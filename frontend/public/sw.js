@@ -1,81 +1,78 @@
-const CACHE_NAME = 'dreamlens-v1';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'dreamlens-v2';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/index.css',
   '/manifest.json',
-  '/vite.svg',
+  '/favicon.png',
+  '/icon-512.png',
 ];
 
-// Install Event
+// Install — precache core shell
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Pre-caching static assets');
-      return cache.addAll(ASSETS_TO_CACHE);
+      console.log('SW: Pre-caching app shell');
+      return cache.addAll(STATIC_ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-// Activate Event
+// Activate — clean old caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
+    caches.keys().then((keys) =>
+      Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('SW: Cleaning old cache:', key);
+            console.log('SW: Purging old cache:', key);
             return caches.delete(key);
           }
         })
-      );
-    })
+      )
+    )
   );
   self.clients.claim();
 });
 
-// Fetch Event
+// Fetch — Network-first for API, Cache-first for assets
 self.addEventListener('fetch', (e) => {
-  // Only intercept HTTP/S requests (avoid chrome-extension:// or file://)
-  if (!e.request.url.startsWith(self.location.origin)) {
+  const url = new URL(e.request.url);
+
+  // Skip non-HTTP requests
+  if (!url.protocol.startsWith('http')) return;
+
+  // API calls — always network-first (never cache)
+  if (url.pathname.startsWith('/api')) {
+    e.respondWith(fetch(e.request).catch(() => new Response('{"error":"offline"}', {
+      headers: { 'Content-Type': 'application/json' },
+      status: 503,
+    })));
     return;
   }
 
+  // Static assets & pages — stale-while-revalidate
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      
-      return fetch(e.request)
-        .then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
+    caches.match(e.request).then((cached) => {
+      const networkFetch = fetch(e.request).then((response) => {
+        // Cache valid responses (skip opaque, errors)
+        if (response && response.status === 200 && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+        }
+        return response;
+      }).catch(() => cached);
 
-          // Don't cache API routes or upload folders (they change/have large files)
-          const url = new URL(e.request.url);
-          if (url.pathname.startsWith('/api') || url.pathname.startsWith('/uploads')) {
-            return response;
-          }
-
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, responseToCache);
-          });
-
-          return response;
-        })
-        .catch(() => {
-          // Offline fallback
-          if (e.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-        });
+      return cached || networkFetch;
     })
   );
+});
+
+// Handle offline navigation — serve cached index.html
+self.addEventListener('fetch', (e) => {
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match('/index.html'))
+    );
+  }
 });

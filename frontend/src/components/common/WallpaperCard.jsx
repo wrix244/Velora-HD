@@ -68,7 +68,12 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       <div className="absolute top-3 inset-x-3 flex justify-between items-start z-10">
         <div className="flex flex-col gap-1.5">
           {/* Static/Live and device type badges */}
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-1">
+            {wallpaper.type === 'live' && (
+              <span className="text-[10px] font-bold tracking-wide bg-accent/80 text-white px-2 py-0.5 rounded-full backdrop-blur-sm uppercase">
+                Live
+              </span>
+            )}
             <span className="text-[10px] font-semibold tracking-wide bg-[#121212]/70 border border-white/10 px-2 py-0.5 rounded-full capitalize backdrop-blur-sm text-gray-300">
               {wallpaper.deviceType}
             </span>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Dream Lens</string>
+    <string name="title_activity_main">Dream Lens</string>
+    <string name="package_name">com.dreamlens.app</string>
+    <string name="custom_url_scheme">com.dreamlens.app</string>
+</resources>

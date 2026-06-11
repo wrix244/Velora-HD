@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogOut, LayoutDashboard, Heart, History, Compass, Sparkles, Monitor, Phone, Film, Activity } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Heart, History, Compass, Sparkles, Monitor, Phone, Film, Activity, Download } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
+import usePWAStore from '../../store/pwaStore';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuthStore();
   const addToast = useUIStore((state) => state.addToast);
+  const { isInstalled, installApp, deferredPrompt } = usePWAStore();
   
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handlePWAInstall = async () => {
+    if (deferredPrompt) {
+      await installApp();
+    } else {
+      addToast("To install, tap your browser's share/menu button, then select 'Add to Home Screen'.", "info");
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -28,7 +38,8 @@ export default function Navbar() {
     { name: 'PC', path: '/explore?deviceType=desktop', icon: <Monitor className="w-3.5 h-3.5" /> },
     { name: 'Live', path: '/explore?type=live', icon: <Film className="w-3.5 h-3.5" /> },
     { name: 'Premium', path: '/explore?isPremium=true', icon: <Sparkles className="w-3.5 h-3.5" /> },
-    { name: 'Dashboard', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> },
+    ...(isAuthenticated ? [{ name: 'Dashboard', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> }] : []),
+    ...(!isInstalled ? [{ name: 'Add to Home Screen', onClick: handlePWAInstall, icon: <Download className="w-3.5 h-3.5" /> }] : []),
   ];
 
   return (
@@ -47,22 +58,36 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              className={({ isActive }) =>
-                `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
-                  (isActive && location.search === link.path.split('?')[1]) || (isActive && !link.path.includes('?'))
-                    ? 'bg-primary/10 text-primary border border-primary/20'
-                    : 'text-gray-300 hover:text-white border border-transparent hover:bg-white/5'
-                }`
-              }
-            >
-              {link.icon}
-              {link.name}
-            </NavLink>
-          ))}
+          {navLinks.map((link) => {
+            if (link.onClick) {
+              return (
+                <button
+                  key={link.name}
+                  onClick={link.onClick}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all text-accent hover:text-accent-active border border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer"
+                >
+                  {link.icon}
+                  {link.name}
+                </button>
+              );
+            }
+            return (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
+                    (isActive && location.search === link.path.split('?')[1]) || (isActive && !link.path.includes('?'))
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-300 hover:text-white border border-transparent hover:bg-white/5'
+                  }`
+                }
+              >
+                {link.icon}
+                {link.name}
+              </NavLink>
+            );
+          })}
         </div>
 
         {/* Right side CTA / Actions */}
@@ -176,23 +201,40 @@ export default function Navbar() {
             <div className="space-y-4">
               {/* Nav links */}
               <div className="flex flex-col gap-1">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className={({ isActive }) =>
-                      `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                        (isActive && location.search === link.path.split('?')[1]) || (isActive && !link.path.includes('?'))
-                          ? 'bg-primary/10 text-primary'
-                          : 'text-gray-300 hover:text-white hover:bg-white/5'
-                      }`
-                    }
-                  >
-                    {link.icon}
-                    {link.name}
-                  </NavLink>
-                ))}
+                {navLinks.map((link) => {
+                  if (link.onClick) {
+                    return (
+                      <button
+                        key={link.name}
+                        onClick={() => {
+                          link.onClick();
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-accent hover:text-accent-active border border-accent/20 bg-accent/5 hover:bg-accent/10 text-left w-full cursor-pointer"
+                      >
+                        {link.icon}
+                        {link.name}
+                      </button>
+                    );
+                  }
+                  return (
+                    <NavLink
+                      key={link.name}
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                          (isActive && location.search === link.path.split('?')[1]) || (isActive && !link.path.includes('?'))
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        }`
+                      }
+                    >
+                      {link.icon}
+                      {link.name}
+                    </NavLink>
+                  );
+                })}
               </div>
             </div>
 

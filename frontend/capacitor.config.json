@@ -1,0 +1,6 @@
+{
+  "appId": "com.dreamlens.app",
+  "appName": "Dream Lens",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

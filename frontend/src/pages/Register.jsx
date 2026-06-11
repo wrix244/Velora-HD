@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import { useRegister } from '../hooks/useAuth';
 import useAuthStore from '../store/authStore';
+import useThemeStore from '../store/themeStore';
 
 export default function Register() {
   const navigate = useNavigate();
+  const theme = useThemeStore((s) => s.theme);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const registerMutation = useRegister();
 
@@ -28,11 +30,11 @@ export default function Register() {
 
   return (
     <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Graffiti wall background */}
+      {/* Theme-aware auth background */}
       <div className="absolute inset-0 z-0">
-        <img src="/graffiti-bg.png" alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-[#121212]/75" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-[#121212]/80" />
+        <img src={theme === 'space' ? '/space-bg.png' : '/graffiti-bg.png'} alt="" className="w-full h-full object-cover" />
+        <div className={`absolute inset-0 ${theme === 'space' ? 'bg-[#0B0F19]/70' : 'bg-[#121212]/75'}`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'space' ? 'from-[#0B0F19] via-transparent to-[#0B0F19]/80' : 'from-[#121212] via-transparent to-[#121212]/80'}`} />
       </div>
 
       {/* Neon glow accent */}

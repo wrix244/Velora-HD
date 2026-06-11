@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
@@ -7,6 +8,7 @@ import {
   BarChart3, Server
 } from 'lucide-react';
 import axios from 'axios';
+import useAuthStore from '../store/authStore';
 
 // Animated counter hook
 function useAnimatedCounter(target, duration = 2000) {
@@ -93,6 +95,13 @@ function timeAgo(dateStr) {
 }
 
 export default function LiveDashboard() {
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) navigate('/login');
+  }, [isAuthenticated, navigate]);
+
   const { data: stats, isLoading } = useQuery({
     queryKey: ['publicStats'],
     queryFn: async () => {

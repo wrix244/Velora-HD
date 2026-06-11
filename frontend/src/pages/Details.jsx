@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info } from 'lucide-react';
+import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X } from 'lucide-react';
+import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
 import { useRecordDownload } from '../hooks/useDownloads';
@@ -12,12 +13,65 @@ import LivePlayer from '../components/common/LivePlayer';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
 
+const Wallpaper = registerPlugin('Wallpaper');
+
 export default function Details() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuthStore();
   const addRecentlyViewed = useUIStore((state) => state.addRecentlyViewed);
   const addToast = useUIStore((state) => state.addToast);
+
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [selectedOS, setSelectedOS] = useState('windows');
+
+  const detectOS = () => {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'ios';
+    if (/android/i.test(ua)) return 'android';
+    if (/Macintosh|Mac OS X/i.test(ua)) return 'mac';
+    if (/Windows/i.test(ua)) return 'windows';
+    return 'windows';
+  };
+
+  const handleOpenInstructions = () => {
+    setSelectedOS(detectOS());
+    setShowInstructions(true);
+  };
+
+  const [settingWallpaper, setSettingWallpaper] = useState(false);
+
+  const handleSetNativeWallpaper = async (location) => {
+    setSettingWallpaper(true);
+    addToast('Downloading image stream...', 'info');
+
+    try {
+      const response = await fetch(wallpaper.downloadFile);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = async () => {
+        const base64 = reader.result;
+        try {
+          addToast('Applying design natively...', 'info');
+          const res = await Wallpaper.setWallpaper({ base64, location });
+          if (res.success) {
+            addToast('Wallpaper applied successfully!', 'success');
+          }
+        } catch (err) {
+          console.error(err);
+          addToast(err.message || 'Failed to apply wallpaper.', 'error');
+        } finally {
+          setSettingWallpaper(false);
+          setShowInstructions(false);
+        }
+      };
+    } catch (err) {
+      console.error(err);
+      addToast('Failed to fetch wallpaper image.', 'error');
+      setSettingWallpaper(false);
+    }
+  };
 
   // Queries
   const { data: wallpaper, isLoading, error } = useWallpaperBySlug(slug);
@@ -209,6 +263,16 @@ export default function Details() {
               </button>
             </div>
 
+            {hasAccess && (
+              <button
+                onClick={handleOpenInstructions}
+                className="w-full py-3.5 px-6 rounded-xl border border-accent/30 hover:border-accent text-accent hover:bg-accent/5 font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-accent/5"
+              >
+                <Monitor className="w-4.5 h-4.5" />
+                Set as Wallpaper
+              </button>
+            )}
+
             {/* Share and Info options */}
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -294,6 +358,161 @@ export default function Details() {
                 ))}
           </div>
         </section>
+      )}
+
+      {/* Set as Wallpaper Picker Modal for Native App Wrapper */}
+      {showInstructions && Capacitor.isNativePlatform() && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+          <div className="relative w-full max-w-sm rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200 text-center">
+            {/* Header */}
+            <div className="flex flex-col items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-accent/10 border border-accent/20">
+                <Monitor className="w-8 h-8 text-accent animate-pulse" />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-xl text-white">Apply Wallpaper</h3>
+                <p className="text-xs text-gray-400">Choose where to set this design</p>
+              </div>
+            </div>
+
+            {/* Loading state or picker actions */}
+            {settingWallpaper ? (
+              <div className="py-6 space-y-3 flex flex-col items-center">
+                <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+                <p className="text-xs text-gray-300 font-semibold animate-pulse">Applying to system settings...</p>
+              </div>
+            ) : (
+              <div className="space-y-2 pt-2">
+                <button
+                  onClick={() => handleSetNativeWallpaper('home')}
+                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
+                >
+                  Home Screen
+                </button>
+                <button
+                  onClick={() => handleSetNativeWallpaper('lock')}
+                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
+                >
+                  Lock Screen
+                </button>
+                <button
+                  onClick={() => handleSetNativeWallpaper('both')}
+                  className="w-full py-3 px-5 rounded-xl bg-accent hover:bg-accent/90 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md shadow-accent/10"
+                >
+                  Home & Lock Screen
+                </button>
+                <button
+                  onClick={() => setShowInstructions(false)}
+                  className="w-full py-3 px-5 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 font-semibold text-xs tracking-wider uppercase transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Set as Wallpaper Instructions Modal (Web Browser fallback) */}
+      {showInstructions && !Capacitor.isNativePlatform() && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+          <div className="relative w-full max-w-lg rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200">
+            {/* Close */}
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="absolute top-4 right-4 p-2 rounded-full text-gray-500 hover:text-white hover:bg-white/10 transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20">
+                <Monitor className="w-6 h-6 text-accent" />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-xl text-white">Set as Wallpaper</h3>
+                <p className="text-xs text-gray-400">Step-by-step setup guide for your device</p>
+              </div>
+            </div>
+
+            {/* OS Tabs */}
+            <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-white/[0.02] border border-white/5">
+              {[
+                { id: 'windows', label: 'Windows' },
+                { id: 'mac', label: 'macOS' },
+                { id: 'ios', label: 'iOS' },
+                { id: 'android', label: 'Android' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedOS(tab.id)}
+                  className={`py-2 text-[10px] md:text-xs font-bold rounded-lg transition-all border cursor-pointer ${
+                    selectedOS === tab.id
+                      ? 'bg-accent/10 border-accent/25 text-accent shadow-sm'
+                      : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Step Guide List */}
+            <div className="space-y-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
+              {selectedOS === 'windows' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Click the <strong className="text-white">Download Artwork</strong> button below to save the high-res file to your computer.</li>
+                  <li>Open your File Explorer and navigate to the file (usually located in your <strong className="text-white">Downloads</strong> folder).</li>
+                  <li>Right-click the image and select <strong className="text-white">"Set as desktop background"</strong> from the menu.</li>
+                </ol>
+              )}
+              {selectedOS === 'mac' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Click the <strong className="text-white">Download Artwork</strong> button below to save the high-res file to your Mac.</li>
+                  <li>Open Finder, locate the file, and right-click (or Control-click) it.</li>
+                  <li>Choose <strong className="text-white">"Set Desktop Picture"</strong> (or go to <strong className="text-white">System Settings → Wallpaper</strong>).</li>
+                </ol>
+              )}
+              {selectedOS === 'ios' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Tap the <strong className="text-white">Download Artwork</strong> button below, and confirm download to save it to your iOS device.</li>
+                  <li>Launch your iOS <strong className="text-white">Photos</strong> app and tap the downloaded image.</li>
+                  <li>Tap the <strong className="text-white">Share button</strong> (box with upward arrow) in the bottom left corner.</li>
+                  <li>Scroll down the options list and select <strong className="text-white">"Use as Wallpaper"</strong>.</li>
+                </ol>
+              )}
+              {selectedOS === 'android' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Tap the <strong className="text-white">Download Artwork</strong> button below to download the high-res file to your device gallery.</li>
+                  <li>Open your <strong className="text-white">Gallery</strong> or <strong className="text-white">Google Photos</strong> app.</li>
+                  <li>Tap the <strong className="text-white">three dots menu</strong> (options) in the top-right corner.</li>
+                  <li>Select <strong className="text-white">"Set as wallpaper"</strong> and choose Home screen, Lock screen, or both.</li>
+                </ol>
+              )}
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="space-y-3 pt-2">
+              <button
+                onClick={() => {
+                  handleAction();
+                  addToast('Downloading wallpaper...', 'info');
+                }}
+                className="w-full py-3.5 px-6 rounded-xl bg-accent hover:bg-accent/90 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                Download Artwork
+              </button>
+              <div className="flex gap-2 items-start text-[10px] text-gray-500 leading-relaxed">
+                <Info className="w-4 h-4 flex-shrink-0 text-accent animate-pulse" />
+                <p>
+                  Security sandbox rule: Web applications cannot directly modify system settings. Doing this download-and-apply step ensures maximum security for your device.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>

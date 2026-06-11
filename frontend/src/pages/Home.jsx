@@ -11,7 +11,7 @@ const categories = [
   { name: 'Nature', photo: '1501785888041-af3ef285b470', gradient: 'from-emerald-500 to-lime-400' },
   { name: 'Space', photo: '1451187580459-43490279c0fa', gradient: 'from-violet-500 to-fuchsia-400' },
   { name: 'Cyberpunk', photo: '1515621061946-eff1c2a352bd', gradient: 'from-pink-500 to-rose-400' },
-  { name: 'Anime', photo: '1607604276583-eef5d076aa5f', gradient: 'from-orange-500 to-yellow-400' },
+  { name: 'Anime', photo: 'local:/wallpapers/anime/category-thumb.png', gradient: 'from-orange-500 to-yellow-400' },
   { name: 'Cars', photo: '1525609004556-c46c7d6cf0a3', gradient: 'from-red-500 to-orange-400' },
   { name: 'Gaming', photo: '1538481199705-c710c4e965fc', gradient: 'from-fuchsia-500 to-purple-400' },
   { name: 'Minimal', photo: '1507525428034-b723cf961d3e', gradient: 'from-zinc-500 to-zinc-300' },
@@ -20,6 +20,8 @@ const categories = [
   { name: 'Technology', photo: '1518770660439-4636190af475', gradient: 'from-sky-400 to-cyan-300' },
   { name: 'Architecture', photo: '1486406146926-c627a92ad1ab', gradient: 'from-blue-400 to-indigo-300' },
 ];
+
+import useThemeStore from '../store/themeStore';
 
 const stats = [
   { value: '15,000+', label: 'Total Wallpapers', icon: <Layers className="w-5 h-5 text-primary" /> },
@@ -53,15 +55,29 @@ export default function Home() {
   const navigate = useNavigate();
   const { data: trending, isLoading: trendingLoading } = useTrendingWallpapers();
   const { data: latest, isLoading: latestLoading } = useLatestWallpapers();
+  const { theme, setTheme } = useThemeStore();
 
   return (
     <div className="pt-16 pb-12 overflow-hidden">
       
       {/* 1. Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center py-20 px-4">
+      <section className="relative min-h-[85vh] flex items-center justify-center py-20 px-4 overflow-hidden">
+        {/* Theme-aware hero background */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={theme === 'space' ? '/space-hero.png' : '/graffiti-hero.png'}
+            alt=""
+            className="w-full h-full object-cover transition-opacity duration-700"
+          />
+          <div className={`absolute inset-0 ${theme === 'space' ? 'bg-[#0B0F19]/50' : 'bg-[#121212]/60'}`} />
+          <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'space' ? 'from-[#0B0F19] via-[#0B0F19]/40' : 'from-[#121212] via-[#121212]/40'} to-transparent`} />
+          <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'space' ? 'from-[#0B0F19]' : 'from-[#121212]'} via-transparent to-transparent h-32`} />
+        </div>
+
         {/* Neon glowing radial backgrounds */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/15 blur-[120px] pointer-events-none z-[1]" />
+        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/10 blur-[100px] pointer-events-none z-[1]" />
+        <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-secondary/10 blur-[80px] pointer-events-none z-[1]" />
 
         <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
           <motion.div
@@ -69,10 +85,28 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold tracking-wider text-primary uppercase inline-flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              Transform Your Display
-            </span>
+            <div className="inline-flex items-center gap-1 p-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+              <button
+                onClick={() => setTheme('graffiti')}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-1.5 ${
+                  theme === 'graffiti'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                🎨 Graffiti
+              </button>
+              <button
+                onClick={() => setTheme('space')}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-1.5 ${
+                  theme === 'space'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                🚀 Space
+              </button>
+            </div>
           </motion.div>
 
           <motion.h1
@@ -81,9 +115,9 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="font-display font-black text-5xl md:text-7xl tracking-tight text-white leading-[1.1]"
           >
-            Transform Every <br />
+            {theme === 'graffiti' ? 'Splash Art On' : 'Explore The'} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
-              Screen Into Art
+              {theme === 'graffiti' ? 'Every Wall' : 'Cosmos Beyond'}
             </span>
           </motion.h1>
 
@@ -93,7 +127,9 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.3 }}
             className="text-base md:text-lg text-gray-400 max-w-xl mx-auto leading-relaxed"
           >
-            Discover a curated collection of ultra-high-definition PC and mobile wallpapers. Experience smooth animations, live motion loops, and premium design.
+            {theme === 'graffiti'
+              ? 'Discover a curated collection of ultra-high-definition PC and mobile wallpapers. Experience smooth animations, live motion loops, and premium design.'
+              : 'Journey through stunning cosmic wallpapers — nebulae, galaxies, star fields, and deep space vistas. Transform your screen into a portal to the universe.'}
           </motion.p>
 
           <motion.div
@@ -166,7 +202,7 @@ export default function Home() {
             >
               {/* Category Image Overlay */}
               <img
-                src={`https://images.unsplash.com/photo-${cat.photo}?auto=format&fit=crop&w=150&q=50`}
+                src={cat.photo.startsWith('local:') ? cat.photo.replace('local:', '') : `https://images.unsplash.com/photo-${cat.photo}?auto=format&fit=crop&w=150&q=50`}
                 alt={cat.name}
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-300 z-0"

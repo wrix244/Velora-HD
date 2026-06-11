@@ -73,10 +73,7 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
         </div>
       )}
 
-      {/* Live Indicator Badge */}
-      <div className="absolute top-2 left-2 px-2 py-0.5 text-[10px] font-bold tracking-widest bg-cyan-500/80 text-[#121212] rounded uppercase backdrop-blur-sm z-10">
-        Live
-      </div>
+
 
       {/* Play/Pause Control (only visible on large details page play, not hover cards) */}
       {!hoverToPlay && (

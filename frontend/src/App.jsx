@@ -5,6 +5,8 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import ToastContainer from './components/common/ToastContainer';
+import InstallPrompt from './components/common/InstallPrompt';
+import usePWAStore from './store/pwaStore';
 
 // Pages
 import Home from './pages/Home';
@@ -17,9 +19,47 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import LiveDashboard from './pages/LiveDashboard';
+import useThemeStore from './store/themeStore';
 
 export default function App() {
   const location = useLocation();
+  const initTheme = useThemeStore((s) => s.initTheme);
+  const setDeferredPrompt = usePWAStore((s) => s.setDeferredPrompt);
+  const setIsInstalled = usePWAStore((s) => s.setIsInstalled);
+  const setShowInstallBanner = usePWAStore((s) => s.setShowInstallBanner);
+
+  useEffect(() => {
+    initTheme();
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+      return;
+    }
+
+    const dismissed = localStorage.getItem('dl_pwa_dismissed');
+    const wasDismissedRecently = dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000;
+
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      if (!wasDismissedRecently) {
+        setTimeout(() => setShowInstallBanner(true), 3000);
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => {
+      setIsInstalled(true);
+      setShowInstallBanner(false);
+      setDeferredPrompt(null);
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, [setDeferredPrompt, setIsInstalled, setShowInstallBanner]);
   const sessionId = useRef(
     sessionStorage.getItem('dl_session') || (() => {
       const id = Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -68,6 +108,9 @@ export default function App() {
 
       {/* Toast Notification Container */}
       <ToastContainer />
+
+      {/* PWA Install Bottom Sheet */}
+      <InstallPrompt />
 
       {/* Global Footer */}
       <Footer />

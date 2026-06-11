@@ -3,6 +3,7 @@ import Wallpaper from '../models/Wallpaper.js';
 import User from '../models/User.js';
 import Download from '../models/Download.js';
 import Purchase from '../models/Purchase.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -49,8 +50,8 @@ router.post('/visit', (req, res) => {
 
 // @route   GET /api/stats/public
 // @desc    Get public live dashboard stats
-// @access  Public
-router.get('/public', async (req, res) => {
+// @access  Protected
+router.get('/public', protect, async (req, res) => {
   try {
     const [
       totalWallpapers,
