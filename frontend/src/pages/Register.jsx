@@ -27,9 +27,16 @@ export default function Register() {
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-primary/10 blur-[80px] pointer-events-none" />
+    <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Graffiti wall background */}
+      <div className="absolute inset-0 z-0">
+        <img src="/graffiti-bg.png" alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-[#121212]/75" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-[#121212]/80" />
+      </div>
+
+      {/* Neon glow accent */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/8 blur-[100px] pointer-events-none z-0" />
 
       <div className="w-full max-w-md p-8 rounded-3xl glass-panel space-y-6 relative z-10 shadow-2xl">
         
@@ -60,7 +67,7 @@ export default function Register() {
                 placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                 required
               />
             </div>
@@ -76,7 +83,7 @@ export default function Register() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                 required
               />
             </div>
@@ -92,7 +99,7 @@ export default function Register() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                 required
               />
             </div>

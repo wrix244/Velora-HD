@@ -181,7 +181,7 @@ export default function Checkout() {
                   placeholder="John Doe"
                   value={cardHolder}
                   onChange={(e) => setCardHolder(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900 ${
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
                     validationErrors.cardHolder ? 'border-rose-500/50 focus:border-rose-500' : ''
                   }`}
                   required
@@ -202,7 +202,7 @@ export default function Checkout() {
                   placeholder="4111 2222 3333 4444"
                   value={cardNumber}
                   onChange={handleCardNumberChange}
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900 ${
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
                     validationErrors.cardNumber ? 'border-rose-500/50 focus:border-rose-500' : ''
                   }`}
                   required
@@ -224,7 +224,7 @@ export default function Checkout() {
                     placeholder="12/28"
                     value={expiry}
                     onChange={handleExpiryChange}
-                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900 ${
+                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
                       validationErrors.expiry ? 'border-rose-500/50 focus:border-rose-500' : ''
                     }`}
                     required
@@ -244,7 +244,7 @@ export default function Checkout() {
                     placeholder="***"
                     value={cvv}
                     onChange={handleCvvChange}
-                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900 ${
+                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
                       validationErrors.cvv ? 'border-rose-500/50 focus:border-rose-500' : ''
                     }`}
                     required
@@ -287,7 +287,7 @@ export default function Checkout() {
 
           {/* Cart Item Row */}
           <div className="flex gap-4">
-            <div className="w-20 aspect-[4/5] rounded-xl overflow-hidden flex-shrink-0 border border-white/10 bg-slate-950">
+            <div className="w-20 aspect-[4/5] rounded-xl overflow-hidden flex-shrink-0 border border-white/10 bg-[#121212]">
               <img src={wallpaper.previewImage} alt={wallpaper.title} className="w-full h-full object-cover" />
             </div>
             <div className="space-y-1 select-none">

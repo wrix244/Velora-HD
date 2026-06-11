@@ -73,10 +73,10 @@ export default function Details() {
   if (isLoading) {
     return (
       <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
-        <div className="h-6 w-24 bg-slate-900 rounded" />
+        <div className="h-6 w-24 bg-[#1A1A1A] rounded" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 aspect-video rounded-3xl bg-slate-900" />
-          <div className="lg:col-span-4 h-96 rounded-3xl bg-slate-900" />
+          <div className="lg:col-span-8 aspect-video rounded-3xl bg-[#1A1A1A]" />
+          <div className="lg:col-span-4 h-96 rounded-3xl bg-[#1A1A1A]" />
         </div>
       </div>
     );
@@ -113,7 +113,7 @@ export default function Details() {
       {/* Main Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Large Preview Frame */}
-        <div className="lg:col-span-8 rounded-3xl overflow-hidden glass-panel border-white/10 relative shadow-2xl flex items-center justify-center bg-slate-950">
+        <div className="lg:col-span-8 rounded-3xl overflow-hidden glass-panel border-white/10 relative shadow-2xl flex items-center justify-center bg-[#121212]">
           {wallpaper.type === 'live' ? (
             <div className="w-full aspect-[16/10] max-h-[70vh]">
               <LivePlayer
@@ -134,10 +134,10 @@ export default function Details() {
 
           {/* Absolute labels */}
           <div className="absolute top-4 left-4 flex gap-2">
-            <span className="px-2.5 py-1 text-[10px] font-bold bg-slate-950/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
+            <span className="px-2.5 py-1 text-[10px] font-bold bg-[#121212]/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
               {wallpaper.type}
             </span>
-            <span className="px-2.5 py-1 text-[10px] font-bold bg-slate-950/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
+            <span className="px-2.5 py-1 text-[10px] font-bold bg-[#121212]/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
               {wallpaper.deviceType}
             </span>
           </div>
@@ -179,7 +179,7 @@ export default function Details() {
                 className={`flex-grow py-3.5 px-6 rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 ${
                   wallpaper.isPremium && !hasAccess
                     ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-primary/10'
-                    : 'bg-white hover:bg-gray-100 text-slate-950'
+                    : 'bg-white hover:bg-gray-100 text-[#121212]'
                 }`}
               >
                 {wallpaper.isPremium && !hasAccess ? (

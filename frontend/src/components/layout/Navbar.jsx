@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogOut, LayoutDashboard, Heart, History, Compass, Sparkles, Monitor, Phone, Film } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Heart, History, Compass, Sparkles, Monitor, Phone, Film, Activity } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 
@@ -28,6 +28,7 @@ export default function Navbar() {
     { name: 'PC', path: '/explore?deviceType=desktop', icon: <Monitor className="w-3.5 h-3.5" /> },
     { name: 'Live', path: '/explore?type=live', icon: <Film className="w-3.5 h-3.5" /> },
     { name: 'Premium', path: '/explore?isPremium=true', icon: <Sparkles className="w-3.5 h-3.5" /> },
+    { name: 'Dashboard', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> },
   ];
 
   return (
@@ -71,9 +72,9 @@ export default function Navbar() {
               {/* Profile dropdown trigger */}
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 p-1 pr-3 rounded-full bg-slate-900 border border-white/5 hover:border-white/15 transition-all text-left"
+                className="flex items-center gap-2 p-1 pr-3 rounded-full bg-[#1A1A1A] border border-white/5 hover:border-white/15 transition-all text-left"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary via-secondary to-accent flex items-center justify-center font-display font-bold text-slate-950 uppercase text-xs">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary via-secondary to-accent flex items-center justify-center font-display font-bold text-[#121212] uppercase text-xs">
                   {user?.name?.slice(0, 2)}
                 </div>
                 <div>
@@ -170,7 +171,7 @@ export default function Navbar() {
       {/* Mobile Sidebar */}
       {isOpen && (
         <>
-          <div className="fixed inset-0 top-16 bg-slate-950/60 backdrop-blur-sm z-40" onClick={() => setIsOpen(false)} />
+          <div className="fixed inset-0 top-16 bg-[#121212]/60 backdrop-blur-sm z-40" onClick={() => setIsOpen(false)} />
           <div className="fixed top-16 right-0 bottom-0 w-64 glass-panel border-l border-white/10 z-50 p-4 flex flex-col justify-between">
             <div className="space-y-4">
               {/* Nav links */}

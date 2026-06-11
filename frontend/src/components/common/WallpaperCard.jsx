@@ -61,7 +61,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         )}
         
         {/* Soft shadow gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 z-1" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/30 to-transparent opacity-80 z-1" />
       </Link>
 
       {/* Top badges bar */}
@@ -69,11 +69,11 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         <div className="flex flex-col gap-1.5">
           {/* Static/Live and device type badges */}
           <div className="flex gap-1">
-            <span className="text-[10px] font-semibold tracking-wide bg-slate-950/70 border border-white/10 px-2 py-0.5 rounded-full capitalize backdrop-blur-sm text-gray-300">
+            <span className="text-[10px] font-semibold tracking-wide bg-[#121212]/70 border border-white/10 px-2 py-0.5 rounded-full capitalize backdrop-blur-sm text-gray-300">
               {wallpaper.deviceType}
             </span>
             {wallpaper.isPremium && (
-              <span className="text-[10px] font-semibold tracking-wide bg-amber-500/80 text-slate-950 px-2 py-0.5 rounded-full flex items-center gap-0.5 backdrop-blur-sm">
+              <span className="text-[10px] font-semibold tracking-wide bg-amber-500/80 text-[#121212] px-2 py-0.5 rounded-full flex items-center gap-0.5 backdrop-blur-sm">
                 <Lock className="w-2.5 h-2.5" />
                 Premium
               </span>
@@ -88,7 +88,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
           className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
             isFavorite
               ? 'bg-rose-500/80 border-rose-500/20 text-white'
-              : 'bg-slate-950/40 text-gray-300 hover:text-white hover:bg-slate-950/60'
+              : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
           }`}
         >
           <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
@@ -118,7 +118,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
               wallpaper.isPremium && !hasAccess
                 ? 'bg-primary hover:bg-primary/95 text-white shadow-lg shadow-primary/20'
-                : 'bg-white hover:bg-gray-100 text-slate-950'
+                : 'bg-white hover:bg-gray-100 text-[#121212]'
             }`}
           >
             {wallpaper.isPremium && !hasAccess ? (

@@ -54,7 +54,7 @@ export default function Success() {
       {/* Unlocked Item Summary Box */}
       {wallpaper && (
         <div className="p-4 rounded-2xl glass-panel border-emerald-500/15 flex items-center gap-4 text-left">
-          <div className="w-16 aspect-[4/5] rounded-lg overflow-hidden flex-shrink-0 border border-white/10 bg-slate-950">
+          <div className="w-16 aspect-[4/5] rounded-lg overflow-hidden flex-shrink-0 border border-white/10 bg-[#121212]">
             <img src={wallpaper.previewImage} alt={wallpaper.title} className="w-full h-full object-cover" />
           </div>
           <div className="space-y-0.5">
@@ -75,7 +75,7 @@ export default function Success() {
         <button
           onClick={handleDownload}
           disabled={recordDownloadMutation.isPending}
-          className="w-full py-3.5 bg-white hover:bg-gray-100 text-slate-950 font-bold text-xs tracking-wider uppercase rounded-xl transition flex items-center justify-center gap-2 shadow-lg"
+          className="w-full py-3.5 bg-white hover:bg-gray-100 text-[#121212] font-bold text-xs tracking-wider uppercase rounded-xl transition flex items-center justify-center gap-2 shadow-lg"
         >
           <Download className="w-4 h-4" />
           {recordDownloadMutation.isPending ? 'Downloading...' : 'Download High-Res Now'}
@@ -83,7 +83,7 @@ export default function Success() {
 
         <Link
           to="/profile?tab=purchases"
-          className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase rounded-xl border border-white/5 hover:border-white/10 transition flex items-center justify-center gap-1.5"
+          className="w-full py-3.5 bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white font-bold text-xs tracking-wider uppercase rounded-xl border border-white/5 hover:border-white/10 transition flex items-center justify-center gap-1.5"
         >
           <FileCheck className="w-4 h-4" />
           View Purchases History

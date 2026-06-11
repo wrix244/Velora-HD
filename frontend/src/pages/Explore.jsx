@@ -150,10 +150,10 @@ export default function Explore() {
               <select
                 value={category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-900"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
                 {categories.map((cat) => (
-                  <option key={cat} value={cat} className="bg-slate-950 text-white">
+                  <option key={cat} value={cat} className="bg-[#121212] text-white">
                     {cat}
                   </option>
                 ))}
@@ -171,7 +171,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       deviceType === d
                         ? 'bg-primary border-primary text-white font-black'
-                        : 'border-white/5 bg-white/2 hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {d === 'desktop' ? 'PC' : d === 'mobile' ? 'Mobile' : 'All'}
@@ -191,7 +191,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       type === t
                         ? 'bg-accent border-accent text-slate-950 font-black'
-                        : 'border-white/5 bg-white/2 hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {t}
@@ -211,7 +211,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       isPremium === p
                         ? 'bg-amber-500 border-amber-500 text-slate-950 font-black'
-                        : 'border-white/5 bg-white/2 hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {p === 'true' ? 'Premium' : p === 'false' ? 'Free' : 'All'}
@@ -226,10 +226,10 @@ export default function Explore() {
               <select
                 value={resolution}
                 onChange={(e) => handleFilterChange('resolution', e.target.value)}
-                className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-900"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
                 {resolutions.map((res) => (
-                  <option key={res} value={res} className="bg-slate-950 text-white">
+                  <option key={res} value={res} className="bg-[#121212] text-white">
                     {res}
                   </option>
                 ))}
@@ -242,11 +242,11 @@ export default function Explore() {
               <select
                 value={sort}
                 onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-900"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
-                <option value="latest" className="bg-slate-950 text-white">Latest Uploads</option>
-                <option value="downloads" className="bg-slate-950 text-white">Most Downloaded</option>
-                <option value="likes" className="bg-slate-950 text-white">Most Liked</option>
+                <option value="latest" className="bg-[#121212] text-white">Latest Uploads</option>
+                <option value="downloads" className="bg-[#121212] text-white">Most Downloaded</option>
+                <option value="likes" className="bg-[#121212] text-white">Most Liked</option>
               </select>
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function Explore() {
                   <button
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
-                    className="px-8 py-3 rounded-xl bg-slate-900 border border-white/10 hover:border-white/20 text-white font-semibold text-xs transition flex items-center gap-2 shadow-lg disabled:opacity-50"
+                    className="px-8 py-3 rounded-xl bg-[#1A1A1A] border border-white/10 hover:border-white/20 text-white font-semibold text-xs transition flex items-center gap-2 shadow-lg disabled:opacity-50"
                   >
                     {isFetchingNextPage ? (
                       <>

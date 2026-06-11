@@ -14,6 +14,7 @@ import favoriteRoutes from './routes/favoriteRoutes.js';
 import downloadRoutes from './routes/downloadRoutes.js';
 import purchaseRoutes from './routes/purchaseRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import statsRoutes from './routes/statsRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -49,6 +50,7 @@ app.use('/api/favorites', favoriteRoutes);
 app.use('/api/downloads', downloadRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {

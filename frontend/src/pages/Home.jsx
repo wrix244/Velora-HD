@@ -8,17 +8,17 @@ import SkeletonCard from '../components/common/SkeletonCard';
 
 // 11 Categories with curated preview backgrounds (low res Unsplash thumbnails)
 const categories = [
-  { name: 'Nature', photo: '1501785888041-af3ef285b470', gradient: 'from-emerald-600 to-teal-500' },
-  { name: 'Space', photo: '1451187580459-43490279c0fa', gradient: 'from-indigo-600 to-purple-500' },
-  { name: 'Cyberpunk', photo: '1515621061946-eff1c2a352bd', gradient: 'from-fuchsia-600 to-pink-500' },
-  { name: 'Anime', photo: '1607604276583-eef5d076aa5f', gradient: 'from-rose-500 to-amber-500' },
-  { name: 'Cars', photo: '1525609004556-c46c7d6cf0a3', gradient: 'from-red-600 to-orange-500' },
-  { name: 'Gaming', photo: '1538481199705-c710c4e965fc', gradient: 'from-purple-600 to-blue-500' },
-  { name: 'Minimal', photo: '1507525428034-b723cf961d3e', gradient: 'from-slate-600 to-slate-400' },
-  { name: 'Abstract', photo: '1541701494587-cb58502866ab', gradient: 'from-violet-600 to-cyan-500' },
-  { name: 'Fantasy', photo: '1518709268805-4e9042af9f23', gradient: 'from-indigo-500 to-rose-400' },
-  { name: 'Technology', photo: '1518770660439-4636190af475', gradient: 'from-cyan-600 to-teal-400' },
-  { name: 'Architecture', photo: '1486406146926-c627a92ad1ab', gradient: 'from-blue-600 to-sky-400' },
+  { name: 'Nature', photo: '1501785888041-af3ef285b470', gradient: 'from-emerald-500 to-lime-400' },
+  { name: 'Space', photo: '1451187580459-43490279c0fa', gradient: 'from-violet-500 to-fuchsia-400' },
+  { name: 'Cyberpunk', photo: '1515621061946-eff1c2a352bd', gradient: 'from-pink-500 to-rose-400' },
+  { name: 'Anime', photo: '1607604276583-eef5d076aa5f', gradient: 'from-orange-500 to-yellow-400' },
+  { name: 'Cars', photo: '1525609004556-c46c7d6cf0a3', gradient: 'from-red-500 to-orange-400' },
+  { name: 'Gaming', photo: '1538481199705-c710c4e965fc', gradient: 'from-fuchsia-500 to-purple-400' },
+  { name: 'Minimal', photo: '1507525428034-b723cf961d3e', gradient: 'from-zinc-500 to-zinc-300' },
+  { name: 'Abstract', photo: '1541701494587-cb58502866ab', gradient: 'from-cyan-400 to-teal-300' },
+  { name: 'Fantasy', photo: '1518709268805-4e9042af9f23', gradient: 'from-pink-400 to-amber-300' },
+  { name: 'Technology', photo: '1518770660439-4636190af475', gradient: 'from-sky-400 to-cyan-300' },
+  { name: 'Architecture', photo: '1486406146926-c627a92ad1ab', gradient: 'from-blue-400 to-indigo-300' },
 ];
 
 const stats = [
@@ -111,7 +111,7 @@ export default function Home() {
             </Link>
             <Link
               to="/explore?isPremium=true"
-              className="px-8 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm border border-white/10 hover:border-white/20 transition-all"
+              className="px-8 py-3 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white font-semibold text-sm border border-white/10 hover:border-white/20 transition-all"
             >
               Explore Premium
             </Link>

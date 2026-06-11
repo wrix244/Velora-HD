@@ -68,13 +68,13 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
 
       {/* Loading Overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center backdrop-blur-[2px]">
+        <div className="absolute inset-0 bg-[#121212]/40 flex items-center justify-center backdrop-blur-[2px]">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
       {/* Live Indicator Badge */}
-      <div className="absolute top-2 left-2 px-2 py-0.5 text-[10px] font-bold tracking-widest bg-cyan-500/80 text-slate-950 rounded uppercase backdrop-blur-sm z-10">
+      <div className="absolute top-2 left-2 px-2 py-0.5 text-[10px] font-bold tracking-widest bg-cyan-500/80 text-[#121212] rounded uppercase backdrop-blur-sm z-10">
         Live
       </div>
 
@@ -83,7 +83,7 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
         <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="p-1.5 rounded-lg bg-slate-900/60 backdrop-blur-md text-white border border-white/10 hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg bg-[#1A1A1A]/60 backdrop-blur-md text-white border border-white/10 hover:bg-slate-800 transition"
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>

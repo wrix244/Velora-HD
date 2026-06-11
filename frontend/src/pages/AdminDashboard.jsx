@@ -229,7 +229,7 @@ export default function AdminDashboard() {
           const y = height - padding - (val * (height - padding * 2)) / maxVal;
           return (
             <g key={idx}>
-              <circle cx={x} cy={y} r="4" fill={strokeColor} stroke="#0B0F19" strokeWidth="2" />
+              <circle cx={x} cy={y} r="4" fill={strokeColor} stroke="#121212" strokeWidth="2" />
               <text x={x} y={y - 8} fontSize="9" fill="#F9FAFB" textAnchor="middle" fontWeight="bold">
                 {val}
               </text>
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
               className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition ${
                 activeTab === tab
                   ? 'bg-primary text-white font-bold'
-                  : 'text-gray-400 hover:text-white bg-slate-900/50 hover:bg-slate-900'
+                  : 'text-gray-400 hover:text-white bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]'
               }`}
             >
               {tab}
@@ -310,7 +310,7 @@ export default function AdminDashboard() {
               <DollarSign className="w-4 h-4 text-primary" /> Monthly Revenue Trend
             </h3>
             <div className="h-52 flex items-center justify-center pt-2">
-              {analytics?.charts && renderSVGChart(analytics.charts.revenue, analytics.charts.labels, '#7C3AED', 'rgba(124,58,237,0.1)')}
+              {analytics?.charts && renderSVGChart(analytics.charts.revenue, analytics.charts.labels, '#FF2D6F', 'rgba(255,45,111,0.1)')}
             </div>
           </div>
 
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
               <Download className="w-4 h-4 text-accent" /> Monthly Downloads Trend
             </h3>
             <div className="h-52 flex items-center justify-center pt-2">
-              {analytics?.charts && renderSVGChart(analytics.charts.downloads, analytics.charts.labels, '#06B6D4', 'rgba(6,182,212,0.1)')}
+              {analytics?.charts && renderSVGChart(analytics.charts.downloads, analytics.charts.labels, '#00E5FF', 'rgba(0,229,255,0.1)')}
             </div>
           </div>
 
@@ -511,8 +511,8 @@ export default function AdminDashboard() {
 
       {/* ADD / EDIT MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative">
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -533,7 +533,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                     required
                   />
                 </div>
@@ -544,7 +544,7 @@ export default function AdminDashboard() {
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950 h-20"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212] h-20"
                   />
                 </div>
 
@@ -554,10 +554,10 @@ export default function AdminDashboard() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                   >
                     {categories.map((c) => (
-                      <option key={c} value={c} className="bg-slate-950 text-white">{c}</option>
+                      <option key={c} value={c} className="bg-[#121212] text-white">{c}</option>
                     ))}
                   </select>
                 </div>
@@ -568,10 +568,10 @@ export default function AdminDashboard() {
                   <select
                     value={deviceType}
                     onChange={(e) => setDeviceType(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                   >
-                    <option value="desktop" className="bg-slate-950 text-white">Desktop (PC)</option>
-                    <option value="mobile" className="bg-slate-950 text-white">Mobile</option>
+                    <option value="desktop" className="bg-[#121212] text-white">Desktop (PC)</option>
+                    <option value="mobile" className="bg-[#121212] text-white">Mobile</option>
                   </select>
                 </div>
 
@@ -581,10 +581,10 @@ export default function AdminDashboard() {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                   >
-                    <option value="static" className="bg-slate-950 text-white">Static Image</option>
-                    <option value="live" className="bg-slate-950 text-white">Live Wallpaper (Video)</option>
+                    <option value="static" className="bg-[#121212] text-white">Static Image</option>
+                    <option value="live" className="bg-[#121212] text-white">Live Wallpaper (Video)</option>
                   </select>
                 </div>
 
@@ -595,7 +595,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={resolution}
                     onChange={(e) => setResolution(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                     placeholder="3840x2160"
                     required
                   />
@@ -625,7 +625,7 @@ export default function AdminDashboard() {
                       min="0.99"
                       value={price}
                       onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
-                      className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                      className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                       required={isPremium}
                     />
                   </div>
@@ -638,7 +638,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                     placeholder="cinematic, dark, minimal"
                   />
                 </div>
@@ -660,7 +660,7 @@ export default function AdminDashboard() {
                         placeholder="Or paste URL link"
                         value={previewImageUrl}
                         onChange={(e) => setPreviewImageUrl(e.target.value)}
-                        className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                        className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                       />
                     </div>
 
@@ -677,7 +677,7 @@ export default function AdminDashboard() {
                         placeholder="Or paste URL link (mp4 for Live)"
                         value={downloadFileUrl}
                         onChange={(e) => setDownloadFileUrl(e.target.value)}
-                        className="w-full px-3 py-2 text-xs glass-input focus:bg-slate-950"
+                        className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                       />
                     </div>
                   </div>
@@ -688,7 +688,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 border border-white/5 bg-slate-900/50 hover:bg-slate-900 text-gray-300 font-semibold text-xs rounded-xl transition"
+                  className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
                 >
                   Cancel
                 </button>

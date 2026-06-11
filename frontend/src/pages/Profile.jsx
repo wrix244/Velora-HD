@@ -210,7 +210,7 @@ export default function Profile() {
               {downloadsLoading ? (
                 <div className="space-y-3">
                   {Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="h-14 bg-slate-900/40 rounded-xl animate-pulse" />
+                    <div key={i} className="h-14 bg-[#1A1A1A]/40 rounded-xl animate-pulse" />
                   ))}
                 </div>
               ) : !downloads || downloads.length === 0 ? (
@@ -280,7 +280,7 @@ export default function Profile() {
                       placeholder="Your Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                       required
                     />
                   </div>
@@ -295,7 +295,7 @@ export default function Profile() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                       required
                     />
                   </div>
@@ -311,7 +311,7 @@ export default function Profile() {
                       placeholder="Leave blank to keep current"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                     />
                   </div>
                 </div>
@@ -327,7 +327,7 @@ export default function Profile() {
                         placeholder="Confirm password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                        className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                         required={!!password}
                       />
                     </div>
