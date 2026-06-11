@@ -1,0 +1,352 @@
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { User, Heart, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert } from 'lucide-react';
+import { useProfile, useUpdateProfile } from '../hooks/useAuth';
+import { useFavorites } from '../hooks/useFavorites';
+import { usePurchaseHistory } from '../hooks/usePurchases';
+import { useDownloadHistory } from '../hooks/useDownloads';
+import useAuthStore from '../store/authStore';
+import useUIStore from '../store/uiStore';
+import WallpaperCard from '../components/common/WallpaperCard';
+import SkeletonCard from '../components/common/SkeletonCard';
+
+export default function Profile() {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const addToast = useUIStore((state) => state.addToast);
+
+  const activeTab = searchParams.get('tab') || 'favorites';
+
+  // Auth check on mount
+  useEffect(() => {
+    if (!isAuthenticated) {
+      addToast('Please login to view your profile.', 'info');
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate, addToast]);
+
+  // Queries
+  const { data: profile } = useProfile();
+  const { data: favorites, isLoading: favsLoading } = useFavorites();
+  const { data: purchases, isLoading: purchasesLoading } = usePurchaseHistory();
+  const { data: downloads, isLoading: downloadsLoading } = useDownloadHistory();
+
+  // Settings form states
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const updateProfileMutation = useUpdateProfile();
+
+  useEffect(() => {
+    if (profile) {
+      setName(profile.name);
+      setEmail(profile.email);
+    }
+  }, [profile]);
+
+  const handleUpdateProfile = (e) => {
+    e.preventDefault();
+    if (password && password !== confirmPassword) {
+      addToast('Passwords do not match.', 'error');
+      return;
+    }
+
+    updateProfileMutation.mutate(
+      { name, email, password: password || undefined },
+      {
+        onSuccess: () => {
+          setPassword('');
+          setConfirmPassword('');
+        },
+      }
+    );
+  };
+
+  const handleTabChange = (tab) => {
+    setSearchParams({ tab });
+  };
+
+  const tabs = [
+    { id: 'favorites', label: 'Favorites', icon: <Heart className="w-4 h-4" /> },
+    { id: 'purchases', label: 'Purchases', icon: <ShoppingBag className="w-4 h-4" /> },
+    { id: 'downloads', label: 'Downloads Log', icon: <Download className="w-4 h-4" /> },
+    { id: 'settings', label: 'Account Settings', icon: <Settings className="w-4 h-4" /> },
+  ];
+
+  return (
+    <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 min-h-screen">
+      
+      {/* Profile Banner */}
+      <div className="p-8 rounded-3xl bg-gradient-to-r from-primary/10 via-secondary/5 to-transparent border border-white/5 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
+
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center font-display font-black text-white text-2xl uppercase">
+            {profile?.name?.slice(0, 2) || 'DL'}
+          </div>
+          <div className="space-y-1">
+            <h1 className="font-display font-black text-2xl text-white">
+              {profile?.name || 'User Profile'}
+            </h1>
+            <p className="text-xs text-gray-400">
+              {profile?.email} • Member since {new Date(profile?.createdAt || Date.now()).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+
+        {profile?.role === 'admin' && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="px-5 py-2.5 bg-primary/20 hover:bg-primary/30 border border-primary/20 text-primary font-semibold rounded-xl text-xs transition flex items-center gap-1.5 self-start md:self-auto"
+          >
+            <ShieldAlert className="w-4 h-4" />
+            Go to Admin Dashboard
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Side: Tab controls */}
+        <div className="lg:col-span-3 p-4 rounded-2xl glass-panel flex flex-col gap-1.5">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide transition ${
+                activeTab === tab.id
+                  ? 'bg-primary text-white font-black shadow-lg shadow-primary/10'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Right Side: Tab Contents */}
+        <div className="lg:col-span-9">
+          
+          {/* TAB 1: Favorites */}
+          {activeTab === 'favorites' && (
+            <div className="space-y-6">
+              <h2 className="font-display font-bold text-lg text-white">My Liked Designs</h2>
+              
+              {favsLoading ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
+                </div>
+              ) : !favorites || favorites.length === 0 ? (
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <Heart className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">Your favorites is empty</h3>
+                  <p className="text-xs text-gray-400 max-w-sm">
+                    Browse the collections and click the heart icon on any design to save it here.
+                  </p>
+                  <button
+                    onClick={() => navigate('/explore')}
+                    className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
+                  >
+                    Browse Collections
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {favorites.map((wp) => (
+                    <WallpaperCard
+                      key={`fav-${wp._id}`}
+                      wallpaper={wp}
+                      purchased={purchases?.some((p) => p.wallpaperId?._id === wp._id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 2: Purchases */}
+          {activeTab === 'purchases' && (
+            <div className="space-y-6">
+              <h2 className="font-display font-bold text-lg text-white">Purchased Premium Licenses</h2>
+              
+              {purchasesLoading ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
+                </div>
+              ) : !purchases || purchases.length === 0 ? (
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <ShoppingBag className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">No purchased wallpapers</h3>
+                  <p className="text-xs text-gray-400 max-w-sm">
+                    Premium layouts you buy via mock checkout will show up here for lifetime unlimited downloads.
+                  </p>
+                  <button
+                    onClick={() => navigate('/explore?isPremium=true')}
+                    className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
+                  >
+                    Explore Premium Layouts
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {purchases.map((p) =>
+                    p.wallpaperId ? (
+                      <WallpaperCard key={`purchased-${p._id}`} wallpaper={p.wallpaperId} purchased={true} />
+                    ) : null
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 3: Downloads Log */}
+          {activeTab === 'downloads' && (
+            <div className="space-y-6">
+              <h2 className="font-display font-bold text-lg text-white">Downloads History</h2>
+              
+              {downloadsLoading ? (
+                <div className="space-y-3">
+                  {Array(3).fill(0).map((_, i) => (
+                    <div key={i} className="h-14 bg-slate-900/40 rounded-xl animate-pulse" />
+                  ))}
+                </div>
+              ) : !downloads || downloads.length === 0 ? (
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <Download className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">No downloads recorded</h3>
+                  <p className="text-xs text-gray-400 max-w-xs">
+                    Once you start downloading static or motion loops, they will be logged here.
+                  </p>
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-white/5 overflow-hidden">
+                  <table className="w-full text-left border-collapse text-xs select-none">
+                    <thead>
+                      <tr className="bg-white/2 text-gray-400 font-semibold border-b border-white/5">
+                        <th className="p-4">Wallpaper</th>
+                        <th className="p-4">Resolution</th>
+                        <th className="p-4">Format</th>
+                        <th className="p-4">Downloaded At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5 text-gray-300">
+                      {downloads.map((d) => (
+                        <tr key={d._id} className="hover:bg-white/2 transition">
+                          <td className="p-4">
+                            {d.wallpaperId ? (
+                              <Link
+                                to={`/wallpaper/${d.wallpaperId.slug}`}
+                                className="font-semibold text-white hover:text-primary transition"
+                              >
+                                {d.wallpaperId.title}
+                              </Link>
+                            ) : (
+                              <span className="text-gray-500 italic">Deleted Wallpaper</span>
+                            )}
+                          </td>
+                          <td className="p-4">{d.wallpaperId?.resolution || 'N/A'}</td>
+                          <td className="p-4 capitalize">{d.wallpaperId?.type || 'N/A'}</td>
+                          <td className="p-4 text-gray-500">
+                            {new Date(d.createdAt).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 4: Account Settings */}
+          {activeTab === 'settings' && (
+            <div className="p-6 rounded-2xl glass-panel space-y-6 max-w-xl">
+              <h2 className="font-display font-bold text-lg text-white border-b border-white/5 pb-3 flex items-center gap-1.5">
+                <Settings className="w-5 h-5 text-primary" />
+                Update Profile Settings
+              </h2>
+
+              <form onSubmit={handleUpdateProfile} className="space-y-4">
+                {/* Name */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Email (Read Only for safety/mocking or allow change) */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Email Address</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Password field */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">New Password (Optional)</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input
+                      type="password"
+                      placeholder="Leave blank to keep current"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Confirm Password field */}
+                {password && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Confirm New Password</label>
+                    <div className="relative">
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                      <input
+                        type="password"
+                        placeholder="Confirm password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-slate-900"
+                        required={!!password}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={updateProfileMutation.isPending}
+                  className="px-6 py-2.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition"
+                >
+                  {updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}
+                </button>
+              </form>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+}
