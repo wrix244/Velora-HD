@@ -111,9 +111,9 @@ export default function Footer() {
             © {new Date().getFullYear()} Dream Lens. All rights reserved.
           </p>
           <div className="flex gap-4 text-[10px] text-gray-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Settings</a>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <a href="#" className="hover:text-white transition-colors font-semibold">Cookie Settings</a>
           </div>
         </div>
       </div>

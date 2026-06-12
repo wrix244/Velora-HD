@@ -4,6 +4,7 @@ import { Cookie, Shield, Check, X } from 'lucide-react';
 import { getCookie, setCookie, eraseCookie } from '../../utils/cookies';
 import useThemeStore from '../../store/themeStore';
 import useUIStore from '../../store/uiStore';
+import { Link } from 'react-router-dom';
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
@@ -81,7 +82,7 @@ export default function CookieConsent() {
               </div>
 
               <p className="text-xs text-gray-400 leading-relaxed">
-                We use cookies to secure your account authentication and personalize your experience. Custom themes and recommendation history require preference cookies.
+                We use cookies to secure your account authentication and personalize your experience. Custom themes and recommendation history require preference cookies. Read our <Link to="/privacy" className="text-primary hover:underline font-semibold">Privacy Policy</Link> to learn more.
               </p>
 
               <div className="flex flex-col gap-2 pt-2">
