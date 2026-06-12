@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Compass, Sparkles, TrendingUp, Clock, Eye, Layers, ShieldCheck, Download, Award, Heart, CheckCircle } from 'lucide-react';
-import { useTrendingWallpapers, useLatestWallpapers } from '../hooks/useWallpapers';
+import { useTrendingWallpapers, useLatestWallpapers, useRecommendedWallpapers } from '../hooks/useWallpapers';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
 
@@ -55,6 +55,7 @@ export default function Home() {
   const navigate = useNavigate();
   const { data: trending, isLoading: trendingLoading } = useTrendingWallpapers();
   const { data: latest, isLoading: latestLoading } = useLatestWallpapers();
+  const { data: recommended, isLoading: recommendedLoading } = useRecommendedWallpapers();
   const { theme, setTheme } = useThemeStore();
 
   return (
@@ -177,6 +178,33 @@ export default function Home() {
                 .fill(0)
                 .map((_, i) => <SkeletonCard key={i} />)
             : trending?.slice(0, 4).map((wp) => (
+                <WallpaperCard key={wp._id} wallpaper={wp} />
+              ))}
+        </div>
+      </section>
+
+      {/* Recommended For You Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <span className="text-xs font-bold text-accent tracking-widest uppercase flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5" /> Tailored For You
+            </span>
+            <h2 className="font-display font-bold text-2xl md:text-3xl text-white mt-1">
+              Recommended For You
+            </h2>
+          </div>
+          <Link to="/explore" className="text-xs font-semibold text-gray-400 hover:text-white transition-colors">
+            Explore More
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {recommendedLoading
+            ? Array(4)
+                .fill(0)
+                .map((_, i) => <SkeletonCard key={i} />)
+            : recommended?.slice(0, 4).map((wp) => (
                 <WallpaperCard key={wp._id} wallpaper={wp} />
               ))}
         </div>

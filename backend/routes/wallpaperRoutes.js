@@ -5,6 +5,8 @@ import {
   getTrendingWallpapers,
   getLatestWallpapers,
   getRelatedWallpapers,
+  getRecentWallpapers,
+  getRecommendedWallpapers,
 } from '../controllers/wallpaperController.js';
 
 const router = express.Router();
@@ -12,6 +14,8 @@ const router = express.Router();
 router.get('/', getWallpapers);
 router.get('/trending', getTrendingWallpapers);
 router.get('/latest', getLatestWallpapers);
+router.get('/recent', getRecentWallpapers);
+router.get('/recommendations', getRecommendedWallpapers);
 router.get('/slug/:slug', getWallpaperBySlug);
 router.get('/:id/related', getRelatedWallpapers);
 

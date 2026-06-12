@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getCookie, setCookie, eraseCookie } from '../utils/cookies';
 
 const useUIStore = create((set, get) => ({
   toasts: [],
@@ -22,8 +23,12 @@ const useUIStore = create((set, get) => ({
     }));
   },
 
-  // Recently Viewed Wallpapers (Local Storage based)
-  recentlyViewed: JSON.parse(localStorage.getItem('recentlyViewed') || '[]'),
+  // Recently Viewed Wallpapers (Zustand memory + Cookie based)
+  recentlyViewed: [],
+
+  setRecentlyViewed: (wallpapers) => {
+    set({ recentlyViewed: wallpapers || [] });
+  },
 
   addRecentlyViewed: (wallpaper) => {
     if (!wallpaper || !wallpaper._id) return;
@@ -33,13 +38,23 @@ const useUIStore = create((set, get) => ({
       const filtered = state.recentlyViewed.filter((item) => item._id !== wallpaper._id);
       const updated = [wallpaper, ...filtered].slice(0, 10); // Keep last 10
       
-      localStorage.setItem('recentlyViewed', JSON.stringify(updated));
+      // Update cookie if consent is granted or not explicitly rejected
+      const consent = getCookie('dl_cookie_consent');
+      if (consent !== 'necessary') {
+        const ids = updated.map((wp) => wp._id);
+        // Save cookie for 30 days
+        setCookie('recentlyViewed', JSON.stringify(ids), 30);
+      } else {
+        // If necessary-only, ensure cookie is erased
+        eraseCookie('recentlyViewed');
+      }
+      
       return { recentlyViewed: updated };
     });
   },
 
   clearRecentlyViewed: () => {
-    localStorage.removeItem('recentlyViewed');
+    eraseCookie('recentlyViewed');
     set({ recentlyViewed: [] });
   },
 }));

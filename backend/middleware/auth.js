@@ -1,18 +1,40 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+// Helper to parse cookies from raw headers
+const parseCookies = (cookieHeader) => {
+  const list = {};
+  if (!cookieHeader) return list;
+  cookieHeader.split(';').forEach((cookie) => {
+    const parts = cookie.split('=');
+    list[parts.shift().trim()] = decodeURIComponent(parts.join('='));
+  });
+  return list;
+};
+
 // Protect routes
 export const protect = async (req, res, next) => {
   let token;
 
+  // 1. Try to read token from cookies
+  if (req.headers.cookie) {
+    const cookies = parseCookies(req.headers.cookie);
+    if (cookies.token) {
+      token = cookies.token;
+    }
+  }
+
+  // 2. Fall back to Authorization header
   if (
+    !token &&
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
-    try {
-      // Get token from header
-      token = req.headers.authorization.split(' ')[1];
+    token = req.headers.authorization.split(' ')[1];
+  }
 
+  if (token) {
+    try {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dreamlens_secret_key_123');
 
@@ -23,28 +45,39 @@ export const protect = async (req, res, next) => {
         return res.status(401).json({ success: false, message: 'Not authorized, user not found' });
       }
 
-      next();
+      return next();
     } catch (error) {
       console.error(error);
-      res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+      return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
     }
   }
 
-  if (!token) {
-    res.status(401).json({ success: false, message: 'Not authorized, no token provided' });
-  }
+  return res.status(401).json({ success: false, message: 'Not authorized, no token provided' });
 };
 
 // Optional Protect (allows guests, but decodes user if token provided)
 export const optionalProtect = async (req, res, next) => {
   let token;
 
+  // 1. Try to read token from cookies
+  if (req.headers.cookie) {
+    const cookies = parseCookies(req.headers.cookie);
+    if (cookies.token) {
+      token = cookies.token;
+    }
+  }
+
+  // 2. Fall back to Authorization header
   if (
+    !token &&
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (token) {
     try {
-      token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dreamlens_secret_key_123');
       req.user = await User.findById(decoded.id).select('-password');
     } catch (error) {
@@ -53,7 +86,6 @@ export const optionalProtect = async (req, res, next) => {
   }
   next();
 };
-
 
 // Admin middleware
 export const admin = (req, res, next) => {

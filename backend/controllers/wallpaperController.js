@@ -159,3 +159,138 @@ export const getRelatedWallpapers = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Get recently viewed wallpapers from cookie
+// @route   GET /api/wallpapers/recent
+// @access  Public
+export const getRecentWallpapers = async (req, res) => {
+  try {
+    const parseCookies = (cookieHeader) => {
+      const list = {};
+      if (!cookieHeader) return list;
+      cookieHeader.split(';').forEach((cookie) => {
+        const parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURIComponent(parts.join('='));
+      });
+      return list;
+    };
+
+    const cookies = parseCookies(req.headers.cookie);
+    const recentlyViewedStr = cookies.recentlyViewed;
+
+    if (!recentlyViewedStr) {
+      return res.json({ success: true, data: [] });
+    }
+
+    let ids = [];
+    try {
+      ids = JSON.parse(recentlyViewedStr);
+    } catch (e) {
+      return res.json({ success: true, data: [] });
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.json({ success: true, data: [] });
+    }
+
+    // Fetch wallpapers matching those IDs
+    const wallpapers = await Wallpaper.find({ _id: { $in: ids } });
+
+    // Preserve viewed order
+    const orderMap = {};
+    ids.forEach((id, index) => {
+      orderMap[id.toString()] = index;
+    });
+
+    const sortedWallpapers = wallpapers.sort((a, b) => {
+      return (orderMap[a._id.toString()] ?? 0) - (orderMap[b._id.toString()] ?? 0);
+    });
+
+    res.json({ success: true, data: sortedWallpapers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get personalized recommendations based on browsing history cookie
+// @route   GET /api/wallpapers/recommendations
+// @access  Public
+export const getRecommendedWallpapers = async (req, res) => {
+  try {
+    const parseCookies = (cookieHeader) => {
+      const list = {};
+      if (!cookieHeader) return list;
+      cookieHeader.split(';').forEach((cookie) => {
+        const parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURIComponent(parts.join('='));
+      });
+      return list;
+    };
+
+    const cookies = parseCookies(req.headers.cookie);
+    const recentlyViewedStr = cookies.recentlyViewed;
+    let recentlyViewedIds = [];
+
+    if (recentlyViewedStr) {
+      try {
+        const parsed = JSON.parse(recentlyViewedStr);
+        if (Array.isArray(parsed)) {
+          recentlyViewedIds = parsed;
+        }
+      } catch (e) {
+        console.error('Error parsing recentlyViewed cookie:', e);
+      }
+    }
+
+    // If we have history, recommend similar wallpapers
+    if (recentlyViewedIds.length > 0) {
+      // Fetch viewed wallpapers to analyze categories and tags
+      const viewedWallpapers = await Wallpaper.find({ _id: { $in: recentlyViewedIds } });
+
+      if (viewedWallpapers.length > 0) {
+        // Collect categories and tags
+        const categories = viewedWallpapers.map((wp) => wp.category).filter(Boolean);
+        let tags = [];
+        viewedWallpapers.forEach((wp) => {
+          if (Array.isArray(wp.tags)) {
+            tags = [...tags, ...wp.tags];
+          }
+        });
+
+        // Find other wallpapers matching the same categories or tags, excluding viewed ones
+        const recommendations = await Wallpaper.find({
+          _id: { $not: { $in: recentlyViewedIds } },
+          $or: [
+            { category: { $in: categories } },
+            { tags: { $in: tags } }
+          ]
+        })
+          .limit(8);
+
+        // If we found enough recommendations, return them
+        if (recommendations.length >= 4) {
+          return res.json({ success: true, data: recommendations });
+        }
+
+        // If not enough, fill the rest with trending wallpapers
+        const existingIds = [...recentlyViewedIds, ...recommendations.map(r => r._id.toString())];
+        const filler = await Wallpaper.find({
+          _id: { $not: { $in: existingIds } }
+        })
+          .sort({ downloads: -1, likes: -1, createdAt: -1 })
+          .limit(8 - recommendations.length);
+
+        return res.json({ success: true, data: [...recommendations, ...filler] });
+      }
+    }
+
+    // Default Fallback: If no history, recommend trending wallpapers
+    const trending = await Wallpaper.find({})
+      .sort({ downloads: -1, likes: -1, createdAt: -1 })
+      .limit(8);
+
+    res.json({ success: true, data: trending });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

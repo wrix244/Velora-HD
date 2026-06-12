@@ -68,3 +68,25 @@ export const useRelatedWallpapers = (id) => {
     enabled: !!id,
   });
 };
+
+// Fetch personalized recommended wallpapers
+export const useRecommendedWallpapers = () => {
+  return useQuery({
+    queryKey: ['wallpapers', 'recommendations'],
+    queryFn: async () => {
+      const response = await axios.get('/api/wallpapers/recommendations');
+      return response.data.data;
+    },
+  });
+};
+
+// Fetch recently viewed wallpapers resolved from cookie
+export const useRecentWallpapers = () => {
+  return useQuery({
+    queryKey: ['wallpapers', 'recent'],
+    queryFn: async () => {
+      const response = await axios.get('/api/wallpapers/recent');
+      return response.data.data;
+    },
+  });
+};

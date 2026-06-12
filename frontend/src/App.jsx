@@ -6,7 +6,11 @@ import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import ToastContainer from './components/common/ToastContainer';
 import InstallPrompt from './components/common/InstallPrompt';
+import CookieConsent from './components/common/CookieConsent';
 import usePWAStore from './store/pwaStore';
+import useThemeStore from './store/themeStore';
+import useUIStore from './store/uiStore';
+import { getCookie } from './utils/cookies';
 
 // Pages
 import Home from './pages/Home';
@@ -19,7 +23,6 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import LiveDashboard from './pages/LiveDashboard';
-import useThemeStore from './store/themeStore';
 
 export default function App() {
   const location = useLocation();
@@ -27,18 +30,42 @@ export default function App() {
   const setDeferredPrompt = usePWAStore((s) => s.setDeferredPrompt);
   const setIsInstalled = usePWAStore((s) => s.setIsInstalled);
   const setShowInstallBanner = usePWAStore((s) => s.setShowInstallBanner);
+  const setRecentlyViewed = useUIStore((s) => s.setRecentlyViewed);
 
+  // Initialize theme on app load
   useEffect(() => {
     initTheme();
   }, []);
 
+  // Fetch resolved recently viewed wallpapers from backend if cookie exists
+  useEffect(() => {
+    const fetchRecentWallpapers = async () => {
+      const recentCookie = getCookie('recentlyViewed');
+      if (recentCookie) {
+        try {
+          const ids = JSON.parse(recentCookie);
+          if (Array.isArray(ids) && ids.length > 0) {
+            const res = await axios.get('/api/wallpapers/recent');
+            if (res.data && res.data.success) {
+              setRecentlyViewed(res.data.data);
+            }
+          }
+        } catch (err) {
+          console.error('Error resolving recently viewed wallpapers:', err);
+        }
+      }
+    };
+    fetchRecentWallpapers();
+  }, [setRecentlyViewed]);
+
+  // PWA installation prompt controller
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
       return;
     }
 
-    const dismissed = localStorage.getItem('dl_pwa_dismissed');
+    const dismissed = getCookie('dl_pwa_dismissed');
     const wasDismissedRecently = dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000;
 
     const handler = (e) => {
@@ -60,6 +87,7 @@ export default function App() {
       window.removeEventListener('beforeinstallprompt', handler);
     };
   }, [setDeferredPrompt, setIsInstalled, setShowInstallBanner]);
+
   const sessionId = useRef(
     sessionStorage.getItem('dl_session') || (() => {
       const id = Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -81,6 +109,7 @@ export default function App() {
     const interval = setInterval(sendHeartbeat, 10000);
     return () => clearInterval(interval);
   }, [location.pathname]);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#121212]">
       {/* Route state scroll restorer */}
@@ -111,6 +140,9 @@ export default function App() {
 
       {/* PWA Install Bottom Sheet */}
       <InstallPrompt />
+
+      {/* Cookie Preferences Banner */}
+      <CookieConsent />
 
       {/* Global Footer */}
       <Footer />

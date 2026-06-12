@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone } from 'lucide-react';
 import usePWAStore from '../../store/pwaStore';
+import { setCookie } from '../../utils/cookies';
 
 export default function InstallPrompt() {
   const { isInstalled, showInstallBanner, setShowInstallBanner, installApp } = usePWAStore();
@@ -12,7 +13,7 @@ export default function InstallPrompt() {
 
   const handleDismiss = () => {
     setShowInstallBanner(false);
-    localStorage.setItem('dl_pwa_dismissed', Date.now().toString());
+    setCookie('dl_pwa_dismissed', Date.now().toString(), 7);
   };
 
   if (isInstalled || !showInstallBanner) return null;
