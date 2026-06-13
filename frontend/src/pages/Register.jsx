@@ -46,14 +46,14 @@ export default function Register() {
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center gap-1.5 justify-center">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center">
-              <span className="font-display font-black text-white text-xs">DL</span>
+              <span className="font-display font-black text-white text-xs">VH</span>
             </div>
             <span className="font-display font-black text-lg text-white">
-              Dream<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Lens</span>
+              Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
             </span>
           </Link>
           <h2 className="font-display font-black text-2xl text-white">Create Account</h2>
-          <p className="text-xs text-gray-400">Join Dream Lens and start organizing your wallpaper collections.</p>
+          <p className="text-xs text-gray-400">Join Velora HD and start organizing your wallpaper collections.</p>
         </div>
 
         {/* Input Form */}

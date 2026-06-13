@@ -82,7 +82,7 @@ export default function CookieConsent() {
               </div>
 
               <p className="text-xs text-gray-400 leading-relaxed">
-                We use cookies to secure your account authentication and personalize your experience. Custom themes and recommendation history require preference cookies. Read our <Link to="/privacy" className="text-primary hover:underline font-semibold">Privacy Policy</Link> to learn more.
+                We use cookies to secure your account authentication and personalize your experience. Custom themes and recommendation history require preference cookies. We value your privacy and data security.
               </p>
 
               <div className="flex flex-col gap-2 pt-2">

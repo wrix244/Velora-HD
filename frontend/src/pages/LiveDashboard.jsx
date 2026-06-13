@@ -166,7 +166,7 @@ export default function LiveDashboard() {
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-display text-white leading-tight">
-            Dream Lens <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">Stats</span>
+            Velora HD <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">Stats</span>
           </h1>
           <p className="text-gray-400 text-sm mt-1">Real-time platform metrics — auto-refreshes every 15s</p>
         </div>

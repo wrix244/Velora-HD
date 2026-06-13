@@ -1,6 +1,6 @@
 # Velora HD 🌌 — Premium Full-Stack Wallpaper Marketplace
 
-Velor HD is a production-ready, highly interactive wallpaper marketplace featuring a stunning, cinematic glassmorphic user interface. The platform supports browsing, previewing, wishlisting, purchasing, and downloading ultra-high-definition wallpapers (both static and live animated formats) for both mobile devices and PC screens.
+Velora HD is a production-ready, highly interactive wallpaper marketplace featuring a stunning, cinematic glassmorphic user interface. The platform supports browsing, previewing, wishlisting, purchasing, and downloading ultra-high-definition wallpapers (both static and live animated formats) for both mobile devices and PC screens.
 
 ---
 
@@ -19,7 +19,7 @@ Velor HD is a production-ready, highly interactive wallpaper marketplace featuri
 3. **Advanced Filtering Engine**: Search filters combining categories (11 choices), resolution, device format (Mobile/PC), format type (Static/Live), pricing status, and popularity sorting (Downloads/Likes).
 4. **Mock Checkout & Payment**: Premium wallpapers require passing card details (CVV, Expiry, Card Numbers) validated on both client and server sides, creating persistent transaction logs and unlocking downloads.
 5. **Secure Admin Dashboard**: 
-   - Login at `admin@dreamlens.com` with `admin123`.
+   - Login at `admin@velorahd.com` with `admin123`.
    - Admin Analytics displaying overview cards, monthly download trends, and monthly revenue trends via responsive SVG line charts (no heavy external chart libraries).
    - CRUD management for adding, updating, and deleting wallpapers supporting local file uploads or URL sourcing.
    - Registry tables for users, transactions, and download logs.
@@ -41,7 +41,7 @@ Open a terminal inside the project directory:
 cd backend
 
 # Create the environment configuration file
-# Check backend/.env. Default connection URI is mongodb://127.0.0.1:27017/dreamlens
+# Check backend/.env. Default connection URI is mongodb://127.0.0.1:27017/velorahd
 
 # Run the database seeder script to populate 50+ beautiful wallpapers
 npm run seed
@@ -72,9 +72,9 @@ Vite is pre-configured with a proxy routing `/api` and `/uploads` requests direc
 ## 🔒 Test Credentials
 
 ### Administrator Account
-- **Email**: `admin@dreamlens.com`
+- **Email**: `admin@velorahd.com`
 - **Password**: `admin123`
 
 ### Standard Test Account
-- **Email**: `user@dreamlens.com`
+- **Email**: `user@velorahd.com`
 - **Password**: `user123`

@@ -25,6 +25,12 @@ import AdminDashboard from './pages/AdminDashboard';
 import LiveDashboard from './pages/LiveDashboard';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import Refunds from './pages/Refunds';
+import AiPolicy from './pages/AiPolicy';
+import Copyright from './pages/Copyright';
+import CookiePolicy from './pages/CookiePolicy';
+import Disclaimer from './pages/Disclaimer';
+import Contact from './pages/Contact';
 
 export default function App() {
   const location = useLocation();
@@ -135,6 +141,12 @@ export default function App() {
           <Route path="/dashboard" element={<LiveDashboard />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/refunds" element={<Refunds />} />
+          <Route path="/ai-policy" element={<AiPolicy />} />
+          <Route path="/copyright" element={<Copyright />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>

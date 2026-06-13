@@ -1,6 +1,6 @@
 {
-  "appId": "com.dreamlens.app",
-  "appName": "Dream Lens",
+  "appId": "com.velorahd.app",
+  "appName": "Velora HD",
   "webDir": "dist",
   "bundledWebRuntime": false
 }

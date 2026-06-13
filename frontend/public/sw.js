@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dreamlens-v2';
+const CACHE_NAME = 'velorahd-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

@@ -40,13 +40,13 @@ export default function InstallPrompt() {
             {/* App icon */}
             <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent p-[2px] shadow-lg shadow-primary/20">
               <div className="w-full h-full rounded-2xl overflow-hidden">
-                <img src="/icon-512.png" alt="Dream Lens" className="w-full h-full object-cover" />
+                <img src="/icon-512.png" alt="Velora HD" className="w-full h-full object-cover" />
               </div>
             </div>
 
             {/* Content */}
             <div className="flex-grow min-w-0">
-              <h3 className="font-display text-white text-base font-bold">Install Dream Lens</h3>
+              <h3 className="font-display text-white text-base font-bold">Install Velora HD</h3>
               <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">
                 Add to home screen for instant access, offline browsing, and a fullscreen experience.
               </p>

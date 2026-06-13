@@ -106,7 +106,7 @@ const liveVideoUrls = [
 const seedDatabase = async () => {
   try {
     console.log('Connecting to database for seeding...');
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dreamlens');
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/velorahd');
     console.log('Database connected!');
 
     // Clear existing tables
@@ -123,15 +123,15 @@ const seedDatabase = async () => {
     const hashedUserPassword = await bcrypt.hash('user123', salt);
 
     const adminUser = await User.create({
-      name: 'Dream Lens Admin',
-      email: 'admin@dreamlens.com',
+      name: 'Velora HD Admin',
+      email: 'admin@velorahd.com',
       password: 'admin123', // Will be hashed by pre-save hook
       role: 'admin',
     });
 
     const regularUser = await User.create({
       name: 'John Doe',
-      email: 'user@dreamlens.com',
+      email: 'user@velorahd.com',
       password: 'user123', // Will be hashed by pre-save hook
       role: 'user',
     });

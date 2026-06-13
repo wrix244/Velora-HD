@@ -36,7 +36,7 @@ export const protect = async (req, res, next) => {
   if (token) {
     try {
       // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dreamlens_secret_key_123');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'velorahd_secret_key_123');
 
       // Get user from the token (excluding password)
       req.user = await User.findById(decoded.id).select('-password');
@@ -78,7 +78,7 @@ export const optionalProtect = async (req, res, next) => {
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dreamlens_secret_key_123');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'velorahd_secret_key_123');
       req.user = await User.findById(decoded.id).select('-password');
     } catch (error) {
       console.warn('Optional token verification failed:', error.message);

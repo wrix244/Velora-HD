@@ -1,4 +1,4 @@
-package com.dreamlens.app;
+package com.velorahd.app;
 
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;

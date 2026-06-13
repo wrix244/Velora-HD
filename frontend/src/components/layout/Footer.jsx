@@ -26,10 +26,10 @@ export default function Footer() {
           <div className="md:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center">
-                <span className="font-display font-black text-white text-xs">DL</span>
+                <span className="font-display font-black text-white text-xs">VH</span>
               </div>
               <span className="font-display font-black text-lg tracking-tight text-white">
-                Dream<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Lens</span>
+                Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
               </span>
             </Link>
             <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
@@ -108,11 +108,17 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-[10px] text-gray-500">
-            © {new Date().getFullYear()} Dream Lens. All rights reserved.
+            © {new Date().getFullYear()} Velora HD. All rights reserved.
           </p>
-          <div className="flex gap-4 text-[10px] text-gray-500">
+          <div className="flex flex-wrap justify-center gap-4 text-[10px] text-gray-500">
             <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/refunds" className="hover:text-white transition-colors">Refund Policy</Link>
+            <Link to="/ai-policy" className="hover:text-white transition-colors">AI Policy</Link>
+            <Link to="/copyright" className="hover:text-white transition-colors">Copyright & DMCA</Link>
+            <Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link>
+            <Link to="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link>
             <a href="#" className="hover:text-white transition-colors font-semibold">Cookie Settings</a>
           </div>
         </div>

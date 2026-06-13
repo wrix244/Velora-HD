@@ -54,7 +54,7 @@ app.use('/api/stats', statsRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Dream Lens Server is healthy and running' });
+  res.json({ status: 'ok', message: 'Velora HD Server is healthy and running' });
 });
 
 // Serve frontend build static files in production if needed, or let them run separately

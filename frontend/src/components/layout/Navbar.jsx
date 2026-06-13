@@ -49,10 +49,10 @@ export default function Navbar() {
         {/* Branding Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:rotate-6 transition-transform">
-            <span className="font-display font-black text-white text-base">DL</span>
+            <span className="font-display font-black text-white text-base">VH</span>
           </div>
           <span className="font-display font-black text-xl tracking-tight text-white group-hover:text-primary transition-colors">
-            Dream<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Lens</span>
+            Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
           </span>
         </Link>
 

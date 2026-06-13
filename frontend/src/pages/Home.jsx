@@ -34,7 +34,7 @@ const testimonials = [
   {
     name: 'Sarah K.',
     role: 'iOS Designer',
-    comment: 'Dream Lens has completely replaced where I find layouts for my device mocks. The quality of resolution and live motion renders is spectacular!',
+    comment: 'Velora HD has completely replaced where I find layouts for my device mocks. The quality of resolution and live motion renders is spectacular!',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80',
   },
   {
@@ -46,7 +46,7 @@ const testimonials = [
   {
     name: 'Elena R.',
     role: 'Creative Director',
-    comment: 'Finding high-resolution 4K technology and space art that actually matches premium displays was impossible until I found Dream Lens.',
+    comment: 'Finding high-resolution 4K technology and space art that actually matches premium displays was impossible until I found Velora HD.',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80',
   },
 ];

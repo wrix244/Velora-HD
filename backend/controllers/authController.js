@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'dreamlens_secret_key_123', {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'velorahd_secret_key_123', {
     expiresIn: '30d',
   });
 };
