@@ -1,6 +1,10 @@
 # Velora HD 🌌 — Premium Full-Stack Wallpaper Marketplace
 
+<<<<<<< Updated upstream
 Velora HD is a production-ready, highly interactive wallpaper marketplace featuring a stunning, cinematic glassmorphic user interface. The platform supports browsing, previewing, wishlisting, purchasing, and downloading ultra-high-definition wallpapers (both static and live animated formats) for both mobile devices and PC screens.
+=======
+Dream Lens is a production-ready, highly interactive wallpaper marketplace featuring a stunning, cinematic glassmorphic user interface. The platform supports browsing, previewing, wishlisting, purchasing, and downloading ultra-high-definition wallpapers (both static and live animated formats) for both mobile devices and PC screens.
+>>>>>>> Stashed changes
 
 ---
 

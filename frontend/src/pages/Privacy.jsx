@@ -44,7 +44,11 @@ export default function Privacy() {
           className="glass-panel p-6 rounded-3xl border border-white/5 space-y-4"
         >
           <p className="text-sm text-gray-300 leading-relaxed">
+
             Welcome to <strong>VeloraHD</strong> ("VeloraHD", "Website", "we", "our", or "us").
+
+            At <strong>Velor HD</strong>, we respect your privacy and are committed to protecting your personal data. This Privacy Policy describes how we collect, use, store, and share information when you access or make purchases from our premium wallpaper marketplace.
+
           </p>
           <p className="text-sm text-gray-300 leading-relaxed">
             VeloraHD respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, store, and protect information when you visit our Website, create an account, purchase premium content, subscribe to newsletters, contact us, or otherwise use our services.
