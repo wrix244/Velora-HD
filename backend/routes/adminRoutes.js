@@ -12,22 +12,15 @@ import {
   createWallpaper,
   updateWallpaper,
   deleteWallpaper,
+  getAdminWallpapers,
+  deleteUser,
+  banUser,
 } from '../controllers/adminController.js';
 
 const router = express.Router();
 
-// Configure Multer for local uploads
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
+// Configure Multer for memory uploads
+const storage = multer.memoryStorage();
 
 // File validation
 const fileFilter = (req, file, cb) => {
@@ -64,8 +57,13 @@ router.get('/purchases', getPurchasesList);
 router.get('/downloads', getDownloadsList);
 
 // Wallpaper CRUD
+router.get('/wallpapers', getAdminWallpapers);
 router.post('/wallpapers', uploadFields, createWallpaper);
 router.put('/wallpapers/:id', uploadFields, updateWallpaper);
 router.delete('/wallpapers/:id', deleteWallpaper);
+
+// User Management
+router.delete('/users/:id', deleteUser);
+router.put('/users/:id/ban', banUser);
 
 export default router;

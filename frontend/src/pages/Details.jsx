@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X } from 'lucide-react';
+import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2 } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
 import { useRecordDownload } from '../hooks/useDownloads';
 import { usePurchaseHistory } from '../hooks/usePurchases';
+import { useDeleteWallpaper } from '../hooks/useAdmin';
 import useAuthStore from '../store/authStore';
 import useFavoritesStore from '../store/favoritesStore';
 import useUIStore from '../store/uiStore';
@@ -82,6 +83,7 @@ export default function Details() {
   const isFavorite = useFavoritesStore((state) => state.isFavorite(wallpaper?._id));
   const toggleFavMutation = useToggleFavorite();
   const recordDownloadMutation = useRecordDownload();
+  const deleteMutation = useDeleteWallpaper();
 
   // Synced purchases check
   const purchased = purchases ? purchases.some((p) => p.wallpaperId?._id === wallpaper?._id) : false;
@@ -122,6 +124,20 @@ export default function Details() {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     addToast('Link copied to clipboard!', 'success');
+  };
+
+  const handleEdit = () => {
+    navigate('/admin', { state: { editWallpaper: wallpaper } });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this wallpaper?')) {
+      deleteMutation.mutate(wallpaper._id, {
+        onSuccess: () => {
+          navigate('/explore');
+        },
+      });
+    }
   };
 
   if (isLoading) {
@@ -206,9 +222,27 @@ export default function Details() {
             <h1 className="font-display font-black text-2xl md:text-3xl text-white leading-tight">
               {wallpaper.title}
             </h1>
-            <p className="text-xs text-gray-400 leading-relaxed pt-2">
+            <p className="text-xs text-gray-400 leading-relaxed pt-2 whitespace-pre-wrap break-words">
               {wallpaper.description || 'No description provided for this artwork.'}
             </p>
+            {user?.role === 'admin' && (
+              <div className="flex gap-2 pt-4 border-t border-white/5 mt-2">
+                <button
+                  onClick={handleEdit}
+                  className="flex-grow py-2.5 px-4 bg-primary/10 hover:bg-primary/25 border border-primary/20 hover:border-primary/40 text-primary text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Edit className="w-3.5 h-3.5" />
+                  Edit Wallpaper
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="py-2.5 px-4 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 hover:border-rose-500/40 text-rose-400 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Asset Stats details */}

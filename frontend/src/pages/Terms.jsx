@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Terms() {
   return (
-    <div className="pt-24 pb-20 min-h-screen relative overflow-hidden">
+    <div className="pt-24 pb-20 min-h-screen relative overflow-hidden policy-container">
       {/* Background decorations */}
       <div className="absolute top-1/4 left-10 w-80 h-80 rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 rounded-full bg-accent/5 blur-[150px] pointer-events-none" />

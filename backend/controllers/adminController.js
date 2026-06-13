@@ -1,4 +1,6 @@
 import Wallpaper from '../models/Wallpaper.js';
+import User from '../models/User.js';
+import { uploadToCloudinary, deleteFromCloudinary } from '../config/cloudinary.js';
 
 // @desc    Create a new wallpaper
 // @route   POST /api/admin/wallpapers
@@ -35,10 +37,19 @@ export const createWallpaper = async (req, res) => {
     // If files uploaded via multer
     if (req.files) {
       if (req.files.previewImage) {
-        wallpaperData.previewImage = `/uploads/${req.files.previewImage[0].filename}`;
+        const previewResult = await uploadToCloudinary(req.files.previewImage[0].buffer, {
+          folder: 'velorahd/previews',
+          resource_type: 'image',
+        });
+        wallpaperData.previewImage = previewResult.secure_url;
       }
       if (req.files.downloadFile) {
-        wallpaperData.downloadFile = `/uploads/${req.files.downloadFile[0].filename}`;
+        const isVideo = req.files.downloadFile[0].mimetype.startsWith('video') || type === 'live';
+        const downloadResult = await uploadToCloudinary(req.files.downloadFile[0].buffer, {
+          folder: 'velorahd/downloads',
+          resource_type: isVideo ? 'video' : 'image',
+        });
+        wallpaperData.downloadFile = downloadResult.secure_url;
       }
     }
 
@@ -109,17 +120,46 @@ export const updateWallpaper = async (req, res) => {
     }
 
     // Check if new files uploaded via multer
-    if (req.files) {
+    if (req.files && (req.files.previewImage || req.files.downloadFile)) {
       if (req.files.previewImage) {
-        wallpaper.previewImage = `/uploads/${req.files.previewImage[0].filename}`;
+        // Delete old preview image from Cloudinary
+        if (wallpaper.previewImage) {
+          await deleteFromCloudinary(wallpaper.previewImage);
+        }
+        const previewResult = await uploadToCloudinary(req.files.previewImage[0].buffer, {
+          folder: 'velorahd/previews',
+          resource_type: 'image',
+        });
+        wallpaper.previewImage = previewResult.secure_url;
       }
       if (req.files.downloadFile) {
-        wallpaper.downloadFile = `/uploads/${req.files.downloadFile[0].filename}`;
+        // Delete old high-res file from Cloudinary
+        if (wallpaper.downloadFile) {
+          await deleteFromCloudinary(wallpaper.downloadFile);
+        }
+        const isVideo = req.files.downloadFile[0].mimetype.startsWith('video') || (type !== undefined ? type === 'live' : wallpaper.type === 'live');
+        const downloadResult = await uploadToCloudinary(req.files.downloadFile[0].buffer, {
+          folder: 'velorahd/downloads',
+          resource_type: isVideo ? 'video' : 'image',
+        });
+        wallpaper.downloadFile = downloadResult.secure_url;
       }
     } else {
       // update via text fields if no file uploads
-      if (previewImage !== undefined) wallpaper.previewImage = previewImage;
-      if (downloadFile !== undefined) wallpaper.downloadFile = downloadFile;
+      if (previewImage !== undefined) {
+        // If the URL changed, clean up the old one
+        if (previewImage !== wallpaper.previewImage && wallpaper.previewImage) {
+          await deleteFromCloudinary(wallpaper.previewImage);
+        }
+        wallpaper.previewImage = previewImage;
+      }
+      if (downloadFile !== undefined) {
+        // If the URL changed, clean up the old one
+        if (downloadFile !== wallpaper.downloadFile && wallpaper.downloadFile) {
+          await deleteFromCloudinary(wallpaper.downloadFile);
+        }
+        wallpaper.downloadFile = downloadFile;
+      }
     }
 
     const updatedWallpaper = await wallpaper.save();
@@ -145,9 +185,81 @@ export const deleteWallpaper = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Wallpaper not found' });
     }
 
+    // Delete files from Cloudinary if they exist
+    if (wallpaper.previewImage) {
+      await deleteFromCloudinary(wallpaper.previewImage);
+    }
+    if (wallpaper.downloadFile) {
+      await deleteFromCloudinary(wallpaper.downloadFile);
+    }
+
     await Wallpaper.findByIdAndDelete(req.params.id);
 
     res.json({ success: true, message: 'Wallpaper deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get all wallpapers for admin view
+// @route   GET /api/admin/wallpapers
+// @access  Private/Admin
+export const getAdminWallpapers = async (req, res) => {
+  try {
+    const wallpapers = await Wallpaper.find({}).sort({ createdAt: -1 });
+    res.json({ success: true, data: wallpapers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Delete a user
+// @route   DELETE /api/admin/users/:id
+// @access  Private/Admin
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (user.role === 'admin') {
+      return res.status(400).json({ success: false, message: 'Cannot delete admin users' });
+    }
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({ success: true, message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Ban or unban a user
+// @route   PUT /api/admin/users/:id/ban
+// @access  Private/Admin
+export const banUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (user.role === 'admin') {
+      return res.status(400).json({ success: false, message: 'Cannot ban admin users' });
+    }
+
+    const { isBanned } = req.body;
+    user.isBanned = isBanned !== undefined ? isBanned : !user.isBanned;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: `User has been successfully ${user.isBanned ? 'banned' : 'unbanned'}`,
+      data: user,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
