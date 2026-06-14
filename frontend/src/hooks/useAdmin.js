@@ -82,6 +82,7 @@ export const useCreateWallpaper = () => {
       addToast('Wallpaper created successfully!', 'success');
       queryClient.invalidateQueries({ queryKey: ['wallpapers'] });
       queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'wallpapers'] });
     },
     onError: (error) => {
       const message = error.response?.data?.message || 'Failed to create wallpaper.';
@@ -109,6 +110,7 @@ export const useUpdateWallpaper = () => {
       queryClient.invalidateQueries({ queryKey: ['wallpapers'] });
       queryClient.invalidateQueries({ queryKey: ['wallpaper', data.data.slug] });
       queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'wallpapers'] });
     },
     onError: (error) => {
       const message = error.response?.data?.message || 'Failed to update wallpaper.';
@@ -131,9 +133,69 @@ export const useDeleteWallpaper = () => {
       addToast('Wallpaper deleted successfully.', 'success');
       queryClient.invalidateQueries({ queryKey: ['wallpapers'] });
       queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'wallpapers'] });
     },
     onError: (error) => {
       const message = error.response?.data?.message || 'Failed to delete wallpaper.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Fetch Admin all wallpapers
+export const useAdminWallpapers = () => {
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user?.role === 'admin';
+
+  return useQuery({
+    queryKey: ['admin', 'wallpapers'],
+    queryFn: async () => {
+      const response = await axios.get('/api/admin/wallpapers');
+      return response.data.data;
+    },
+    enabled: isAdmin,
+  });
+};
+
+// Delete User Mutation
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async (id) => {
+      const response = await axios.delete(`/api/admin/users/${id}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      addToast('User deleted successfully.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to delete user.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Ban User Mutation
+export const useBanUser = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async ({ id, isBanned }) => {
+      const response = await axios.put(`/api/admin/users/${id}/ban`, { isBanned });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast(data.message || 'User status updated.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to update user status.';
       addToast(message, 'error');
     },
   });

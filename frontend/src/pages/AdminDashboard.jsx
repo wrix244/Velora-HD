@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle } from 'lucide-react';
 import {
   useAdminAnalytics,
@@ -9,6 +9,9 @@ import {
   useCreateWallpaper,
   useUpdateWallpaper,
   useDeleteWallpaper,
+  useAdminWallpapers,
+  useDeleteUser,
+  useBanUser,
 } from '../hooks/useAdmin';
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
@@ -17,6 +20,7 @@ const categories = ['Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', '
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isAuthenticated } = useAuthStore();
   const addToast = useUIStore((state) => state.addToast);
 
@@ -56,11 +60,14 @@ export default function AdminDashboard() {
   const { data: usersList } = useAdminUsers();
   const { data: purchasesList } = useAdminPurchases();
   const { data: downloadsList } = useAdminDownloads();
+  const { data: wallpapersList } = useAdminWallpapers();
 
   // Mutations
   const createMutation = useCreateWallpaper();
   const updateMutation = useUpdateWallpaper();
   const deleteMutation = useDeleteWallpaper();
+  const deleteUserMutation = useDeleteUser();
+  const banUserMutation = useBanUser();
 
   const handleOpenAddModal = () => {
     setEditingWallpaper(null);
@@ -156,6 +163,27 @@ export default function AdminDashboard() {
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this wallpaper?')) {
       deleteMutation.mutate(id);
+    }
+  };
+
+  useEffect(() => {
+    if (location.state?.editWallpaper) {
+      handleOpenEditModal(location.state.editWallpaper);
+      // Clean up state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  const handleToggleBan = (id, currentBannedStatus) => {
+    const action = currentBannedStatus ? 'unban' : 'ban';
+    if (window.confirm(`Are you sure you want to ${action} this user?`)) {
+      banUserMutation.mutate({ id, isBanned: !currentBannedStatus });
+    }
+  };
+
+  const handleDeleteUser = (id) => {
+    if (window.confirm('Are you sure you want to permanently delete this user? This action cannot be undone.')) {
+      deleteUserMutation.mutate(id);
     }
   };
 
@@ -401,7 +429,7 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 text-gray-300">
-                  {analytics?.popularWallpapers?.map((wp) => ( // Fallback to list
+                  {wallpapersList?.map((wp) => (
                     <tr key={wp._id} className="hover:bg-white/2 transition">
                       <td className="p-4 flex items-center gap-3">
                         <img src={wp.previewImage} alt="" className="w-8 h-10 rounded object-cover" />
@@ -444,7 +472,7 @@ export default function AdminDashboard() {
               </table>
             </div>
             <p className="text-[10px] text-gray-500 italic text-center">
-              Showing top wallpapers by popularity. Use Explore to edit specific items.
+              Showing all uploaded wallpapers. Click Edit or Delete to manage any item.
             </p>
           </div>
         </div>
@@ -460,7 +488,9 @@ export default function AdminDashboard() {
                 <tr className="bg-white/2 text-gray-400 font-semibold border-b border-white/5">
                   <th className="p-4">Name</th>
                   <th className="p-4">Email</th>
+                  <th className="p-4">Status</th>
                   <th className="p-4">Registered On</th>
+                  <th className="p-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-gray-300">
@@ -468,7 +498,38 @@ export default function AdminDashboard() {
                   <tr key={u._id} className="hover:bg-white/2 transition">
                     <td className="p-4 font-semibold text-white">{u.name}</td>
                     <td className="p-4">{u.email}</td>
+                    <td className="p-4">
+                      {u.isBanned ? (
+                        <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[9px] font-bold">
+                          Banned
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold">
+                          Active
+                        </span>
+                      )}
+                    </td>
                     <td className="p-4 text-gray-500">{new Date(u.createdAt).toLocaleString()}</td>
+                    <td className="p-4 text-center space-x-2">
+                      <button
+                        onClick={() => handleToggleBan(u._id, u.isBanned)}
+                        className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer border ${
+                          u.isBanned
+                            ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white'
+                            : 'bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-white'
+                        }`}
+                        title={u.isBanned ? 'Unban User' : 'Ban User'}
+                      >
+                        {u.isBanned ? 'Unban' : 'Ban'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(u._id)}
+                        className="p-1 rounded bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white transition-colors cursor-pointer"
+                        title="Delete User"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 inline align-middle" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -356,4 +356,34 @@ html[data-theme="graffiti"] body::before {
   display: none;
 }
 
+/* Policy Container Typography Normalization */
+.policy-container .font-display {
+  font-family: var(--font-sans) !important;
+}
+
+.policy-container h1.font-display {
+  font-family: var(--font-sans) !important;
+  font-weight: 800 !important;
+}
+
+.policy-container h2.font-display,
+.policy-container h3.font-display {
+  font-family: var(--font-sans) !important;
+  font-weight: 700 !important;
+}
+
+.policy-container .text-xs {
+  font-size: 0.875rem !important; /* normal text-sm size */
+  line-height: 1.5rem !important;
+  color: rgba(255, 255, 255, 0.7) !important; /* Clean, professional readable light grey */
+}
+
+.policy-container .text-\[10px\] {
+  font-size: 0.75rem !important; /* normal text-xs size */
+}
+
+.policy-container li {
+  line-height: 1.6 !important;
+}
+
 
