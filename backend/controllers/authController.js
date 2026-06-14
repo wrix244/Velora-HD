@@ -1,5 +1,31 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import https from 'https';
+
+const verifyGoogleToken = (idToken) => {
+  return new Promise((resolve, reject) => {
+    https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (res.statusCode === 200) {
+            resolve(parsed);
+          } else {
+            reject(new Error(parsed.error_description || 'Invalid token'));
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }).on('error', (err) => {
+      reject(err);
+    });
+  });
+};
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'velorahd_secret_key_123', {
@@ -142,6 +168,76 @@ export const updateUserProfile = async (req, res) => {
     } else {
       res.status(404).json({ success: false, message: 'User not found' });
     }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Login / Register with Google
+// @route   POST /api/auth/google
+// @access  Public
+export const googleLogin = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({ success: false, message: 'Please provide a Google ID token' });
+    }
+
+    let payload;
+    try {
+      payload = await verifyGoogleToken(idToken);
+    } catch (error) {
+      return res.status(400).json({ success: false, message: `Google authentication failed: ${error.message}` });
+    }
+
+    if (!payload || !payload.email) {
+      return res.status(400).json({ success: false, message: 'Invalid token payload' });
+    }
+
+    // Security check: if GOOGLE_CLIENT_ID is configured, verify the audience (aud)
+    const expectedClientId = process.env.GOOGLE_CLIENT_ID;
+    if (expectedClientId && payload.aud !== expectedClientId) {
+      return res.status(400).json({ success: false, message: 'Token audience mismatch. Unrecognized client ID.' });
+    }
+
+    const { sub: googleId, email, name } = payload;
+
+    // 1. Try to find user by googleId
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      // 2. Try to find user by email (linking account if they previously signed up manually)
+      user = await User.findOne({ email });
+
+      if (user) {
+        // Link googleId to existing user
+        user.googleId = googleId;
+        await user.save();
+      } else {
+        // 3. Create new user
+        user = await User.create({
+          name: name || email.split('@')[0],
+          email,
+          googleId,
+        });
+      }
+    }
+
+    if (user.isBanned) {
+      return res.status(403).json({ success: false, message: 'Your account has been banned by the administrator' });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token: generateToken(user._id),
+      },
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

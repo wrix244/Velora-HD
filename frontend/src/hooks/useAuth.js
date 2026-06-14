@@ -34,6 +34,36 @@ export const useLogin = () => {
   });
 };
 
+// Google Login Hook
+export const useGoogleLogin = () => {
+  const login = useAuthStore((state) => state.login);
+  const addToast = useUIStore((state) => state.addToast);
+  const setFavorites = useFavoritesStore((state) => state.setFavorites);
+
+  return useMutation({
+    mutationFn: async ({ idToken }) => {
+      const response = await axios.post('/api/auth/google', { idToken });
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      login(data.data, data.data.token);
+      addToast(`Welcome back, ${data.data.name}!`, 'success');
+      
+      // Load user favorites on success
+      try {
+        const favsRes = await axios.get('/api/favorites');
+        setFavorites(favsRes.data.data);
+      } catch (err) {
+        console.warn('Failed to pre-load favorites on login:', err.message);
+      }
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Google authentication failed. Please try again.';
+      addToast(message, 'error');
+    },
+  });
+};
+
 // User Registration Hook
 export const useRegister = () => {
   const login = useAuthStore((state) => state.login);

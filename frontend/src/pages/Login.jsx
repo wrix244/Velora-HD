@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import { useLogin } from '../hooks/useAuth';
+import { useLogin, useGoogleLogin } from '../hooks/useAuth';
 import useAuthStore from '../store/authStore';
 import useThemeStore from '../store/themeStore';
 
@@ -10,6 +10,7 @@ export default function Login() {
   const theme = useThemeStore((s) => s.theme);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const loginMutation = useLogin();
+  const googleLoginMutation = useGoogleLogin();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +21,52 @@ export default function Login() {
       navigate('/');
     }
   }, [isAuthenticated, navigate]);
+
+  const handleGoogleCredentialResponse = (response) => {
+    const idToken = response.credential;
+    googleLoginMutation.mutate({ idToken });
+  };
+
+  useEffect(() => {
+    const initGoogleSignIn = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || '1085223847253-k1v38d4njs78a08dhnjg9854k41n926j.apps.googleusercontent.com',
+          callback: handleGoogleCredentialResponse,
+        });
+
+        const container = document.getElementById('google-signin-button');
+        const width = container ? Math.min(container.offsetWidth || 382, 382) : 382;
+
+        window.google.accounts.id.renderButton(
+          document.getElementById('google-signin-button'),
+          {
+            theme: 'filled_black',
+            size: 'large',
+            width: width,
+            text: 'signin_with',
+            shape: 'rectangular',
+          }
+        );
+      }
+    };
+
+    initGoogleSignIn();
+
+    const interval = setInterval(() => {
+      if (window.google) {
+        initGoogleSignIn();
+        clearInterval(interval);
+      }
+    }, 500);
+
+    window.addEventListener('resize', initGoogleSignIn);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', initGoogleSignIn);
+    };
+  }, [theme]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,6 +148,18 @@ export default function Login() {
             {loginMutation.isPending ? 'Logging In...' : 'Log In'}
           </button>
         </form>
+
+        {/* OR separator */}
+        <div className="relative flex py-2 items-center">
+          <div className="flex-grow border-t border-white/10"></div>
+          <span className="flex-shrink mx-4 text-gray-500 text-[10px] font-bold uppercase tracking-wider">or</span>
+          <div className="flex-grow border-t border-white/10"></div>
+        </div>
+
+        {/* Google Sign-In button container */}
+        <div className="flex justify-center w-full">
+          <div id="google-signin-button" className="w-full min-h-[44px]"></div>
+        </div>
 
         {/* Redirect toggle */}
         <div className="pt-2 text-center text-xs text-gray-400 border-t border-white/5">
