@@ -10,6 +10,7 @@ import CookieConsent from './components/common/CookieConsent';
 import usePWAStore from './store/pwaStore';
 import useThemeStore from './store/themeStore';
 import useUIStore from './store/uiStore';
+import useAuthStore from './store/authStore';
 import { getCookie } from './utils/cookies';
 
 // Pages
@@ -39,6 +40,24 @@ export default function App() {
   const setIsInstalled = usePWAStore((s) => s.setIsInstalled);
   const setShowInstallBanner = usePWAStore((s) => s.setShowInstallBanner);
   const setRecentlyViewed = useUIStore((s) => s.setRecentlyViewed);
+  const logout = useAuthStore((s) => s.logout);
+
+  // Setup Axios interceptor to catch 401 errors globally
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          // If server returns 401, clear local stale auth cookies & reset authStore state
+          logout();
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [logout]);
 
   // Initialize theme on app load
   useEffect(() => {

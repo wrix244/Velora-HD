@@ -148,11 +148,33 @@ export const getRelatedWallpapers = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Wallpaper not found' });
     }
 
-    const related = await Wallpaper.find({
-      category: wallpaper.category,
+    // Find wallpapers in the same category OR with matching tags, excluding current
+    const candidates = await Wallpaper.find({
       _id: { $ne: wallpaper._id },
-    })
-      .limit(4);
+      $or: [
+        { category: wallpaper.category },
+        { tags: { $in: wallpaper.tags || [] } }
+      ]
+    }).limit(20);
+
+    // Score candidates based on:
+    // 1. Same category: +5 points
+    // 2. Tag overlap count: +3 points per overlapping tag
+    const scored = candidates.map(candidate => {
+      let score = 0;
+      if (candidate.category === wallpaper.category) {
+        score += 5;
+      }
+      if (candidate.tags && wallpaper.tags) {
+        const overlap = candidate.tags.filter(t => wallpaper.tags.includes(t)).length;
+        score += overlap * 3;
+      }
+      return { candidate, score };
+    });
+
+    // Sort by score descending and return top 8 related wallpapers
+    scored.sort((a, b) => b.score - a.score);
+    const related = scored.slice(0, 8).map(s => s.candidate);
 
     res.json({ success: true, data: related });
   } catch (error) {

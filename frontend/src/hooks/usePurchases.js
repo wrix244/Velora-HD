@@ -46,3 +46,26 @@ export const useCheckout = () => {
     },
   });
 };
+
+// Unlock Wallpaper via Ad
+export const useAdUnlock = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async (wallpaperId) => {
+      const response = await axios.post('/api/purchases/ad-unlock', { wallpaperId });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast('Ad watched successfully! Wallpaper unlocked.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['purchases'] });
+      queryClient.invalidateQueries({ queryKey: ['wallpapers'] });
+      queryClient.invalidateQueries({ queryKey: ['wallpaper'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Ad unlock failed. Please try again.';
+      addToast(message, 'error');
+    },
+  });
+};

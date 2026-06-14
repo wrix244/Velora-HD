@@ -1,0 +1,138 @@
+{
+  "abstract-hsl-gradient-flow.jpg": {
+    "p_dark": 13.2,
+    "p_low_sat": 22.3,
+    "p_nature": 0.1,
+    "p_neon": 35.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.36
+  },
+  "aiko-sakura-celestial-palace-spire.jpg": {
+    "p_dark": 0.0,
+    "p_low_sat": 88.7,
+    "p_nature": 0.1,
+    "p_neon": 1.7,
+    "suggested_category": "Minimal",
+    "confidence": 0.89
+  },
+  "architecture-monolithic-archway-design.jpg": {
+    "p_dark": 13.7,
+    "p_low_sat": 54.3,
+    "p_nature": 14.7,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.54
+  },
+  "cyberpunk-alley-neon-rain-live.jpg": {
+    "p_dark": 37.3,
+    "p_low_sat": 0.2,
+    "p_nature": 0.1,
+    "p_neon": 60.9,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.61
+  },
+  "cyberpunk-cyber-night-market.jpg": {
+    "p_dark": 88.1,
+    "p_low_sat": 0.2,
+    "p_nature": 0.0,
+    "p_neon": 3.6,
+    "suggested_category": "Space",
+    "confidence": 0.88
+  },
+  "cyberpunk-tokyo-train-station-live.jpg": {
+    "p_dark": 3.7,
+    "p_low_sat": 93.8,
+    "p_nature": 0.0,
+    "p_neon": 0.7,
+    "suggested_category": "Minimal",
+    "confidence": 0.94
+  },
+  "futuristic-synthwave-cruise-live.jpg": {
+    "p_dark": 4.5,
+    "p_low_sat": 95.5,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.95
+  },
+  "luna-everlight-cosmic-starfield-dream-live.jpg": {
+    "p_dark": 64.8,
+    "p_low_sat": 0.5,
+    "p_nature": 10.5,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "luna-everlight-sakura-wind-live.jpg": {
+    "p_dark": 71.4,
+    "p_low_sat": 2.4,
+    "p_nature": 0.0,
+    "p_neon": 25.0,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.71
+  },
+  "nature-glacial-lake-reflection.jpg": {
+    "p_dark": 8.1,
+    "p_low_sat": 29.3,
+    "p_nature": 0.1,
+    "p_neon": 28.6,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "raizen-kurohiko-golden-grass-field-samurai.jpg": {
+    "p_dark": 17.1,
+    "p_low_sat": 40.5,
+    "p_nature": 12.6,
+    "p_neon": 1.0,
+    "suggested_category": "Nature",
+    "confidence": 0.6
+  },
+  "raizen-kurohiko-shadow-katana-strike-live.jpg": {
+    "p_dark": 36.5,
+    "p_low_sat": 0.4,
+    "p_nature": 0.0,
+    "p_neon": 62.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.63
+  },
+  "raizen-kurohiko-snowy-mountain-samurai-pass.jpg": {
+    "p_dark": 18.3,
+    "p_low_sat": 12.2,
+    "p_nature": 0.0,
+    "p_neon": 53.9,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.54
+  },
+  "raizen-kurohiko-starry-canopy-world-tree.jpg": {
+    "p_dark": 72.4,
+    "p_low_sat": 16.4,
+    "p_nature": 0.4,
+    "p_neon": 1.0,
+    "suggested_category": "Space",
+    "confidence": 0.72
+  },
+  "sora-shinohara-rooftop-star-gazing.jpg": {
+    "p_dark": 24.6,
+    "p_low_sat": 0.2,
+    "p_nature": 3.2,
+    "p_neon": 15.7,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "space-andromeda-deep-galaxy.jpg": {
+    "p_dark": 65.8,
+    "p_low_sat": 23.9,
+    "p_nature": 5.7,
+    "p_neon": 0.0,
+    "suggested_category": "Space",
+    "confidence": 0.66
+  },
+  "technology-holographic-data-cube.jpg": {
+    "p_dark": 3.8,
+    "p_low_sat": 0.0,
+    "p_nature": 0.9,
+    "p_neon": 23.8,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  }
+}

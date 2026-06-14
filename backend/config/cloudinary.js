@@ -19,7 +19,7 @@ export const uploadToCloudinary = (fileBuffer, options = {}) => {
         resolve(result);
       }
     );
-    Readable.from(fileBuffer).pipe(stream);
+    Readable.from([fileBuffer]).pipe(stream);
   });
 };
 

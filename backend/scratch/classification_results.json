@@ -1,0 +1,818 @@
+{
+  "abstract-3d-geometric-sculptures.jpg": {
+    "p_dark": 21.9,
+    "p_low_sat": 0.2,
+    "p_nature": 1.3,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "abstract-3d-geometric-sculptures.png": {
+    "p_dark": 23.7,
+    "p_low_sat": 72.5,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.72
+  },
+  "abstract-ethereal-smoke-swirl.png": {
+    "p_dark": 0.0,
+    "p_low_sat": 15.5,
+    "p_nature": 0.0,
+    "p_neon": 76.2,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.76
+  },
+  "abstract-fluorescent-liquid-dream.jpg": {
+    "p_dark": 54.3,
+    "p_low_sat": 0.1,
+    "p_nature": 24.1,
+    "p_neon": 13.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.34
+  },
+  "abstract-hsl-gradient-flow.png": {
+    "p_dark": 4.8,
+    "p_low_sat": 9.7,
+    "p_nature": 5.7,
+    "p_neon": 67.2,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.67
+  },
+  "abstract-metallic-sphere-matrix.png": {
+    "p_dark": 48.7,
+    "p_low_sat": 0.1,
+    "p_nature": 0.4,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "abstract-neon-glow-patterns.jpg": {
+    "p_dark": 7.2,
+    "p_low_sat": 46.0,
+    "p_nature": 2.8,
+    "p_neon": 9.4,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "abstract-prismatic-light-refraction.png": {
+    "p_dark": 15.6,
+    "p_low_sat": 1.3,
+    "p_nature": 0.1,
+    "p_neon": 0.3,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "aiko-sakura-enchanted-forest-walkway.png": {
+    "p_dark": 8.5,
+    "p_low_sat": 91.5,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.92
+  },
+  "anime-sunset-train-station.jpg": {
+    "p_dark": 7.5,
+    "p_low_sat": 92.5,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.93
+  },
+  "architecture-concrete-brutalist-spire.png": {
+    "p_dark": 58.2,
+    "p_low_sat": 5.4,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "architecture-glass-dome-interior.png": {
+    "p_dark": 23.7,
+    "p_low_sat": 9.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "architecture-monolithic-archway-design.png": {
+    "p_dark": 11.9,
+    "p_low_sat": 8.9,
+    "p_nature": 0.7,
+    "p_neon": 74.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.75
+  },
+  "architecture-spiral-concrete-staircase.jpg": {
+    "p_dark": 59.3,
+    "p_low_sat": 28.5,
+    "p_nature": 0.0,
+    "p_neon": 3.1,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "architecture-spiral-concrete-staircase.png": {
+    "p_dark": 42.7,
+    "p_low_sat": 39.1,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "architecture-tokyo-skyscraper-intersection.jpg": {
+    "p_dark": 82.5,
+    "p_low_sat": 0.5,
+    "p_nature": 0.0,
+    "p_neon": 16.0,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.83
+  },
+  "architecture-tokyo-skyscraper-intersection.png": {
+    "p_dark": 40.5,
+    "p_low_sat": 47.8,
+    "p_nature": 4.8,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "aria-whisperwind-cloud-sanctuary.png": {
+    "p_dark": 0.3,
+    "p_low_sat": 6.8,
+    "p_nature": 8.4,
+    "p_neon": 30.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.31
+  },
+  "aria-whisperwind-dreamy-sky-reflection.png": {
+    "p_dark": 32.2,
+    "p_low_sat": 14.0,
+    "p_nature": 1.2,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "aria-whisperwind-starry-canopy-world-tree.png": {
+    "p_dark": 14.8,
+    "p_low_sat": 82.7,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.83
+  },
+  "cars-futuristic-garage.png": {
+    "p_dark": 83.4,
+    "p_low_sat": 7.9,
+    "p_nature": 0.0,
+    "p_neon": 0.8,
+    "suggested_category": "Space",
+    "confidence": 0.83
+  },
+  "cars-midnight-street-race.png": {
+    "p_dark": 35.2,
+    "p_low_sat": 0.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "cars-mountain-pass-sunset-cruise.jpg": {
+    "p_dark": 10.4,
+    "p_low_sat": 69.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.69
+  },
+  "cars-neon-alley-drift.png": {
+    "p_dark": 15.2,
+    "p_low_sat": 75.1,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.75
+  },
+  "cars-retro-sports-car.png": {
+    "p_dark": 50.2,
+    "p_low_sat": 0.3,
+    "p_nature": 1.6,
+    "p_neon": 41.8,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.42
+  },
+  "cars-supercar-neon-glow.png": {
+    "p_dark": 40.7,
+    "p_low_sat": 6.9,
+    "p_nature": 1.7,
+    "p_neon": 42.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.43
+  },
+  "cars-synthwave-highway.png": {
+    "p_dark": 9.2,
+    "p_low_sat": 16.2,
+    "p_nature": 4.9,
+    "p_neon": 1.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "cinematic-desert-sand-dunes.jpg": {
+    "p_dark": 56.8,
+    "p_low_sat": 35.8,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "cyberpunk-cyber-night-market.png": {
+    "p_dark": 25.9,
+    "p_low_sat": 21.5,
+    "p_nature": 13.4,
+    "p_neon": 9.2,
+    "suggested_category": "Nature",
+    "confidence": 0.6
+  },
+  "cyberpunk-cybernetic-augmented-eye.png": {
+    "p_dark": 21.8,
+    "p_low_sat": 0.2,
+    "p_nature": 2.8,
+    "p_neon": 69.4,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.69
+  },
+  "cyberpunk-hackers-den-terminal.jpg": {
+    "p_dark": 82.3,
+    "p_low_sat": 0.2,
+    "p_nature": 0.0,
+    "p_neon": 15.6,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.82
+  },
+  "cyberpunk-neo-tokyo-skyline.png": {
+    "p_dark": 65.1,
+    "p_low_sat": 0.1,
+    "p_nature": 0.9,
+    "p_neon": 0.0,
+    "suggested_category": "Space",
+    "confidence": 0.65
+  },
+  "cyberpunk-neon-city-rain.png": {
+    "p_dark": 59.5,
+    "p_low_sat": 0.4,
+    "p_nature": 0.0,
+    "p_neon": 34.6,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.35
+  },
+  "cyberpunk-retro-arcade-glow.png": {
+    "p_dark": 67.5,
+    "p_low_sat": 32.2,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Space",
+    "confidence": 0.67
+  },
+  "cyberpunk-synthwave-gridway.jpg": {
+    "p_dark": 9.3,
+    "p_low_sat": 77.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.77
+  },
+  "cyberpunk-tokyo-street-lights.jpg": {
+    "p_dark": 48.4,
+    "p_low_sat": 2.6,
+    "p_nature": 0.2,
+    "p_neon": 45.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.46
+  },
+  "cyberpunk-vending-machine.jpg": {
+    "p_dark": 10.3,
+    "p_low_sat": 32.9,
+    "p_nature": 11.8,
+    "p_neon": 23.7,
+    "suggested_category": "Nature",
+    "confidence": 0.6
+  },
+  "foggy-pine-forest-vista.jpg": {
+    "p_dark": 61.3,
+    "p_low_sat": 3.7,
+    "p_nature": 10.8,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "futuristic-cyber-punk-core.jpg": {
+    "p_dark": 1.6,
+    "p_low_sat": 25.4,
+    "p_nature": 0.0,
+    "p_neon": 49.9,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.5
+  },
+  "gaming-command-center-console.png": {
+    "p_dark": 0.0,
+    "p_low_sat": 30.2,
+    "p_nature": 0.1,
+    "p_neon": 11.3,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "gaming-cozy-lo-fi-desk-glow.png": {
+    "p_dark": 50.9,
+    "p_low_sat": 4.1,
+    "p_nature": 0.0,
+    "p_neon": 28.4,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.4
+  },
+  "gaming-esports-gaming-desk.png": {
+    "p_dark": 0.8,
+    "p_low_sat": 13.4,
+    "p_nature": 0.0,
+    "p_neon": 35.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.36
+  },
+  "gaming-minimalist-rgb-setup.png": {
+    "p_dark": 29.4,
+    "p_low_sat": 70.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.7
+  },
+  "gaming-neon-cyber-battlestation.png": {
+    "p_dark": 58.1,
+    "p_low_sat": 5.7,
+    "p_nature": 0.0,
+    "p_neon": 29.0,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.44
+  },
+  "gaming-vintage-arcade-glow.jpg": {
+    "p_dark": 13.4,
+    "p_low_sat": 9.9,
+    "p_nature": 0.0,
+    "p_neon": 61.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.62
+  },
+  "gaming-vintage-arcade-glow.png": {
+    "p_dark": 78.4,
+    "p_low_sat": 0.3,
+    "p_nature": 0.0,
+    "p_neon": 12.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.78
+  },
+  "kaelen-frost-dragon-shrine-entrance.jpg": {
+    "p_dark": 42.5,
+    "p_low_sat": 0.2,
+    "p_nature": 0.1,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "kaelen-frost-frozen-katana-blade.png": {
+    "p_dark": 53.8,
+    "p_low_sat": 1.4,
+    "p_nature": 0.0,
+    "p_neon": 42.6,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.43
+  },
+  "kitsune-hime-rooftop-star-gazing.png": {
+    "p_dark": 49.7,
+    "p_low_sat": 2.1,
+    "p_nature": 0.0,
+    "p_neon": 0.2,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "kuroko-kage-ethereal-enchanted-castle.png": {
+    "p_dark": 11.1,
+    "p_low_sat": 0.3,
+    "p_nature": 4.6,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "luna-everlight-floating-island-waterfall.png": {
+    "p_dark": 33.3,
+    "p_low_sat": 0.0,
+    "p_nature": 0.1,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "luna-everlight-floral-serenade.png": {
+    "p_dark": 24.4,
+    "p_low_sat": 0.8,
+    "p_nature": 0.2,
+    "p_neon": 66.8,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.67
+  },
+  "luna-everlight-sunset-shrine-gate.jpg": {
+    "p_dark": 4.0,
+    "p_low_sat": 68.1,
+    "p_nature": 13.4,
+    "p_neon": 3.2,
+    "suggested_category": "Minimal",
+    "confidence": 0.68
+  },
+  "luna-everlight-whispering-leaves.png": {
+    "p_dark": 2.8,
+    "p_low_sat": 7.6,
+    "p_nature": 10.1,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "luna-s-emerald-gaze.png": {
+    "p_dark": 39.3,
+    "p_low_sat": 0.8,
+    "p_nature": 20.2,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "mei-lin-celestial-palace-spire.png": {
+    "p_dark": 38.0,
+    "p_low_sat": 8.1,
+    "p_nature": 0.9,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "mei-lin-fairy-light-canopy.png": {
+    "p_dark": 79.5,
+    "p_low_sat": 7.0,
+    "p_nature": 0.0,
+    "p_neon": 1.1,
+    "suggested_category": "Space",
+    "confidence": 0.79
+  },
+  "milky-way-galaxy-night-sky.jpg": {
+    "p_dark": 84.2,
+    "p_low_sat": 0.6,
+    "p_nature": 12.5,
+    "p_neon": 0.4,
+    "suggested_category": "Space",
+    "confidence": 0.84
+  },
+  "minimal-circular-arc-shadow.png": {
+    "p_dark": 30.2,
+    "p_low_sat": 30.4,
+    "p_nature": 0.2,
+    "p_neon": 5.7,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "minimal-desert-sand-crest.jpg": {
+    "p_dark": 33.5,
+    "p_low_sat": 0.1,
+    "p_nature": 28.7,
+    "p_neon": 19.1,
+    "suggested_category": "Nature",
+    "confidence": 0.29
+  },
+  "minimal-geometric-line-composition.jpg": {
+    "p_dark": 26.9,
+    "p_low_sat": 1.2,
+    "p_nature": 2.3,
+    "p_neon": 61.9,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.62
+  },
+  "minimal-geometric-line-composition.png": {
+    "p_dark": 39.6,
+    "p_low_sat": 0.1,
+    "p_nature": 0.1,
+    "p_neon": 58.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.59
+  },
+  "minimal-pastel-clay-block.png": {
+    "p_dark": 7.9,
+    "p_low_sat": 0.2,
+    "p_nature": 5.4,
+    "p_neon": 1.3,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "minimal-pine-tree-silhouette.png": {
+    "p_dark": 35.5,
+    "p_low_sat": 42.3,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "minimal-single-rose-studio-light.png": {
+    "p_dark": 19.6,
+    "p_low_sat": 0.3,
+    "p_nature": 0.0,
+    "p_neon": 54.6,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.55
+  },
+  "minimalist-geometry-architecture.jpg": {
+    "p_dark": 0.5,
+    "p_low_sat": 3.2,
+    "p_nature": 0.0,
+    "p_neon": 91.9,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.92
+  },
+  "nature-bonsai-temple-garden.png": {
+    "p_dark": 23.1,
+    "p_low_sat": 18.5,
+    "p_nature": 0.0,
+    "p_neon": 46.6,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.47
+  },
+  "nature-deep-forest-canopy.png": {
+    "p_dark": 17.0,
+    "p_low_sat": 63.6,
+    "p_nature": 18.8,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.64
+  },
+  "nature-emerald-oasis.png": {
+    "p_dark": 81.8,
+    "p_low_sat": 7.8,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Space",
+    "confidence": 0.82
+  },
+  "nature-glacial-lake-reflection.png": {
+    "p_dark": 43.2,
+    "p_low_sat": 0.2,
+    "p_nature": 0.0,
+    "p_neon": 56.4,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.56
+  },
+  "nature-golden-hour-river.jpg": {
+    "p_dark": 20.1,
+    "p_low_sat": 8.1,
+    "p_nature": 0.3,
+    "p_neon": 15.8,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "nature-misty-autumn-peaks.jpg": {
+    "p_dark": 0.0,
+    "p_low_sat": 45.6,
+    "p_nature": 2.1,
+    "p_neon": 11.3,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "nature-spring-cherry-blossom-path.png": {
+    "p_dark": 42.9,
+    "p_low_sat": 6.2,
+    "p_nature": 22.5,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "neon-tokyo-traffic-alley.jpg": {
+    "p_dark": 43.3,
+    "p_low_sat": 3.2,
+    "p_nature": 20.7,
+    "p_neon": 16.1,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.3
+  },
+  "raizen-kurohiko-ink-samurai-spirit.png": {
+    "p_dark": 6.9,
+    "p_low_sat": 19.9,
+    "p_nature": 6.4,
+    "p_neon": 3.1,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "raizen-kurohiko-ronin-wandering.png": {
+    "p_dark": 2.4,
+    "p_low_sat": 24.7,
+    "p_nature": 14.8,
+    "p_neon": 12.6,
+    "suggested_category": "Nature",
+    "confidence": 0.6
+  },
+  "raizen-kurohiko-sunset-shrine-gate.jpg": {
+    "p_dark": 12.0,
+    "p_low_sat": 54.4,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Minimal",
+    "confidence": 0.54
+  },
+  "seraphina-sunstrike-cyberpunk-street-kid.png": {
+    "p_dark": 40.8,
+    "p_low_sat": 23.0,
+    "p_nature": 0.4,
+    "p_neon": 0.5,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "seraphina-sunstrike-dragon-shrine-entrance.jpg": {
+    "p_dark": 54.4,
+    "p_low_sat": 30.2,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "seraphina-sunstrike-solar-priestess.png": {
+    "p_dark": 38.2,
+    "p_low_sat": 17.1,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "sora-shinohara-mystic-fairy-forest-walk.jpg": {
+    "p_dark": 22.2,
+    "p_low_sat": 49.0,
+    "p_nature": 0.2,
+    "p_neon": 5.9,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "space-andromeda-deep-galaxy.png": {
+    "p_dark": 61.7,
+    "p_low_sat": 0.1,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "space-cosmic-portal-drift.png": {
+    "p_dark": 36.1,
+    "p_low_sat": 0.7,
+    "p_nature": 47.1,
+    "p_neon": 0.1,
+    "suggested_category": "Nature",
+    "confidence": 0.47
+  },
+  "space-distant-exoplanet-horizon.jpg": {
+    "p_dark": 90.0,
+    "p_low_sat": 0.0,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Space",
+    "confidence": 0.9
+  },
+  "space-distant-exoplanet-horizon.png": {
+    "p_dark": 25.3,
+    "p_low_sat": 22.3,
+    "p_nature": 0.9,
+    "p_neon": 10.3,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "space-rings-of-saturn-gas-giant.jpg": {
+    "p_dark": 47.7,
+    "p_low_sat": 1.3,
+    "p_nature": 22.2,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "space-stellar-wind-reflection.png": {
+    "p_dark": 69.6,
+    "p_low_sat": 0.7,
+    "p_nature": 0.0,
+    "p_neon": 1.3,
+    "suggested_category": "Space",
+    "confidence": 0.7
+  },
+  "space-supernova-cosmic-nebula.png": {
+    "p_dark": 18.1,
+    "p_low_sat": 14.5,
+    "p_nature": 0.0,
+    "p_neon": 60.7,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.61
+  },
+  "sunset-horizon-sea.jpg": {
+    "p_dark": 3.8,
+    "p_low_sat": 40.0,
+    "p_nature": 0.2,
+    "p_neon": 33.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.34
+  },
+  "tatsuya-takahashi-cherry-blossom-festival.png": {
+    "p_dark": 62.5,
+    "p_low_sat": 13.5,
+    "p_nature": 0.0,
+    "p_neon": 3.6,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "tatsuya-takahashi-mystic-fairy-forest-walk.jpg": {
+    "p_dark": 27.3,
+    "p_low_sat": 15.2,
+    "p_nature": 0.0,
+    "p_neon": 0.4,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "technology-cybernetic-neural-interface.jpg": {
+    "p_dark": 0.2,
+    "p_low_sat": 34.6,
+    "p_nature": 1.5,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "technology-cybernetic-neural-interface.png": {
+    "p_dark": 45.6,
+    "p_low_sat": 1.0,
+    "p_nature": 14.6,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "technology-glowing-board-path.jpg": {
+    "p_dark": 0.0,
+    "p_low_sat": 49.8,
+    "p_nature": 0.0,
+    "p_neon": 23.4,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "technology-glowing-board-path.png": {
+    "p_dark": 23.6,
+    "p_low_sat": 19.2,
+    "p_nature": 0.2,
+    "p_neon": 0.7,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "technology-holographic-data-cube.png": {
+    "p_dark": 15.0,
+    "p_low_sat": 0.1,
+    "p_nature": 6.4,
+    "p_neon": 0.0,
+    "suggested_category": "Fantasy",
+    "confidence": 0.5
+  },
+  "technology-quantum-cpu-circuit-matrix.png": {
+    "p_dark": 47.5,
+    "p_low_sat": 0.6,
+    "p_nature": 0.0,
+    "p_neon": 51.5,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.52
+  },
+  "technology-server-rack-terminal-console.jpg": {
+    "p_dark": 41.8,
+    "p_low_sat": 13.1,
+    "p_nature": 0.0,
+    "p_neon": 36.2,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.36
+  },
+  "technology-server-rack-terminal-console.png": {
+    "p_dark": 49.5,
+    "p_low_sat": 3.2,
+    "p_nature": 0.0,
+    "p_neon": 0.0,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "tokyo-skyline-dusk.jpg": {
+    "p_dark": 1.4,
+    "p_low_sat": 9.7,
+    "p_nature": 0.6,
+    "p_neon": 68.0,
+    "suggested_category": "Cyberpunk",
+    "confidence": 0.68
+  },
+  "traditional-kyoto-torii-path.jpg": {
+    "p_dark": 20.9,
+    "p_low_sat": 37.9,
+    "p_nature": 1.2,
+    "p_neon": 19.9,
+    "suggested_category": "Abstract",
+    "confidence": 0.5
+  },
+  "yuki-blossom-enchanted-forest-walkway.jpg": {
+    "p_dark": 23.4,
+    "p_low_sat": 15.3,
+    "p_nature": 31.0,
+    "p_neon": 19.8,
+    "suggested_category": "Nature",
+    "confidence": 0.31
+  }
+}

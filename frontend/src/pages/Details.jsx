@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2 } from 'lucide-react';
+import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
 import { useRecordDownload } from '../hooks/useDownloads';
-import { usePurchaseHistory } from '../hooks/usePurchases';
+import { usePurchaseHistory, useAdUnlock } from '../hooks/usePurchases';
 import { useDeleteWallpaper } from '../hooks/useAdmin';
 import useAuthStore from '../store/authStore';
 import useFavoritesStore from '../store/favoritesStore';
@@ -23,8 +23,61 @@ export default function Details() {
   const addRecentlyViewed = useUIStore((state) => state.addRecentlyViewed);
   const addToast = useUIStore((state) => state.addToast);
 
+  // Queries (Declared at top to avoid Temporal Dead Zone ReferenceError)
+  const { data: wallpaper, isLoading, error } = useWallpaperBySlug(slug);
+  const { data: related, isLoading: relatedLoading } = useRelatedWallpapers(wallpaper?._id);
+  const { data: purchases } = usePurchaseHistory();
+
+  // Favoriting & Downloading Mutations
+  const isFavorite = useFavoritesStore((state) => state.isFavorite(wallpaper?._id));
+  const toggleFavMutation = useToggleFavorite();
+  const recordDownloadMutation = useRecordDownload();
+  const deleteMutation = useDeleteWallpaper();
+  const adUnlockMutation = useAdUnlock();
+
+  // Synced purchases check
+  const purchased = purchases ? purchases.some((p) => p.wallpaperId?._id === wallpaper?._id) : false;
+  const hasAccess = !wallpaper?.isPremium || user?.role === 'admin' || purchased;
+
   const [showInstructions, setShowInstructions] = useState(false);
   const [selectedOS, setSelectedOS] = useState('windows');
+  const [playingAd, setPlayingAd] = useState(false);
+  const [adCountdown, setAdCountdown] = useState(8);
+
+  useEffect(() => {
+    let timer;
+    if (playingAd && adCountdown > 0) {
+      timer = setTimeout(() => {
+        setAdCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (playingAd && adCountdown === 0) {
+      if (wallpaper?._id) {
+        setAdCountdown(-1); // Transition out of 0 to prevent mutate loop
+        adUnlockMutation.mutate(wallpaper._id, {
+          onSuccess: () => {
+            setPlayingAd(false);
+          },
+          onError: () => {
+            setPlayingAd(false);
+          }
+        });
+      } else {
+        setPlayingAd(false);
+        addToast('Error: Wallpaper context not found.', 'error');
+      }
+    }
+    return () => clearTimeout(timer);
+  }, [playingAd, adCountdown, wallpaper, adUnlockMutation, addToast]);
+
+  const handleWatchAd = () => {
+    if (!isAuthenticated) {
+      addToast('Please login to unlock premium wallpapers.', 'info');
+      navigate('/login');
+      return;
+    }
+    setAdCountdown(8);
+    setPlayingAd(true);
+  };
 
   const detectOS = () => {
     const ua = navigator.userAgent;
@@ -73,21 +126,6 @@ export default function Details() {
       setSettingWallpaper(false);
     }
   };
-
-  // Queries
-  const { data: wallpaper, isLoading, error } = useWallpaperBySlug(slug);
-  const { data: related, isLoading: relatedLoading } = useRelatedWallpapers(wallpaper?._id);
-  const { data: purchases } = usePurchaseHistory();
-
-  // Favoriting & Downloading Mutations
-  const isFavorite = useFavoritesStore((state) => state.isFavorite(wallpaper?._id));
-  const toggleFavMutation = useToggleFavorite();
-  const recordDownloadMutation = useRecordDownload();
-  const deleteMutation = useDeleteWallpaper();
-
-  // Synced purchases check
-  const purchased = purchases ? purchases.some((p) => p.wallpaperId?._id === wallpaper?._id) : false;
-  const hasAccess = !wallpaper?.isPremium || user?.role === 'admin' || purchased;
 
   // Add to recently viewed on mount/successful wallpaper fetch
   useEffect(() => {
@@ -259,42 +297,69 @@ export default function Details() {
 
           {/* Action CTAs */}
           <div className="space-y-3">
-            <div className="flex gap-2">
-              {/* Primary Download/Buy Button */}
-              <button
-                onClick={handleAction}
-                disabled={recordDownloadMutation.isPending}
-                className={`flex-grow py-3.5 px-6 rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 ${
-                  wallpaper.isPremium && !hasAccess
-                    ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-primary/10'
-                    : 'bg-white hover:bg-gray-100 text-[#121212]'
-                }`}
-              >
-                {wallpaper.isPremium && !hasAccess ? (
-                  <>
-                    <Lock className="w-4 h-4" />
-                    Unlock for ${wallpaper.price.toFixed(2)}
-                  </>
-                ) : (
-                  <>
+            <div className="flex flex-col gap-2">
+              {wallpaper.isPremium && !hasAccess ? (
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    {/* Buy Button */}
+                    <button
+                      onClick={handleAction}
+                      className="flex-grow py-3.5 px-6 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2"
+                    >
+                      <Lock className="w-4 h-4" />
+                      Unlock for ${wallpaper.price.toFixed(2)}
+                    </button>
+
+                    {/* Like/Favorite Button */}
+                    <button
+                      onClick={handleFavorite}
+                      disabled={toggleFavMutation.isPending}
+                      className={`p-3.5 rounded-xl border transition-all ${
+                        isFavorite
+                          ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                          : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                    </button>
+                  </div>
+
+                  {/* Watch Ad to Unlock */}
+                  <button
+                    onClick={handleWatchAd}
+                    disabled={adUnlockMutation.isPending}
+                    className="w-full py-3.5 px-6 bg-white/[0.04] hover:bg-white/10 border border-white/10 hover:border-white/20 text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                  >
+                    <Play className="w-4 h-4 text-accent animate-pulse fill-accent/20" />
+                    Watch Ad to Unlock Free
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  {/* Download Button */}
+                  <button
+                    onClick={handleAction}
+                    disabled={recordDownloadMutation.isPending}
+                    className="flex-grow py-3.5 px-6 bg-white hover:bg-gray-100 text-[#121212] rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2"
+                  >
                     <Download className="w-4 h-4" />
                     Download Instantly
-                  </>
-                )}
-              </button>
+                  </button>
 
-              {/* Like/Favorite Button */}
-              <button
-                onClick={handleFavorite}
-                disabled={toggleFavMutation.isPending}
-                className={`p-3.5 rounded-xl border transition-all ${
-                  isFavorite
-                    ? 'bg-rose-500/80 border-rose-500/20 text-white'
-                    : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
-              </button>
+                  {/* Like/Favorite Button */}
+                  <button
+                    onClick={handleFavorite}
+                    disabled={toggleFavMutation.isPending}
+                    className={`p-3.5 rounded-xl border transition-all ${
+                      isFavorite
+                        ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                        : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                  </button>
+                </div>
+              )}
             </div>
 
             {hasAccess && (
@@ -544,6 +609,48 @@ export default function Details() {
                   Security sandbox rule: Web applications cannot directly modify system settings. Doing this download-and-apply step ensures maximum security for your device.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Simulated Ad Player Modal Overlay */}
+      {playingAd && (
+        <div className="fixed inset-0 bg-[#0a0a0a]/95 backdrop-blur-xl z-[150] flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl text-center relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="space-y-4">
+              <span className="px-3 py-1 text-[10px] font-black tracking-widest bg-white/5 border border-white/10 text-accent uppercase rounded-full">
+                Sponsor Advertisement
+              </span>
+              <h3 className="font-display font-black text-xl text-white">
+                Unlocking Premium Wallpaper
+              </h3>
+              <p className="text-xs text-gray-400">
+                Please wait while we prepare your high-resolution download link.
+              </p>
+            </div>
+
+            <div className="w-full aspect-video rounded-2xl bg-[#121212] border border-white/5 relative overflow-hidden flex flex-col items-center justify-center">
+              <div className="absolute inset-0 bg-cover bg-center filter brightness-50 opacity-40 animate-pulse" style={{ backgroundImage: `url(${wallpaper.previewImage})` }} />
+              
+              <div className="relative z-10 space-y-4 flex flex-col items-center">
+                <div className="relative w-16 h-16 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full border-4 border-white/5 border-t-accent animate-spin" />
+                  <span className="font-display font-black text-[10px] text-white uppercase tracking-wider">
+                    {adCountdown > 0 ? `${adCountdown}s` : 'Processing'}
+                  </span>
+                </div>
+                <p className="text-[10px] font-bold tracking-widest text-accent uppercase animate-pulse">
+                  {adCountdown > 0 ? 'Watching Advertisement...' : 'Unlocking Artwork...'}
+                </p>
+              </div>
+            </div>
+
+            <div className="text-[10px] text-gray-500 italic leading-relaxed pt-2">
+              Watching this short ad helps us keep the servers running and pay the original artists. Thank you for your support!
             </div>
           </div>
         </div>

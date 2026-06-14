@@ -49,6 +49,21 @@ export default function AdminDashboard() {
   const [detectedMetadata, setDetectedMetadata] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // Custom Confirmation Modal States
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+  const [confirmType, setConfirmType] = useState('primary'); // 'primary' | 'danger'
+  const [confirmOnApprove, setConfirmOnApprove] = useState(null);
+
+  const requestConfirmation = (title, message, onApprove, type = 'primary') => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmOnApprove(() => onApprove);
+    setConfirmType(type);
+    setConfirmOpen(true);
+  };
+
   // Helper to extract dimensions from an image file
   const getImageDimensions = (file) => {
     return new Promise((resolve, reject) => {
@@ -348,9 +363,12 @@ export default function AdminDashboard() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this wallpaper?')) {
-      deleteMutation.mutate(id);
-    }
+    requestConfirmation(
+      'Delete Wallpaper Artwork',
+      'Are you sure you want to permanently delete this wallpaper artwork? It will be removed from the library and users will no longer be able to discover or download it. This action is irreversible.',
+      () => deleteMutation.mutate(id),
+      'danger'
+    );
   };
 
   useEffect(() => {
@@ -363,15 +381,26 @@ export default function AdminDashboard() {
 
   const handleToggleBan = (id, currentBannedStatus) => {
     const action = currentBannedStatus ? 'unban' : 'ban';
-    if (window.confirm(`Are you sure you want to ${action} this user?`)) {
-      banUserMutation.mutate({ id, isBanned: !currentBannedStatus });
-    }
+    const title = currentBannedStatus ? 'Unban User Account' : 'Ban User Account';
+    const message = currentBannedStatus
+      ? 'Are you sure you want to unban this user? This will restore their access to their account, favorites, and download history immediately.'
+      : 'Are you sure you want to ban this user? Banned users are suspended immediately and will be blocked from logging in, checking out premium wallpapers, or accessing downloads.';
+
+    requestConfirmation(
+      title,
+      message,
+      () => banUserMutation.mutate({ id, isBanned: !currentBannedStatus }),
+      currentBannedStatus ? 'primary' : 'danger'
+    );
   };
 
   const handleDeleteUser = (id) => {
-    if (window.confirm('Are you sure you want to permanently delete this user? This action cannot be undone.')) {
-      deleteUserMutation.mutate(id);
-    }
+    requestConfirmation(
+      'Permanently Delete User Account',
+      'Are you sure you want to permanently delete this user account? All of their order records, transaction logs, and favorited items will be permanently erased. This action cannot be undone.',
+      () => deleteUserMutation.mutate(id),
+      'danger'
+    );
   };
 
   if (user?.role !== 'admin') {
@@ -1021,6 +1050,46 @@ export default function AdminDashboard() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM CONFIRMATION MODAL */}
+      {confirmOpen && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-6 relative shadow-2xl">
+            <div className="space-y-2">
+              <h3 className="font-display font-bold text-lg text-white">
+                {confirmTitle}
+              </h3>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                {confirmMessage}
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
+              <button
+                type="button"
+                onClick={() => setConfirmOpen(false)}
+                className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirmOnApprove) confirmOnApprove();
+                  setConfirmOpen(false);
+                }}
+                className={`px-5 py-2 text-white font-bold text-xs rounded-xl shadow-lg transition ${
+                  confirmType === 'danger'
+                    ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-600/10'
+                    : 'bg-primary hover:bg-primary/95 shadow-primary/10'
+                }`}
+              >
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       )}

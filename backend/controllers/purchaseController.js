@@ -83,3 +83,45 @@ export const getPurchaseHistory = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Unlock wallpaper via ad
+// @route   POST /api/purchases/ad-unlock
+// @access  Private
+export const adUnlock = async (req, res) => {
+  try {
+    const { wallpaperId } = req.body;
+    const userId = req.user._id;
+
+    if (!wallpaperId) {
+      return res.status(400).json({ success: false, message: 'Wallpaper ID is required' });
+    }
+
+    const wallpaper = await Wallpaper.findById(wallpaperId);
+    if (!wallpaper) {
+      return res.status(404).json({ success: false, message: 'Wallpaper not found' });
+    }
+
+    if (!wallpaper.isPremium) {
+      return res.status(400).json({ success: false, message: 'This is a free wallpaper, no unlock needed' });
+    }
+
+    const alreadyPurchased = await Purchase.findOne({ userId, wallpaperId });
+    if (alreadyPurchased) {
+      return res.status(400).json({ success: false, message: 'You have already unlocked this wallpaper' });
+    }
+
+    const purchase = await Purchase.create({
+      userId,
+      wallpaperId,
+      amount: 0,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Wallpaper successfully unlocked via ad!',
+      data: purchase,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
