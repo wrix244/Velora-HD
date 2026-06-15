@@ -559,21 +559,49 @@ export default function Details() {
 
             {/* Step Guide List */}
             <div className="space-y-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-              {selectedOS === 'windows' && (
+              {/* Windows Instructions */}
+              {selectedOS === 'windows' && wallpaper.type === 'live' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Click the <strong className="text-white">Download Artwork</strong> button below to download the video wallpaper (`.mp4` / `.mov`).</li>
+                  <li>Download and install the free, open-source <a href="https://rocksdanister.github.io/lively/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">Lively Wallpaper</a> app from the Microsoft Store or online.</li>
+                  <li>Open Lively Wallpaper, click <strong className="text-white">+ Add Wallpaper</strong> (or drag and drop the downloaded video file).</li>
+                  <li>Select the video file and apply it to set it as your interactive live desktop background!</li>
+                </ol>
+              )}
+              {selectedOS === 'windows' && wallpaper.type !== 'live' && (
                 <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
                   <li>Click the <strong className="text-white">Download Artwork</strong> button below to save the high-res file to your computer.</li>
                   <li>Open your File Explorer and navigate to the file (usually located in your <strong className="text-white">Downloads</strong> folder).</li>
                   <li>Right-click the image and select <strong className="text-white">"Set as desktop background"</strong> from the menu.</li>
                 </ol>
               )}
-              {selectedOS === 'mac' && (
+
+              {/* Mac Instructions */}
+              {selectedOS === 'mac' && wallpaper.type === 'live' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Click the <strong className="text-white">Download Artwork</strong> button below to download the video wallpaper (`.mp4` / `.mov`).</li>
+                  <li>Install a third-party video wallpaper player for macOS (such as <strong className="text-white">Plaster</strong>, <strong className="text-white">VLC</strong>, or search for video wallpaper players on the Mac App Store).</li>
+                  <li>Open the live wallpaper app, import the downloaded video, and apply it to your desktop display.</li>
+                </ol>
+              )}
+              {selectedOS === 'mac' && wallpaper.type !== 'live' && (
                 <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
                   <li>Click the <strong className="text-white">Download Artwork</strong> button below to save the high-res file to your Mac.</li>
                   <li>Open Finder, locate the file, and right-click (or Control-click) it.</li>
                   <li>Choose <strong className="text-white">"Set Desktop Picture"</strong> (or go to <strong className="text-white">System Settings → Wallpaper</strong>).</li>
                 </ol>
               )}
-              {selectedOS === 'ios' && (
+
+              {/* iOS Instructions */}
+              {selectedOS === 'ios' && wallpaper.type === 'live' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Tap the <strong className="text-white">Download Artwork</strong> button below to save the video wallpaper.</li>
+                  <li>Use a free App Store converter (such as <strong className="text-white">intoLive</strong>) to convert the video to a <strong className="text-white">Live Photo</strong>.</li>
+                  <li>Go to iOS <strong className="text-white">Settings → Wallpaper → Add New Wallpaper</strong> and select the converted Live Photo.</li>
+                  <li>Ensure the live playback feature is enabled and apply.</li>
+                </ol>
+              )}
+              {selectedOS === 'ios' && wallpaper.type !== 'live' && (
                 <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
                   <li>Tap the <strong className="text-white">Download Artwork</strong> button below, and confirm download to save it to your iOS device.</li>
                   <li>Launch your iOS <strong className="text-white">Photos</strong> app and tap the downloaded image.</li>
@@ -581,7 +609,17 @@ export default function Details() {
                   <li>Scroll down the options list and select <strong className="text-white">"Use as Wallpaper"</strong>.</li>
                 </ol>
               )}
-              {selectedOS === 'android' && (
+
+              {/* Android Instructions */}
+              {selectedOS === 'android' && wallpaper.type === 'live' && (
+                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                  <li>Tap the <strong className="text-white">Download Artwork</strong> button below to save the video.</li>
+                  <li>Open your phone's default Gallery app, select the video, and tap the options (three dots).</li>
+                  <li>Select <strong className="text-white">"Set as wallpaper"</strong> (on Samsung/Xiaomi, it will automatically loop).</li>
+                  <li>If your launcher does not support direct video wallpapers, download the free <strong className="text-white">Video Live Wallpaper</strong> app from the Google Play Store to apply it.</li>
+                </ol>
+              )}
+              {selectedOS === 'android' && wallpaper.type !== 'live' && (
                 <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
                   <li>Tap the <strong className="text-white">Download Artwork</strong> button below to download the high-res file to your device gallery.</li>
                   <li>Open your <strong className="text-white">Gallery</strong> or <strong className="text-white">Google Photos</strong> app.</li>
