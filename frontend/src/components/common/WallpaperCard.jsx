@@ -33,6 +33,11 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
   const handleDownload = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isAuthenticated) {
+      addToast('Please register or login to download wallpapers.', 'info');
+      navigate('/login');
+      return;
+    }
     if (wallpaper.isPremium && !hasAccess) {
       navigate(`/checkout?wallpaperId=${wallpaper._id}`);
       return;
