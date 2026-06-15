@@ -124,3 +124,24 @@ export const useProfile = () => {
     enabled: isAuthenticated,
   });
 };
+
+// Delete profile/account hook
+export const useDeleteProfile = () => {
+  const logout = useAuthStore((state) => state.logout);
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await axios.delete('/api/auth/profile');
+      return response.data;
+    },
+    onSuccess: (data) => {
+      logout();
+      addToast(data.message || 'Account deleted successfully.', 'success');
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to delete account.';
+      addToast(message, 'error');
+    },
+  });
+};

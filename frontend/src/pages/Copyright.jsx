@@ -141,11 +141,11 @@ export default function Copyright() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
                 <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Email Address</span>
-                  <a href="mailto:copyright@velorahd.com" className="text-primary hover:underline font-semibold">copyright@velorahd.com</a>
+                  <a href="mailto:copyright@velorahd.in" className="text-primary hover:underline font-semibold">copyright@velorahd.in</a>
                 </div>
                 <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Contact Page</span>
-                  <a href="https://velorahd.com/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.com/contact</a>
+                  <a href="https://velorahd.in/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.in/contact</a>
                 </div>
               </div>
               <p className="text-gray-500">Users are encouraged to provide as much information as possible to assist in the review process.</p>
@@ -421,17 +421,17 @@ export default function Copyright() {
           <div className="text-xs text-gray-400 space-y-3 leading-relaxed">
             <p>For copyright-related inquiries, reports, or questions regarding this policy, please contact:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-              <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
+               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Copyright Email</span>
-                <a href="mailto:copyright@velorahd.com" className="text-primary hover:underline font-semibold">copyright@velorahd.com</a>
+                <a href="mailto:copyright@velorahd.in" className="text-primary hover:underline font-semibold">copyright@velorahd.in</a>
               </div>
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Legal Inquiries</span>
-                <a href="mailto:legal@velorahd.com" className="text-primary hover:underline font-semibold">legal@velorahd.com</a>
+                <a href="mailto:legal@velorahd.in" className="text-primary hover:underline font-semibold">legal@velorahd.in</a>
               </div>
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5 md:col-span-2">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Contact Page</span>
-                <a href="https://velorahd.com/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.com/contact</a>
+                <a href="https://velorahd.in/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.in/contact</a>
               </div>
             </div>
           </div>

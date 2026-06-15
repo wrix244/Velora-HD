@@ -254,8 +254,8 @@ export default function Terms() {
           </h2>
           <div className="text-xs text-gray-400 space-y-2 leading-relaxed">
             <p>If you have questions regarding these Terms of Service, please contact us through our Contact Page or by email at:</p>
-            <p className="font-bold text-white"><a href="mailto:support@velorahd.com" className="text-primary hover:underline">support@velorahd.com</a></p>
-            <p>Official URL: <a href="https://velorahd.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">https://velorahd.com</a></p>
+            <p className="font-bold text-white"><a href="mailto:support@velorahd.in" className="text-primary hover:underline">support@velorahd.in</a></p>
+            <p>Official URL: <a href="https://velorahd.in" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">https://velorahd.in</a></p>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shield, Database, Eye, User, Mail, Tv, BarChart, CreditCard, Layers, Calendar, Lock, Heart, Globe, Scale, RefreshCw, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Privacy() {
   return (
@@ -252,7 +253,7 @@ export default function Privacy() {
             </h2>
             <div className="text-xs text-gray-400 space-y-2 leading-relaxed">
               <p>Depending on applicable laws, users may have the right to access personal information, correct inaccurate information, request deletion of personal information, withdraw consent where applicable, object to certain forms of processing, and request information regarding data usage.</p>
-              <p className="text-gray-500">Requests may be submitted through our contact channels.</p>
+              <p className="text-gray-400">Users can permanently delete their own account and all associated records (favorites, purchases, and download history) directly from the <Link to="/profile" className="text-primary hover:underline font-semibold">Profile Settings</Link> page. Alternatively, requests for manual data deletion may be submitted through our contact channels.</p>
             </div>
           </div>
 
@@ -280,19 +281,19 @@ export default function Privacy() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Privacy Queries</span>
-                <a href="mailto:privacy@velorahd.com" className="text-primary hover:underline font-semibold">privacy@velorahd.com</a>
+                <a href="mailto:privacy@velorahd.in" className="text-primary hover:underline font-semibold">privacy@velorahd.in</a>
               </div>
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Support Requests</span>
-                <a href="mailto:support@velorahd.com" className="text-primary hover:underline font-semibold">support@velorahd.com</a>
+                <a href="mailto:support@velorahd.in" className="text-primary hover:underline font-semibold">support@velorahd.in</a>
               </div>
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Copyright & Legal</span>
-                <a href="mailto:copyright@velorahd.com" className="text-accent hover:underline font-semibold block">copyright@velorahd.com</a>
+                <a href="mailto:copyright@velorahd.in" className="text-accent hover:underline font-semibold block">copyright@velorahd.in</a>
               </div>
               <div className="p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">Contact Form</span>
-                <a href="https://velorahd.com/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.com/contact</a>
+                <a href="https://velorahd.in/contact" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-semibold block">https://velorahd.in/contact</a>
               </div>
             </div>
           </div>

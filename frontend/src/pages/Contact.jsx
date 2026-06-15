@@ -120,8 +120,8 @@ export default function Contact() {
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 For general questions, technical assistance, account issues, premium content inquiries, or website-related support.
               </p>
-              <a href="mailto:support@velorahd.com" className="text-xs text-primary font-semibold hover:underline block pt-1">
-                support@velorahd.com
+              <a href="mailto:support@velorahd.in" className="text-xs text-primary font-semibold hover:underline block pt-1">
+                support@velorahd.in
               </a>
             </div>
 
@@ -134,8 +134,8 @@ export default function Contact() {
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 For refund requests related to premium content, subscriptions, or purchases.
               </p>
-              <a href="mailto:refunds@velorahd.com" className="text-xs text-primary font-semibold hover:underline block pt-1">
-                refunds@velorahd.com
+              <a href="mailto:refunds@velorahd.in" className="text-xs text-primary font-semibold hover:underline block pt-1">
+                refunds@velorahd.in
               </a>
             </div>
 
@@ -148,8 +148,8 @@ export default function Contact() {
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 To report copyright infringement, intellectual property concerns, or content ownership disputes.
               </p>
-              <a href="mailto:copyright@velorahd.com" className="text-xs text-primary font-semibold hover:underline block pt-1">
-                copyright@velorahd.com
+              <a href="mailto:copyright@velorahd.in" className="text-xs text-primary font-semibold hover:underline block pt-1">
+                copyright@velorahd.in
               </a>
             </div>
 
@@ -162,8 +162,8 @@ export default function Contact() {
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 For legal matters, policy questions, or compliance-related requests.
               </p>
-              <a href="mailto:legal@velorahd.com" className="text-xs text-primary font-semibold hover:underline block pt-1">
-                legal@velorahd.com
+              <a href="mailto:legal@velorahd.in" className="text-xs text-primary font-semibold hover:underline block pt-1">
+                legal@velorahd.in
               </a>
             </div>
 
@@ -176,8 +176,8 @@ export default function Contact() {
               <p className="text-[11px] text-gray-400 leading-relaxed">
                 For partnerships, collaborations, sponsorships, advertising opportunities, or business proposals.
               </p>
-              <a href="mailto:business@velorahd.com" className="text-xs text-primary font-semibold hover:underline block pt-1">
-                business@velorahd.com
+              <a href="mailto:business@velorahd.in" className="text-xs text-primary font-semibold hover:underline block pt-1">
+                business@velorahd.in
               </a>
             </div>
           </motion.div>
@@ -279,8 +279,8 @@ export default function Contact() {
 
           <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-2 flex flex-col justify-center">
             <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Website Link</span>
-            <a href="https://velorahd.com" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline font-semibold tracking-tight">
-              https://velorahd.com
+            <a href="https://velorahd.in" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline font-semibold tracking-tight">
+              https://velorahd.in
             </a>
             <span className="text-[10px] text-gray-500 mt-2 block">
               Thank you for being part of the VeloraHD community.

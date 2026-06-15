@@ -1,6 +1,10 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import https from 'https';
+import mongoose from 'mongoose';
+import Favorite from '../models/Favorite.js';
+import Purchase from '../models/Purchase.js';
+import Download from '../models/Download.js';
 
 const verifyGoogleToken = (idToken) => {
   return new Promise((resolve, reject) => {
@@ -168,6 +172,37 @@ export const updateUserProfile = async (req, res) => {
     } else {
       res.status(404).json({ success: false, message: 'User not found' });
     }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Delete user profile (Delete account)
+// @route   DELETE /api/auth/profile
+// @access  Private
+export const deleteUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Protect main admin from being deleted
+    if (user.role === 'admin' && user.email === 'velorahdwallart@gmail.com') {
+      return res.status(400).json({ success: false, message: 'Main Admin account cannot be deleted.' });
+    }
+
+    // Cascade delete related records
+    await Promise.all([
+      Favorite.deleteMany({ userId }),
+      Purchase.deleteMany({ userId }),
+      Download.deleteMany({ userId }),
+      User.findByIdAndDelete(userId),
+    ]);
+
+    res.json({ success: true, message: 'Your account has been deleted successfully.' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

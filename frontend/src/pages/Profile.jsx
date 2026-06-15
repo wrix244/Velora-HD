@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { User, Heart, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert } from 'lucide-react';
-import { useProfile, useUpdateProfile } from '../hooks/useAuth';
+import { useProfile, useUpdateProfile, useDeleteProfile } from '../hooks/useAuth';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePurchaseHistory } from '../hooks/usePurchases';
 import { useDownloadHistory } from '../hooks/useDownloads';
@@ -39,6 +39,22 @@ export default function Profile() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const updateProfileMutation = useUpdateProfile();
+  const deleteProfileMutation = useDeleteProfile();
+
+  const handleDeleteAccount = () => {
+    if (window.confirm('WARNING: Are you sure you want to permanently delete your account? All your purchase records, downloads, and favorites will be permanently erased. This action cannot be undone.')) {
+      const confirmationText = window.prompt('Double Confirmation: To permanently delete your account and all associated data, please type "DELETE" below:');
+      if (confirmationText === 'DELETE') {
+        deleteProfileMutation.mutate(null, {
+          onSuccess: () => {
+            navigate('/');
+          }
+        });
+      } else if (confirmationText !== null) {
+        alert('Account deletion cancelled. You must type "DELETE" to confirm.');
+      }
+    }
+  };
 
   useEffect(() => {
     if (profile) {
@@ -342,6 +358,23 @@ export default function Profile() {
                   {updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}
                 </button>
               </form>
+
+              {/* Danger Zone */}
+              <div className="border-t border-white/5 pt-6 mt-6 space-y-4">
+                <div>
+                  <h3 className="text-sm font-bold text-rose-500">Danger Zone</h3>
+                  <p className="text-[11px] text-gray-500 mt-1">
+                    Once you delete your account, your favorites, purchases, and download history will be permanently erased. This action cannot be undone.
+                  </p>
+                </div>
+                <button
+                  onClick={handleDeleteAccount}
+                  disabled={deleteProfileMutation.isPending}
+                  className="px-5 py-2.5 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/25 text-rose-500 hover:text-rose-400 font-bold text-xs tracking-wider uppercase rounded-xl transition cursor-pointer"
+                >
+                  {deleteProfileMutation.isPending ? 'Deleting...' : 'Delete Account Permanently'}
+                </button>
+              </div>
             </div>
           )}
 
