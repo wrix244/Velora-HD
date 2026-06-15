@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play } from 'lucide-react';
+import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
@@ -561,12 +561,45 @@ export default function Details() {
             <div className="space-y-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
               {/* Windows Instructions */}
               {selectedOS === 'windows' && wallpaper.type === 'live' && (
-                <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
-                  <li>Click the <strong className="text-white">Download Artwork</strong> button below to download the video wallpaper (`.mp4` / `.mov`).</li>
-                  <li>Download and install the free, open-source <a href="https://rocksdanister.github.io/lively/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">Lively Wallpaper</a> app from the Microsoft Store or online.</li>
-                  <li>Open Lively Wallpaper, click <strong className="text-white">+ Add Wallpaper</strong> (or drag and drop the downloaded video file).</li>
-                  <li>Select the video file and apply it to set it as your interactive live desktop background!</li>
-                </ol>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 space-y-3 text-left">
+                    <div className="flex gap-2.5 items-start">
+                      <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 animate-pulse" />
+                      <div>
+                        <h4 className="font-bold text-xs text-white">Lively Wallpaper Required</h4>
+                        <p className="text-[11px] text-gray-300 leading-relaxed mt-1">
+                          Windows does not support live video wallpapers natively. You need a third-party application like <strong className="text-white">Lively Wallpaper</strong> to apply this animated design.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                      <a
+                        href="https://apps.microsoft.com/detail/9ntm2qc6qws7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-[10px] tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-lg shadow-primary/15"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        Microsoft Store
+                      </a>
+                      <a
+                        href="https://rocksdanister.github.io/lively/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 hover:text-white font-bold text-[10px] tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        Official Website
+                      </a>
+                    </div>
+                  </div>
+                  <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
+                    <li>Click the <strong className="text-white">Download Artwork</strong> button below to download the video wallpaper (`.mp4` / `.mov`).</li>
+                    <li>Install <strong className="text-white">Lively Wallpaper</strong> using either of the links above.</li>
+                    <li>Open Lively Wallpaper, click <strong className="text-white">+ Add Wallpaper</strong> (or drag and drop the downloaded video file).</li>
+                    <li>Select the video file and apply it to set it as your interactive live desktop background!</li>
+                  </ol>
+                </div>
               )}
               {selectedOS === 'windows' && wallpaper.type !== 'live' && (
                 <ol className="list-decimal list-inside text-xs text-gray-300 space-y-3">
