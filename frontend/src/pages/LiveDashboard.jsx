@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
-  Activity, Users, Download, Heart, Image, ShoppingBag,
-  TrendingUp, Clock, Eye, Zap, Monitor, Smartphone,
+  Activity, Download, Heart, Image, ShoppingBag,
+  TrendingUp, Clock, Zap, Monitor, Smartphone,
   BarChart3, Server
 } from 'lucide-react';
 import axios from 'axios';
@@ -138,10 +138,8 @@ export default function LiveDashboard() {
   const statCards = [
     { icon: Image, label: 'Total Wallpapers', value: stats?.totalWallpapers || 0, color: 'from-primary to-pink-400' },
     { icon: Download, label: 'Total Downloads', value: stats?.totalDownloads || 0, color: 'from-accent to-cyan-300' },
-    { icon: Users, label: 'Registered Users', value: stats?.totalUsers || 0, color: 'from-secondary to-yellow-300' },
     { icon: Heart, label: 'Total Likes', value: stats?.totalLikes || 0, color: 'from-rose-500 to-pink-400' },
     { icon: ShoppingBag, label: 'Purchases', value: stats?.totalPurchases || 0, color: 'from-emerald-500 to-teal-400' },
-    { icon: Eye, label: 'Active Users', value: stats?.activeUsers || 0, color: 'from-emerald-400 to-green-300' },
     { icon: Monitor, label: 'Free Wallpapers', value: stats?.freeWallpapers || 0, color: 'from-sky-500 to-blue-400' },
     { icon: Smartphone, label: 'Premium Walls', value: stats?.premiumWallpapers || 0, color: 'from-amber-500 to-orange-400' },
   ];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle } from 'lucide-react';
+import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity } from 'lucide-react';
 import {
   useAdminAnalytics,
   useAdminUsers,
@@ -495,6 +495,7 @@ export default function AdminDashboard() {
 
   const overviewCards = [
     { label: 'Total Users', value: analytics?.stats?.totalUsers || 0, icon: <Users className="w-5 h-5 text-primary" /> },
+    { label: 'Active Users', value: analytics?.stats?.activeUsers || 0, icon: <Activity className="w-5 h-5 text-emerald-400" /> },
     { label: 'Total Downloads', value: analytics?.stats?.totalDownloads || 0, icon: <Download className="w-5 h-5 text-accent" /> },
     { label: 'Total Assets', value: analytics?.stats?.totalWallpapers || 0, icon: <Image className="w-5 h-5 text-secondary" /> },
     { label: 'Total Revenue', value: `$${(analytics?.stats?.revenue || 0).toFixed(2)}`, icon: <DollarSign className="w-5 h-5 text-amber-400" /> },
@@ -531,7 +532,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Overview Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
         {overviewCards.map((c) => (
           <div key={c.label} className="p-4 sm:p-6 rounded-2xl glass-panel flex items-center gap-3 sm:gap-4">
             <div className="p-2.5 sm:p-3 bg-white/5 rounded-xl shrink-0">{c.icon}</div>
