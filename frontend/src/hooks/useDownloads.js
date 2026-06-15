@@ -39,9 +39,15 @@ export const useRecordDownload = () => {
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
         
+        const cleanFileName = wallpaper.title
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '');
+
         const link = document.createElement('a');
         link.href = blobUrl;
-        link.download = `${wallpaper.title.toLowerCase().replace(/\s+/g, '-')}-${wallpaper.resolution}.${
+        link.download = `${cleanFileName}.${
           wallpaper.type === 'live' ? 'mp4' : 'jpg'
         }`;
         document.body.appendChild(link);
