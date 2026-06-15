@@ -180,6 +180,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/mobile" element={<Explore />} />
+          <Route path="/pc" element={<Explore />} />
+          <Route path="/premium" element={<Explore />} />
           <Route path="/wallpaper/:slug" element={<Details />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/success/:slug" element={<Success />} />

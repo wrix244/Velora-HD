@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { Compass, Search, SlidersHorizontal, RefreshCw, X, EyeOff } from 'lucide-react';
+import SEO from '../components/common/SEO';
 import { useWallpapers } from '../hooks/useWallpapers';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
@@ -12,6 +13,7 @@ const resolutions = ['All', '3840x2160', '1920x1080', '1440x3200', '1080x1920'];
 
 export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const recentlyViewed = useUIStore((state) => state.recentlyViewed);
   const clearRecentlyViewed = useUIStore((state) => state.clearRecentlyViewed);
   const { data: purchases } = usePurchaseHistory();
@@ -19,25 +21,44 @@ export default function Explore() {
   // Extract purchased wallpaper ids to pass to card rendering
   const purchasedIds = purchases ? purchases.map((p) => p.wallpaperId?._id) : [];
 
-  // Filter States synced with URL SearchParams
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [category, setCategory] = useState(searchParams.get('category') || 'All');
-  const [resolution, setResolution] = useState(searchParams.get('resolution') || 'All');
-  const [isPremium, setIsPremium] = useState(searchParams.get('isPremium') || 'All');
-  const [type, setType] = useState(searchParams.get('type') || 'All');
-  const [deviceType, setDeviceType] = useState(searchParams.get('deviceType') || 'All');
-  const [sort, setSort] = useState(searchParams.get('sort') || 'latest');
+  const isMobilePath = location.pathname === '/mobile';
+  const isPcPath = location.pathname === '/pc';
+  const isPremiumPath = location.pathname === '/premium';
 
-  // Trigger filters update when URL query params change
+  // Helper to derive filter states from URL or path default values
+  const getInitialValue = (key, fallback) => {
+    const fromParam = searchParams.get(key);
+    if (fromParam !== null) return fromParam;
+    
+    if (key === 'deviceType') {
+      if (isMobilePath) return 'mobile';
+      if (isPcPath) return 'desktop';
+    }
+    if (key === 'isPremium') {
+      if (isPremiumPath) return 'true';
+    }
+    return fallback;
+  };
+
+  // Filter States synced with URL SearchParams & Path defaults
+  const [search, setSearch] = useState(getInitialValue('search', ''));
+  const [category, setCategory] = useState(getInitialValue('category', 'All'));
+  const [resolution, setResolution] = useState(getInitialValue('resolution', 'All'));
+  const [isPremium, setIsPremium] = useState(getInitialValue('isPremium', 'All'));
+  const [type, setType] = useState(getInitialValue('type', 'All'));
+  const [deviceType, setDeviceType] = useState(getInitialValue('deviceType', 'All'));
+  const [sort, setSort] = useState(getInitialValue('sort', 'latest'));
+
+  // Trigger filters update when URL query params or path change
   useEffect(() => {
-    setSearch(searchParams.get('search') || '');
-    setCategory(searchParams.get('category') || 'All');
-    setResolution(searchParams.get('resolution') || 'All');
-    setIsPremium(searchParams.get('isPremium') || 'All');
-    setType(searchParams.get('type') || 'All');
-    setDeviceType(searchParams.get('deviceType') || 'All');
-    setSort(searchParams.get('sort') || 'latest');
-  }, [searchParams]);
+    setSearch(getInitialValue('search', ''));
+    setCategory(getInitialValue('category', 'All'));
+    setResolution(getInitialValue('resolution', 'All'));
+    setIsPremium(getInitialValue('isPremium', 'All'));
+    setType(getInitialValue('type', 'All'));
+    setDeviceType(getInitialValue('deviceType', 'All'));
+    setSort(getInitialValue('sort', 'latest'));
+  }, [searchParams, location.pathname]);
 
   // Combined filters object for query keys
   const filters = {
@@ -80,8 +101,36 @@ export default function Explore() {
     setSearch('');
   };
 
+  let pageTitle = "Explore Wallpapers (4K) | Velora HD";
+  let displayTitle = "Explore Wallpapers";
+  let seoDesc = "Browse and search our entire collection of high resolution 4K wallpapers. Filter by category, resolution, device, format, and price.";
+
+  if (isMobilePath) {
+    pageTitle = "Mobile Wallpapers (4K) | Velora HD";
+    displayTitle = "Mobile Wallpapers";
+    seoDesc = "Download premium mobile wallpapers in high resolution 4K quality. Curated vertical backgrounds for iPhone and Android devices.";
+  } else if (isPcPath) {
+    pageTitle = "PC Wallpapers (4K) | Velora HD";
+    displayTitle = "PC Wallpapers";
+    seoDesc = "Download premium 4K desktop setups and PC wallpapers in ultra-high resolution. Curated widescreen layouts and backgrounds.";
+  } else if (isPremiumPath) {
+    pageTitle = "Premium Wallpapers (4K) | Velora HD";
+    displayTitle = "Premium Wallpapers";
+    seoDesc = "Explore exclusive premium wallpapers and motion assets in 4K resolution. Unlock elite backgrounds on Velora HD.";
+  }
+
   return (
     <div className="pt-20 pb-16 min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SEO
+        title={pageTitle}
+        description={seoDesc}
+        keywords={[
+          isMobilePath ? "mobile wallpapers" : isPcPath ? "pc wallpapers" : isPremiumPath ? "premium wallpapers" : "explore wallpapers",
+          "4k wallpapers",
+          "live wallpapers",
+          "velora hd"
+        ]}
+      />
       
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -90,7 +139,7 @@ export default function Explore() {
             <Compass className="w-3.5 h-3.5" /> Discovery Engine
           </span>
           <h1 className="font-display font-black text-3xl text-white mt-1">
-            Explore Wallpapers
+            {displayTitle}
           </h1>
         </div>
 

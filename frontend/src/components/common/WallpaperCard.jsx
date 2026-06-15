@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Heart, Bookmark, Download, Lock, Check } from 'lucide-react';
+import { optimiseUrl } from '../../utils/cloudinary';
 import useAuthStore from '../../store/authStore';
 import useFavoritesStore from '../../store/favoritesStore';
 import useLikesStore from '../../store/likesStore';
@@ -60,6 +61,10 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
     recordDownloadMutation.mutate(wallpaper);
   };
 
+  const src400 = optimiseUrl(wallpaper.previewImage, { width: 400 });
+  const src800 = optimiseUrl(wallpaper.previewImage, { width: 800 });
+  const src1200 = optimiseUrl(wallpaper.previewImage, { width: 1200 });
+
   return (
     <div className="group relative rounded-2xl overflow-hidden glass-card aspect-[4/5] flex flex-col justify-end">
       {/* Background Media Container */}
@@ -67,15 +72,19 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         {wallpaper.type === 'live' ? (
           <LivePlayer
             src={wallpaper.downloadFile}
-            poster={wallpaper.previewImage}
+            poster={optimiseUrl(wallpaper.previewImage, { width: 800 })}
             hoverToPlay={true}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <img
-            src={wallpaper.previewImage}
+            src={src400}
+            srcSet={`${src400} 400w, ${src800} 800w, ${src1200} 1200w`}
+            sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
             alt={wallpaper.title}
             loading="lazy"
+            width={400}
+            height={500}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         )}

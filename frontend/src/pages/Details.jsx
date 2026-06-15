@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Heart, Bookmark, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
+import SEO from '../components/common/SEO';
+import { optimiseUrl } from '../utils/cloudinary';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
 import { useToggleLike } from '../hooks/useLikes';
@@ -194,6 +196,7 @@ export default function Details() {
   if (isLoading) {
     return (
       <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
+        <SEO title="Loading..." />
         <div className="h-6 w-24 bg-[#1A1A1A] rounded" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 aspect-video rounded-3xl bg-[#1A1A1A]" />
@@ -206,6 +209,7 @@ export default function Details() {
   if (error || !wallpaper) {
     return (
       <div className="pt-20 pb-16 text-center max-w-md mx-auto space-y-4">
+        <SEO is404={true} />
         <Info className="w-12 h-12 text-rose-500 mx-auto" />
         <h2 className="font-display font-bold text-xl text-white">Wallpaper Not Found</h2>
         <p className="text-xs text-gray-400">
@@ -218,8 +222,34 @@ export default function Details() {
     );
   }
 
+  const ogImage = optimiseUrl(wallpaper.previewImage, { width: 1200, height: 630 });
+  const seoDesc = wallpaper.description
+    ? `${wallpaper.description}. Download in high resolution for desktop and mobile.`
+    : `Download ${wallpaper.title} wallpaper in high resolution for desktop and mobile devices.`;
+
+  const schemaOrg = {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    "name": wallpaper.title,
+    "description": seoDesc,
+    "image": wallpaper.previewImage,
+    "url": `https://velorahd.in/wallpaper/${wallpaper.slug}`,
+    "author": {
+      "@type": "Organization",
+      "name": "Velora HD",
+      "url": "https://velorahd.in"
+    }
+  };
+
   return (
     <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <SEO
+        title={wallpaper.title}
+        description={wallpaper.description}
+        keywords={wallpaper.tags}
+        image={ogImage}
+        schema={schemaOrg}
+      />
       {/* Back button */}
       <div>
         <button

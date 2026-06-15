@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import SEO from '../components/common/SEO';
 import { Compass, Sparkles, TrendingUp, Clock, Eye, Layers, ShieldCheck, Download, Award, Heart, CheckCircle } from 'lucide-react';
 import { useTrendingWallpapers, useLatestWallpapers, useRecommendedWallpapers } from '../hooks/useWallpapers';
 import WallpaperCard from '../components/common/WallpaperCard';
@@ -60,6 +61,12 @@ export default function Home() {
 
   return (
     <div className="pt-16 pb-12 overflow-hidden">
+      <SEO
+        title="Premium 4K & Live Wallpapers Marketplace"
+        description="Velora HD — Premium wallpaper marketplace. Discover loop-ready live video motion wallpapers, high resolution 4K desktop themes, and mobile backgrounds. Transform every screen into art."
+        keywords={["wallpapers", "4k wallpapers", "live wallpapers", "desktop setups", "mobile wallpapers", "velora hd"]}
+        image="https://velorahd.in/graffiti-bg.png"
+      />
       
       {/* 1. Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center py-20 px-4 overflow-hidden">

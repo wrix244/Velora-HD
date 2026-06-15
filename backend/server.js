@@ -17,6 +17,7 @@ import purchaseRoutes from './routes/purchaseRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
 
 
 // Load env vars
@@ -45,6 +46,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Sitemap Routes (mounted first to allow indexing)
+app.use('/api/sitemap.xml', sitemapRoutes);
+app.use('/sitemap.xml', sitemapRoutes);
+
+// Global noindex middleware for other API routes
+app.use('/api', (req, res, next) => {
+  res.header('X-Robots-Tag', 'noindex, nofollow');
+  next();
+});
 
 // API Routes
 app.use('/api/auth', authRoutes);
