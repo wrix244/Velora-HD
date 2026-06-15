@@ -144,8 +144,8 @@ export default function Details() {
   };
 
   const handleAction = () => {
-    if (!isAuthenticated && wallpaper.isPremium) {
-      addToast('Please register or login to purchase premium wallpapers.', 'info');
+    if (!isAuthenticated) {
+      addToast('Please register or login to download wallpapers.', 'info');
       navigate('/login');
       return;
     }
@@ -666,10 +666,8 @@ export default function Details() {
             {/* Bottom Actions */}
             <div className="space-y-3 pt-2">
               <button
-                onClick={() => {
-                  handleAction();
-                  addToast('Downloading wallpaper...', 'info');
-                }}
+                onClick={handleAction}
+                disabled={recordDownloadMutation.isPending}
                 className="w-full py-3.5 px-6 rounded-xl bg-accent hover:bg-accent/90 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Download className="w-4 h-4" />

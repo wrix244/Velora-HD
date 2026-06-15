@@ -4,7 +4,7 @@ import { protect, optionalProtect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/:wallpaperId', optionalProtect, recordDownload);
+router.post('/:wallpaperId', protect, recordDownload);
 router.get('/history', protect, getDownloadHistory);
 
 export default router;
