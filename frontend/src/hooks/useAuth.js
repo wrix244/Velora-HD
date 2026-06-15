@@ -3,12 +3,14 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
 import useFavoritesStore from '../store/favoritesStore';
+import useLikesStore from '../store/likesStore';
 
 // User Login Hook
 export const useLogin = () => {
   const login = useAuthStore((state) => state.login);
   const addToast = useUIStore((state) => state.addToast);
   const setFavorites = useFavoritesStore((state) => state.setFavorites);
+  const setLikes = useLikesStore((state) => state.setLikes);
 
   return useMutation({
     mutationFn: async ({ email, password }) => {
@@ -19,12 +21,18 @@ export const useLogin = () => {
       login(data.data, data.data.token);
       addToast(`Welcome back, ${data.data.name}!`, 'success');
       
-      // Load user favorites on success
+      // Load user favorites & likes on success
       try {
         const favsRes = await axios.get('/api/favorites');
         setFavorites(favsRes.data.data);
       } catch (err) {
         console.warn('Failed to pre-load favorites on login:', err.message);
+      }
+      try {
+        const likesRes = await axios.get('/api/likes');
+        setLikes(likesRes.data.data);
+      } catch (err) {
+        console.warn('Failed to pre-load likes on login:', err.message);
       }
     },
     onError: (error) => {
@@ -39,6 +47,7 @@ export const useGoogleLogin = () => {
   const login = useAuthStore((state) => state.login);
   const addToast = useUIStore((state) => state.addToast);
   const setFavorites = useFavoritesStore((state) => state.setFavorites);
+  const setLikes = useLikesStore((state) => state.setLikes);
 
   return useMutation({
     mutationFn: async ({ idToken }) => {
@@ -49,12 +58,18 @@ export const useGoogleLogin = () => {
       login(data.data, data.data.token);
       addToast(`Welcome back, ${data.data.name}!`, 'success');
       
-      // Load user favorites on success
+      // Load user favorites & likes on success
       try {
         const favsRes = await axios.get('/api/favorites');
         setFavorites(favsRes.data.data);
       } catch (err) {
         console.warn('Failed to pre-load favorites on login:', err.message);
+      }
+      try {
+        const likesRes = await axios.get('/api/likes');
+        setLikes(likesRes.data.data);
+      } catch (err) {
+        console.warn('Failed to pre-load likes on login:', err.message);
       }
     },
     onError: (error) => {

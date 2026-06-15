@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity } from 'lucide-react';
+import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity, RotateCw } from 'lucide-react';
 import {
   useAdminAnalytics,
   useAdminUsers,
@@ -241,6 +241,62 @@ export default function AdminDashboard() {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  // Rotate Image using Canvas client-side
+  const handleRotateImage = async (isForPreview = true) => {
+    const file = isForPreview ? previewImageFile : downloadFileFile;
+    const url = isForPreview ? previewImageUrl : downloadFileUrl;
+
+    let imageSrc = '';
+    if (file) {
+      imageSrc = URL.createObjectURL(file);
+    } else if (url) {
+      imageSrc = url;
+    } else {
+      return;
+    }
+
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalHeight || img.height;
+      canvas.height = img.naturalWidth || img.width;
+
+      const ctx = canvas.getContext('2d');
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((90 * Math.PI) / 180);
+      ctx.drawImage(img, -(img.naturalWidth || img.width) / 2, -(img.naturalHeight || img.height) / 2);
+
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          addToast('Rotation failed', 'error');
+          return;
+        }
+        
+        const rotatedFile = new File([blob], file ? file.name : 'rotated.jpg', {
+          type: blob.type || 'image/jpeg',
+          lastModified: Date.now(),
+        });
+
+        if (isForPreview) {
+          setPreviewImageFile(rotatedFile);
+          setPreviewImageUrl(''); // Use file state
+          analyzeAsset(rotatedFile, true);
+        } else {
+          setDownloadFileFile(rotatedFile);
+          setDownloadFileUrl(''); // Use file state
+          analyzeAsset(rotatedFile, true);
+        }
+        addToast('Image rotated 90° clockwise!', 'success');
+      }, 'image/jpeg', 0.95);
+    };
+    img.onerror = (err) => {
+      console.error('Failed to load image for rotation:', err);
+      addToast('Could not rotate image. Remote images might be blocked by browser CORS restrictions.', 'error');
+    };
+    img.src = imageSrc;
   };
 
   // Router protection
@@ -931,7 +987,7 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-2 gap-4">
                     {/* Preview Image */}
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Preview Image</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Preview Image (Optional)</label>
                       <input
                         type="file"
                         onChange={(e) => {
@@ -955,6 +1011,25 @@ export default function AdminDashboard() {
                         }}
                         className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                       />
+                      
+                      {/* Visual Preview & Rotate */}
+                      {(previewImageFile || previewImageUrl) && (
+                        <div className="mt-2 p-2 bg-black/30 border border-white/5 rounded-xl flex flex-col items-center gap-2 relative group/prev">
+                          <img
+                            src={previewImageFile ? URL.createObjectURL(previewImageFile) : previewImageUrl}
+                            alt="Preview cover"
+                            className="h-28 object-contain rounded-lg max-w-full"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRotateImage(true)}
+                            className="absolute bottom-2 right-2 p-1.5 bg-black/60 hover:bg-black/90 text-white rounded-lg border border-white/10 flex items-center justify-center transition-all opacity-0 group-hover/prev:opacity-100 shadow-md"
+                            title="Rotate 90° Clockwise"
+                          >
+                            <RotateCw className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Download File */}
@@ -983,6 +1058,33 @@ export default function AdminDashboard() {
                         }}
                         className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
                       />
+
+                      {/* Visual Preview & Rotate */}
+                      {(downloadFileFile || downloadFileUrl) && (
+                        <div className="mt-2 p-2 bg-black/30 border border-white/5 rounded-xl flex flex-col items-center gap-2 relative group/down">
+                          {type === 'live' ? (
+                            <div className="h-28 w-full flex items-center justify-center bg-black/40 rounded-lg text-gray-500 text-[10px] font-semibold select-none">
+                              Live Wallpaper Video Loaded
+                            </div>
+                          ) : (
+                            <>
+                              <img
+                                src={downloadFileFile ? URL.createObjectURL(downloadFileFile) : downloadFileUrl}
+                                alt="High-Res preview"
+                                className="h-28 object-contain rounded-lg max-w-full"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRotateImage(false)}
+                                className="absolute bottom-2 right-2 p-1.5 bg-black/60 hover:bg-black/90 text-white rounded-lg border border-white/10 flex items-center justify-center transition-all opacity-0 group-hover/down:opacity-100 shadow-md"
+                                title="Rotate 90° Clockwise"
+                              >
+                                <RotateCw className="w-3.5 h-3.5" />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

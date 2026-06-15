@@ -11,6 +11,8 @@ import usePWAStore from './store/pwaStore';
 import useThemeStore from './store/themeStore';
 import useUIStore from './store/uiStore';
 import useAuthStore from './store/authStore';
+import useFavoritesStore from './store/favoritesStore';
+import useLikesStore from './store/likesStore';
 import { getCookie } from './utils/cookies';
 
 // Pages
@@ -66,6 +68,31 @@ export default function App() {
   useEffect(() => {
     initTheme();
   }, []);
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const setFavorites = useFavoritesStore((s) => s.setFavorites);
+  const setLikes = useLikesStore((s) => s.setLikes);
+
+  // Pre-load user favorites and likes on page load/mount if already authenticated
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (isAuthenticated) {
+        try {
+          const favsRes = await axios.get('/api/favorites');
+          setFavorites(favsRes.data.data);
+        } catch (err) {
+          console.error('Error pre-loading favorites:', err);
+        }
+        try {
+          const likesRes = await axios.get('/api/likes');
+          setLikes(likesRes.data.data);
+        } catch (err) {
+          console.error('Error pre-loading likes:', err);
+        }
+      }
+    };
+    loadUserData();
+  }, [isAuthenticated, setFavorites, setLikes]);
 
   // Fetch resolved recently viewed wallpapers from backend if cookie exists
   useEffect(() => {

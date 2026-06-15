@@ -21,9 +21,6 @@ export const toggleFavorite = async (req, res) => {
     if (existingFav) {
       // Remove favorite
       await Favorite.findByIdAndDelete(existingFav._id);
-      // Decrement likes counter
-      wallpaper.likes = Math.max(0, wallpaper.likes - 1);
-      await wallpaper.save();
 
       return res.json({
         success: true,
@@ -33,9 +30,6 @@ export const toggleFavorite = async (req, res) => {
     } else {
       // Add favorite
       await Favorite.create({ userId, wallpaperId });
-      // Increment likes counter
-      wallpaper.likes = (wallpaper.likes || 0) + 1;
-      await wallpaper.save();
 
       return res.json({
         success: true,

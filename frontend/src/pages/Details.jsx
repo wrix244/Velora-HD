@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe } from 'lucide-react';
+import { Heart, Bookmark, Download, Lock, Check, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useWallpaperBySlug, useRelatedWallpapers } from '../hooks/useWallpapers';
 import { useToggleFavorite } from '../hooks/useFavorites';
+import { useToggleLike } from '../hooks/useLikes';
 import { useRecordDownload } from '../hooks/useDownloads';
 import { usePurchaseHistory, useAdUnlock } from '../hooks/usePurchases';
 import { useDeleteWallpaper } from '../hooks/useAdmin';
 import useAuthStore from '../store/authStore';
 import useFavoritesStore from '../store/favoritesStore';
+import useLikesStore from '../store/likesStore';
 import useUIStore from '../store/uiStore';
 import LivePlayer from '../components/common/LivePlayer';
 import WallpaperCard from '../components/common/WallpaperCard';
@@ -28,9 +30,11 @@ export default function Details() {
   const { data: related, isLoading: relatedLoading } = useRelatedWallpapers(wallpaper?._id);
   const { data: purchases } = usePurchaseHistory();
 
-  // Favoriting & Downloading Mutations
+  // Favoriting & Liking & Downloading Mutations
   const isFavorite = useFavoritesStore((state) => state.isFavorite(wallpaper?._id));
   const toggleFavMutation = useToggleFavorite();
+  const isLiked = useLikesStore((state) => state.isLiked(wallpaper?._id));
+  const toggleLikeMutation = useToggleLike();
   const recordDownloadMutation = useRecordDownload();
   const deleteMutation = useDeleteWallpaper();
   const adUnlockMutation = useAdUnlock();
@@ -136,11 +140,20 @@ export default function Details() {
 
   const handleFavorite = () => {
     if (!isAuthenticated) {
-      addToast('Please login to like wallpapers.', 'info');
+      addToast('Please log in to add to favorites.', 'info');
       navigate('/login');
       return;
     }
     toggleFavMutation.mutate(wallpaper);
+  };
+
+  const handleLike = () => {
+    if (!isAuthenticated) {
+      addToast('Please log in to like wallpapers.', 'info');
+      navigate('/login');
+      return;
+    }
+    toggleLikeMutation.mutate(wallpaper);
   };
 
   const handleAction = () => {
@@ -310,17 +323,32 @@ export default function Details() {
                       Unlock for ${wallpaper.price.toFixed(2)}
                     </button>
 
-                    {/* Like/Favorite Button */}
+                    {/* Like Button */}
+                    <button
+                      onClick={handleLike}
+                      disabled={toggleLikeMutation.isPending}
+                      className={`p-3.5 rounded-xl border transition-all ${
+                        isLiked
+                          ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                          : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
+                      title="Like this artwork"
+                    >
+                      <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
+                    </button>
+
+                    {/* Favorite Button */}
                     <button
                       onClick={handleFavorite}
                       disabled={toggleFavMutation.isPending}
                       className={`p-3.5 rounded-xl border transition-all ${
                         isFavorite
-                          ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                          ? 'bg-amber-500/80 border-amber-500/20 text-white'
                           : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
                       }`}
+                      title="Add to Favorites"
                     >
-                      <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                      <Bookmark className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
                     </button>
                   </div>
 
@@ -346,17 +374,32 @@ export default function Details() {
                     Download Instantly
                   </button>
 
-                  {/* Like/Favorite Button */}
+                  {/* Like Button */}
+                  <button
+                    onClick={handleLike}
+                    disabled={toggleLikeMutation.isPending}
+                    className={`p-3.5 rounded-xl border transition-all ${
+                      isLiked
+                        ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                        : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
+                    }`}
+                    title="Like this artwork"
+                  >
+                    <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
+                  </button>
+
+                  {/* Favorite Button */}
                   <button
                     onClick={handleFavorite}
                     disabled={toggleFavMutation.isPending}
                     className={`p-3.5 rounded-xl border transition-all ${
                       isFavorite
-                        ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                        ? 'bg-amber-500/80 border-amber-500/20 text-white'
                         : 'border-white/10 text-gray-300 hover:text-white hover:bg-white/5'
                     }`}
+                    title="Add to Favorites"
                   >
-                    <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                    <Bookmark className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
                   </button>
                 </div>
               )}

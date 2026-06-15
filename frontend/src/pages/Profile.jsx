@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { User, Heart, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert } from 'lucide-react';
+import { User, Heart, Bookmark, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert } from 'lucide-react';
 import { useProfile, useUpdateProfile, useDeleteProfile } from '../hooks/useAuth';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePurchaseHistory } from '../hooks/usePurchases';
@@ -90,7 +90,7 @@ export default function Profile() {
   };
 
   const tabs = [
-    { id: 'favorites', label: 'Favorites', icon: <Heart className="w-4 h-4" /> },
+    { id: 'favorites', label: 'Favorites', icon: <Bookmark className="w-4 h-4" /> },
     { id: 'purchases', label: 'Purchases', icon: <ShoppingBag className="w-4 h-4" /> },
     { id: 'downloads', label: 'Downloads Log', icon: <Download className="w-4 h-4" /> },
     { id: 'settings', label: 'Account Settings', icon: <Settings className="w-4 h-4" /> },
@@ -153,7 +153,7 @@ export default function Profile() {
           {/* TAB 1: Favorites */}
           {activeTab === 'favorites' && (
             <div className="space-y-6">
-              <h2 className="font-display font-bold text-lg text-white">My Liked Designs</h2>
+              <h2 className="font-display font-bold text-lg text-white">My Favorite Wallpapers</h2>
               
               {favsLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -161,10 +161,10 @@ export default function Profile() {
                 </div>
               ) : !favorites || favorites.length === 0 ? (
                 <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
-                  <Heart className="w-10 h-10 text-gray-600 animate-pulse" />
-                  <h3 className="font-display font-bold text-base text-white">Your favorites is empty</h3>
+                  <Bookmark className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">Your favorites folder is empty</h3>
                   <p className="text-xs text-gray-400 max-w-sm">
-                    Browse the collections and click the heart icon on any design to save it here.
+                    Browse the collections and click the bookmark icon on any design to save it here.
                   </p>
                   <button
                     onClick={() => navigate('/explore')}

@@ -50,6 +50,17 @@ export const createWallpaper = async (req, res) => {
           resource_type: isVideo ? 'video' : 'image',
         });
         wallpaperData.downloadFile = downloadResult.secure_url;
+
+        // Auto-generate preview image if not uploaded or provided
+        if (!wallpaperData.previewImage && !previewImage) {
+          if (isVideo) {
+            wallpaperData.previewImage = downloadResult.secure_url
+              .replace(/\.[^/.]+$/, '.jpg')
+              .replace('/video/upload/', '/video/upload/f_jpg,so_3/');
+          } else {
+            wallpaperData.previewImage = downloadResult.secure_url;
+          }
+        }
       }
     }
 
@@ -59,6 +70,18 @@ export const createWallpaper = async (req, res) => {
     }
     if (!wallpaperData.downloadFile && downloadFile) {
       wallpaperData.downloadFile = downloadFile;
+      
+      // Auto-generate preview image from download URL if download URL is provided but preview is not
+      if (!wallpaperData.previewImage) {
+        const isVideo = type === 'live' || downloadFile.includes('/video/upload/') || downloadFile.endsWith('.mp4');
+        if (isVideo) {
+          wallpaperData.previewImage = downloadFile
+            .replace(/\.[^/.]+$/, '.jpg')
+            .replace('/video/upload/', '/video/upload/f_jpg,so_3/');
+        } else {
+          wallpaperData.previewImage = downloadFile;
+        }
+      }
     }
 
     // Final checks
@@ -143,6 +166,21 @@ export const updateWallpaper = async (req, res) => {
           resource_type: isVideo ? 'video' : 'image',
         });
         wallpaper.downloadFile = downloadResult.secure_url;
+
+        // If no new preview image was uploaded, and we just uploaded a new high-res file
+        if (!req.files.previewImage && !previewImage) {
+          // Delete old preview image from Cloudinary
+          if (wallpaper.previewImage) {
+            await deleteFromCloudinary(wallpaper.previewImage);
+          }
+          if (isVideo) {
+            wallpaper.previewImage = downloadResult.secure_url
+              .replace(/\.[^/.]+$/, '.jpg')
+              .replace('/video/upload/', '/video/upload/f_jpg,so_3/');
+          } else {
+            wallpaper.previewImage = downloadResult.secure_url;
+          }
+        }
       }
     } else {
       // update via text fields if no file uploads
@@ -159,6 +197,22 @@ export const updateWallpaper = async (req, res) => {
           await deleteFromCloudinary(wallpaper.downloadFile);
         }
         wallpaper.downloadFile = downloadFile;
+
+        // If high-res URL was updated but previewImage was not provided in request
+        if (previewImage === undefined) {
+          // Delete old preview image from Cloudinary
+          if (wallpaper.previewImage) {
+            await deleteFromCloudinary(wallpaper.previewImage);
+          }
+          const isVideo = (type !== undefined ? type === 'live' : wallpaper.type === 'live') || downloadFile.includes('/video/upload/') || downloadFile.endsWith('.mp4');
+          if (isVideo) {
+            wallpaper.previewImage = downloadFile
+              .replace(/\.[^/.]+$/, '.jpg')
+              .replace('/video/upload/', '/video/upload/f_jpg,so_3/');
+          } else {
+            wallpaper.previewImage = downloadFile;
+          }
+        }
       }
     }
 

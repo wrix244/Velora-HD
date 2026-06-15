@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Download, Lock, Check } from 'lucide-react';
+import { Heart, Bookmark, Download, Lock, Check } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useFavoritesStore from '../../store/favoritesStore';
+import useLikesStore from '../../store/likesStore';
 import { useToggleFavorite } from '../../hooks/useFavorites';
+import { useToggleLike } from '../../hooks/useLikes';
 import { useRecordDownload } from '../../hooks/useDownloads';
 import useUIStore from '../../store/uiStore';
 import LivePlayer from './LivePlayer';
@@ -13,6 +15,8 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
   const { user, isAuthenticated } = useAuthStore();
   const isFavorite = useFavoritesStore((state) => state.isFavorite(wallpaper._id));
   const toggleFavMutation = useToggleFavorite();
+  const isLiked = useLikesStore((state) => state.isLiked(wallpaper._id));
+  const toggleLikeMutation = useToggleLike();
   const recordDownloadMutation = useRecordDownload();
   const addToast = useUIStore((state) => state.addToast);
 
@@ -28,6 +32,17 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       return;
     }
     toggleFavMutation.mutate(wallpaper);
+  };
+
+  const handleLike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      addToast('Please log in to like wallpapers.', 'info');
+      navigate('/login');
+      return;
+    }
+    toggleLikeMutation.mutate(wallpaper);
   };
 
   const handleDownload = (e) => {
@@ -91,18 +106,36 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
           </div>
         </div>
 
-        {/* Wishlist Like Button */}
-        <button
-          onClick={handleFavorite}
-          disabled={toggleFavMutation.isPending}
-          className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
-            isFavorite
-              ? 'bg-rose-500/80 border-rose-500/20 text-white'
-              : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
-          }`}
-        >
-          <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
-        </button>
+        {/* Actions panel: Like & Favorite */}
+        <div className="flex gap-1.5">
+          {/* Like Button */}
+          <button
+            onClick={handleLike}
+            disabled={toggleLikeMutation.isPending}
+            className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
+              isLiked
+                ? 'bg-rose-500/80 border-rose-500/20 text-white'
+                : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
+            }`}
+            title="Like"
+          >
+            <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-current' : ''}`} />
+          </button>
+
+          {/* Favorite Button */}
+          <button
+            onClick={handleFavorite}
+            disabled={toggleFavMutation.isPending}
+            className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
+              isFavorite
+                ? 'bg-amber-500/80 border-amber-500/20 text-white'
+                : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
+            }`}
+            title="Add to Favorites"
+          >
+            <Bookmark className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {/* Details / Action panel at bottom */}
