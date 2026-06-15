@@ -41,18 +41,22 @@ export default function Profile() {
   const updateProfileMutation = useUpdateProfile();
   const deleteProfileMutation = useDeleteProfile();
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+
   const handleDeleteAccount = () => {
-    if (window.confirm('WARNING: Are you sure you want to permanently delete your account? All your purchase records, downloads, and favorites will be permanently erased. This action cannot be undone.')) {
-      const confirmationText = window.prompt('Double Confirmation: To permanently delete your account and all associated data, please type "DELETE" below:');
-      if (confirmationText === 'DELETE') {
-        deleteProfileMutation.mutate(null, {
-          onSuccess: () => {
-            navigate('/');
-          }
-        });
-      } else if (confirmationText !== null) {
-        alert('Account deletion cancelled. You must type "DELETE" to confirm.');
-      }
+    setShowDeleteModal(true);
+    setDeleteConfirmText('');
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirmText === 'DELETE') {
+      deleteProfileMutation.mutate(null, {
+        onSuccess: () => {
+          setShowDeleteModal(false);
+          navigate('/');
+        }
+      });
     }
   };
 
@@ -380,6 +384,73 @@ export default function Profile() {
 
         </div>
       </div>
+
+      {/* Custom Account Deletion Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md transition-all duration-300">
+          <div className="w-full max-w-md bg-[#161618] border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden space-y-4">
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="p-2 bg-rose-500/10 rounded-xl text-rose-500">
+                <ShieldAlert className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="font-display font-black text-lg text-white">Delete Account</h3>
+                <p className="text-[10px] text-rose-400 uppercase tracking-widest font-bold">This action cannot be undone</p>
+              </div>
+            </div>
+
+            {/* Warning Message */}
+            <div className="space-y-2 text-xs text-gray-400 leading-relaxed bg-white/5 rounded-2xl p-4 border border-white/5">
+              <p className="font-semibold text-rose-400">WARNING: You are about to permanently delete your VeloraHD account.</p>
+              <p>Once deleted, all of your associated records, including:</p>
+              <ul className="list-disc list-inside space-y-1 text-[11px] pl-1 font-semibold text-white">
+                <li>Saved favorite wallpapers</li>
+                <li>Purchase history & transaction logs</li>
+                <li>Download history & looping files</li>
+              </ul>
+              <p className="mt-2 text-gray-500">will be permanently erased from our databases.</p>
+            </div>
+
+            {/* Double Confirmation Input */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
+                To confirm deletion, please type <span className="text-rose-500 font-black">DELETE</span> below:
+              </label>
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Type DELETE"
+                className="w-full bg-white/[0.03] border border-white/10 focus:border-rose-500 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-600 outline-none transition-all font-mono tracking-wider text-center"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={deleteConfirmText !== 'DELETE' || deleteProfileMutation.isPending}
+                className={`px-4 py-2.5 font-bold text-xs tracking-wider uppercase rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
+                  deleteConfirmText === 'DELETE'
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/20'
+                    : 'bg-rose-950/20 border border-rose-950/30 text-rose-500/40 cursor-not-allowed'
+                }`}
+              >
+                {deleteProfileMutation.isPending ? 'Deleting...' : 'Delete Forever'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
