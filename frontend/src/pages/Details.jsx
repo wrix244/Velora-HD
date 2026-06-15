@@ -514,8 +514,9 @@ export default function Details() {
 
       {/* Set as Wallpaper Instructions Modal (Web Browser fallback) */}
       {showInstructions && !Capacitor.isNativePlatform() && (
-        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-          <div className="relative w-full max-w-lg rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 py-8">
+            <div className="relative w-full max-w-lg rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200">
             {/* Close */}
             <button
               onClick={() => setShowInstructions(false)}
@@ -682,6 +683,7 @@ export default function Details() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       )}
 
