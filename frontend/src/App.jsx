@@ -169,7 +169,16 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    <ReactLenis root>
+    <ReactLenis 
+      root 
+      options={{
+        duration: 1.6,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // exponential ease-out
+        lerp: 0.08, // lower values make scrolling slide longer and smoother
+        smoothWheel: true,
+        wheelMultiplier: 1.15,
+      }}
+    >
       <div className="flex flex-col min-h-screen bg-[#121212]">
         {/* Route state scroll restorer */}
         <ScrollToTop />
