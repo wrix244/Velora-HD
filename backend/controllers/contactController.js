@@ -27,13 +27,16 @@ export const sendContactEmail = async (req, res) => {
       });
     }
 
-    // Configure the Gmail transporter
+    // Configure the Gmail transporter with timeouts to prevent hanging
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: emailUser,
         pass: emailPass,
       },
+      connectionTimeout: 8000, // 8 seconds
+      greetingTimeout: 8000,   // 8 seconds
+      socketTimeout: 10000,    // 10 seconds
     });
 
     // Email content options
@@ -120,13 +123,16 @@ export const sendDmcaEmail = async (req, res) => {
       });
     }
 
-    // Configure the Gmail transporter
+    // Configure the Gmail transporter with timeouts to prevent hanging
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: emailUser,
         pass: emailPass,
       },
+      connectionTimeout: 8000, // 8 seconds
+      greetingTimeout: 8000,   // 8 seconds
+      socketTimeout: 10000,    // 10 seconds
     });
 
     // Email content options
