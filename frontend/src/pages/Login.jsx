@@ -28,6 +28,17 @@ export default function Login() {
   };
 
   useEffect(() => {
+    // Dynamically inject the Google Sign-in client library when page mounts
+    let script = document.getElementById('google-gsi-client');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'google-gsi-client';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
     const initGoogleSignIn = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
@@ -48,14 +59,15 @@ export default function Login() {
             shape: 'rectangular',
           }
         );
+        return true;
       }
+      return false;
     };
 
-    initGoogleSignIn();
+    if (initGoogleSignIn()) return;
 
     const interval = setInterval(() => {
-      if (window.google) {
-        initGoogleSignIn();
+      if (initGoogleSignIn()) {
         clearInterval(interval);
       }
     }, 500);

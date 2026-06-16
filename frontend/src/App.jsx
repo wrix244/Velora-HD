@@ -73,6 +73,25 @@ export default function App() {
     initTheme();
   }, []);
 
+  // Defer Google Tag Manager loading by 3 seconds to ensure page interactivity first
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-B6DKVHT422';
+      document.body.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-B6DKVHT422');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const setFavorites = useFavoritesStore((s) => s.setFavorites);
   const setLikes = useLikesStore((s) => s.setLikes);
