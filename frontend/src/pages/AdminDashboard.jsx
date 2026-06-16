@@ -655,7 +655,7 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               {analytics?.popularWallpapers?.map((wp) => (
                 <div key={wp._id} className="flex items-center gap-3 border-b border-white/5 pb-2">
-                  <img src={wp.previewImage} alt="" className="w-10 h-12 rounded object-cover" />
+                  <img src={wp.previewImage} alt="" className="w-10 h-12 rounded object-cover pointer-events-none select-none" />
                   <div className="flex-grow min-w-0">
                     <p className="text-xs font-semibold text-white truncate">{wp.title}</p>
                     <p className="text-[10px] text-gray-500 capitalize">{wp.category} • {wp.type}</p>
@@ -729,7 +729,7 @@ export default function AdminDashboard() {
                   {wallpapersList?.map((wp) => (
                     <tr key={wp._id} className="hover:bg-white/2 transition">
                       <td className="p-4 flex items-center gap-3">
-                        <img src={wp.previewImage} alt="" className="w-8 h-10 rounded object-cover" />
+                        <img src={wp.previewImage} alt="" className="w-8 h-10 rounded object-cover pointer-events-none select-none" />
                         <span className="font-semibold text-white">{wp.title}</span>
                       </td>
                       <td className="p-4">{wp.category}</td>
@@ -1075,7 +1075,7 @@ export default function AdminDashboard() {
                           <img
                             src={previewImageFile ? URL.createObjectURL(previewImageFile) : previewImageUrl}
                             alt="Preview cover"
-                            className="h-28 object-contain rounded-lg max-w-full"
+                            className="h-28 object-contain rounded-lg max-w-full pointer-events-none select-none"
                           />
                           <button
                             type="button"
@@ -1128,7 +1128,7 @@ export default function AdminDashboard() {
                               <img
                                 src={downloadFileFile ? URL.createObjectURL(downloadFileFile) : downloadFileUrl}
                                 alt="High-Res preview"
-                                className="h-28 object-contain rounded-lg max-w-full"
+                                className="h-28 object-contain rounded-lg max-w-full pointer-events-none select-none"
                               />
                               <button
                                 type="button"
