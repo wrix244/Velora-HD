@@ -74,7 +74,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
             src={wallpaper.downloadFile}
             poster={optimiseUrl(wallpaper.previewImage, { width: 800 })}
             hoverToPlay={true}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none select-none"
           />
         ) : (
           <img
@@ -85,12 +85,12 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
             loading="lazy"
             width={400}
             height={500}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none select-none"
           />
         )}
         
         {/* Soft shadow gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/30 to-transparent opacity-80 z-1" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/30 to-transparent opacity-80 z-1 pointer-events-none select-none" />
       </Link>
 
       {/* Top badges bar */}
