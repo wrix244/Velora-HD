@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ReactLenis } from 'lenis/react';
 import axios from 'axios';
@@ -16,26 +16,29 @@ import useFavoritesStore from './store/favoritesStore';
 import useLikesStore from './store/likesStore';
 import { getCookie } from './utils/cookies';
 
-// Pages
+// Synchronous Page Import (for instant LCP rendering)
 import Home from './pages/Home';
-import Explore from './pages/Explore';
-import Details from './pages/Details';
-import Checkout from './pages/Checkout';
-import Success from './pages/Success';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import AdminDashboard from './pages/AdminDashboard';
-import LiveDashboard from './pages/LiveDashboard';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import Refunds from './pages/Refunds';
-import AiPolicy from './pages/AiPolicy';
-import Copyright from './pages/Copyright';
-import CookiePolicy from './pages/CookiePolicy';
-import Disclaimer from './pages/Disclaimer';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+
+// Lazy Loaded Pages (Chunk split for speed)
+const Explore = lazy(() => import('./pages/Explore'));
+const Details = lazy(() => import('./pages/Details'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Success = lazy(() => import('./pages/Success'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Profile = lazy(() => import('./pages/Profile'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const LiveDashboard = lazy(() => import('./pages/LiveDashboard'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Refunds = lazy(() => import('./pages/Refunds'));
+const AiPolicy = lazy(() => import('./pages/AiPolicy'));
+const Copyright = lazy(() => import('./pages/Copyright'));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
+const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -188,30 +191,36 @@ export default function App() {
 
         {/* Primary Page Layout Portal */}
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/mobile" element={<Explore />} />
-            <Route path="/pc" element={<Explore />} />
-            <Route path="/premium" element={<Explore />} />
-            <Route path="/wallpaper/:slug" element={<Details />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/success/:slug" element={<Success />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/dashboard" element={<LiveDashboard />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/refunds" element={<Refunds />} />
-            <Route path="/ai-policy" element={<AiPolicy />} />
-            <Route path="/copyright" element={<Copyright />} />
-            <Route path="/cookies" element={<CookiePolicy />} />
-            <Route path="/disclaimer" element={<Disclaimer />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[50vh]">
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/mobile" element={<Explore />} />
+              <Route path="/pc" element={<Explore />} />
+              <Route path="/premium" element={<Explore />} />
+              <Route path="/wallpaper/:slug" element={<Details />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/success/:slug" element={<Success />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/dashboard" element={<LiveDashboard />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/refunds" element={<Refunds />} />
+              <Route path="/ai-policy" element={<AiPolicy />} />
+              <Route path="/copyright" element={<Copyright />} />
+              <Route path="/cookies" element={<CookiePolicy />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </main>
 
         {/* Toast Notification Container */}
