@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Bookmark, Download, Lock, Check } from 'lucide-react';
+import { Heart, Bookmark, Download, Lock } from 'lucide-react';
 import { optimiseUrl } from '../../utils/cloudinary';
 import useAuthStore from '../../store/authStore';
 import useFavoritesStore from '../../store/favoritesStore';
@@ -152,41 +152,38 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         </div>
       </div>
 
-      {/* Details / Action panel at bottom */}
-      <div className="p-4 relative z-10 w-full md:transform md:translate-y-3 md:group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
-        <div className="block mb-1">
-          <h3 className="font-display font-semibold text-lg text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
+      {/* Details & Action panel at bottom */}
+      <div className="p-3 md:p-4 relative z-10 w-full flex items-end justify-between pointer-events-none">
+        {/* Left: Text Details */}
+        <div className="block min-w-0 flex-1 pr-2">
+          <h3 className="font-display font-semibold text-sm md:text-base text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
             {wallpaper.title}
           </h3>
-          <p className="text-[11px] text-gray-400 font-medium tracking-wide">
+          <p className="text-[9px] md:text-[11px] text-gray-400 font-medium tracking-wide truncate">
             {wallpaper.category} • {wallpaper.resolution}
           </p>
         </div>
 
-        {/* Interactive Action Bar (revealed on hover, desktop only) */}
-        <div className="hidden md:flex items-center justify-between mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
-          <span className="font-display font-bold text-sm text-white">
-            {wallpaper.isPremium ? (hasAccess ? <span className="text-emerald-400 flex items-center gap-0.5 text-xs"><Check className="w-3.5 h-3.5"/> Unlocked</span> : `$${wallpaper.price.toFixed(2)}`) : 'Free'}
-          </span>
-
+        {/* Right: Floating action button for Download/Unlock */}
+        <div className="flex-shrink-0 pointer-events-auto opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleDownload}
             disabled={recordDownloadMutation.isPending}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] md:text-xs font-semibold tracking-wide transition-all shadow-lg ${
               wallpaper.isPremium && !hasAccess
-                ? 'bg-primary hover:bg-primary/95 text-white shadow-lg shadow-primary/20'
-                : 'bg-white hover:bg-gray-100 text-[#121212]'
+                ? 'bg-primary text-white shadow-primary/20 hover:bg-primary/95'
+                : 'bg-white text-[#121212] hover:bg-gray-100'
             }`}
           >
             {wallpaper.isPremium && !hasAccess ? (
               <>
                 <Lock className="w-3 h-3" />
-                Unlock
+                <span>${wallpaper.price.toFixed(2)}</span>
               </>
             ) : (
               <>
                 <Download className="w-3 h-3 animate-bounce" />
-                Get
+                <span>Get</span>
               </>
             )}
           </button>
