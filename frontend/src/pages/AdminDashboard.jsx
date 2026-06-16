@@ -16,7 +16,7 @@ import {
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
 
-const categories = ['Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
+import { useCategories, useCreateCategory } from '../hooks/useCategories';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -31,7 +31,31 @@ export default function AdminDashboard() {
   // Form States
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const { data: dbCategories } = useCategories();
+  const categories = dbCategories || ['Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
+
   const [category, setCategory] = useState('Nature');
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [showAddCategoryInput, setShowAddCategoryInput] = useState(false);
+  const createCategoryMutation = useCreateCategory();
+
+  const handleAddCategorySubmit = () => {
+    if (!newCategoryName.trim()) {
+      addToast('Please enter a category name', 'error');
+      return;
+    }
+    createCategoryMutation.mutate(newCategoryName, {
+      onSuccess: (newCatName) => {
+        addToast(`Category "${newCatName}" created successfully!`, 'success');
+        setCategory(newCatName);
+        setNewCategoryName('');
+        setShowAddCategoryInput(false);
+      },
+      onError: (err) => {
+        addToast(err.response?.data?.message || 'Failed to create category', 'error');
+      }
+    });
+  };
   const [type, setType] = useState('static');
   const [deviceType, setDeviceType] = useState('desktop');
   const [resolution, setResolution] = useState('1920x1080');
@@ -884,16 +908,49 @@ export default function AdminDashboard() {
 
                 {/* Category */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Category</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
-                  >
-                    {categories.map((c) => (
-                      <option key={c} value={c} className="bg-[#121212] text-white">{c}</option>
-                    ))}
-                  </select>
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Category</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowAddCategoryInput(!showAddCategoryInput);
+                        setNewCategoryName('');
+                      }}
+                      className="text-[9px] font-bold text-primary hover:underline uppercase tracking-wide"
+                    >
+                      {showAddCategoryInput ? 'Cancel' : '+ New Category'}
+                    </button>
+                  </div>
+
+                  {showAddCategoryInput ? (
+                    <div className="flex gap-1">
+                      <input
+                        type="text"
+                        placeholder="New category"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        className="flex-grow px-3 py-1.5 text-xs glass-input focus:bg-[#121212]"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddCategorySubmit}
+                        disabled={createCategoryMutation.isPending}
+                        className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold uppercase rounded-lg hover:bg-primary/90 transition disabled:opacity-50"
+                      >
+                        {createCategoryMutation.isPending ? '...' : 'Add'}
+                      </button>
+                    </div>
+                  ) : (
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
+                    >
+                      {categories.map((c) => (
+                        <option key={c} value={c} className="bg-[#121212] text-white">{c}</option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 {/* Device Type */}

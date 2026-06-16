@@ -7,8 +7,8 @@ import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
 import useUIStore from '../store/uiStore';
 import { usePurchaseHistory } from '../hooks/usePurchases';
+import { useCategories } from '../hooks/useCategories';
 
-const categories = ['All', 'Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
 const resolutions = ['All', '3840x2160', '1920x1080', '1440x3200', '1080x1920'];
 
 export default function Explore() {
@@ -17,6 +17,8 @@ export default function Explore() {
   const recentlyViewed = useUIStore((state) => state.recentlyViewed);
   const clearRecentlyViewed = useUIStore((state) => state.clearRecentlyViewed);
   const { data: purchases } = usePurchaseHistory();
+  const { data: dbCategories } = useCategories();
+  const categories = dbCategories ? ['All', ...dbCategories] : ['All', 'Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
 
   // Extract purchased wallpaper ids to pass to card rendering
   const purchasedIds = purchases ? purchases.map((p) => p.wallpaperId?._id) : [];

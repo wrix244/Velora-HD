@@ -18,6 +18,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 
 // Load env vars
@@ -67,6 +68,7 @@ app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {
