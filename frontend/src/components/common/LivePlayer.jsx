@@ -6,6 +6,7 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
   const [isPlaying, setIsPlaying] = useState(autoplay);
   const [isLoading, setIsLoading] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (autoplay && videoRef.current) {
@@ -32,6 +33,7 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
   };
 
   const handleHoverStart = () => {
+    setIsHovered(true);
     if (hoverToPlay && videoRef.current && !isPlaying) {
       videoRef.current.play()
         .then(() => setIsPlaying(true))
@@ -40,6 +42,7 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
   };
 
   const handleHoverEnd = () => {
+    setIsHovered(false);
     if (hoverToPlay && videoRef.current && isPlaying) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0; // reset
@@ -67,14 +70,12 @@ export default function LivePlayer({ src, poster, autoplay = false, hoverToPlay 
         className="w-full h-full object-cover"
       />
 
-      {/* Loading Overlay */}
-      {isLoading && (
+      {/* Loading Overlay — Only render if loading AND user is hovering or autoplay is active */}
+      {isLoading && (autoplay || isHovered) && (
         <div className="absolute inset-0 bg-[#121212]/40 flex items-center justify-center backdrop-blur-[2px]">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-
-
 
       {/* Play/Pause Control (only visible on large details page play, not hover cards) */}
       {!hoverToPlay && (
