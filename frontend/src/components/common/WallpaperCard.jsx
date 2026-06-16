@@ -74,7 +74,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       <Link to={`/wallpaper/${wallpaper.slug}`} className="absolute inset-0 z-0">
         {wallpaper.type === 'live' ? (
           <LivePlayer
-            src={wallpaper.downloadFile}
+            src={optimiseUrl(wallpaper.downloadFile, { width: 800 })}
             poster={optimiseUrl(wallpaper.previewImage, { width: 800 })}
             hoverToPlay={true}
             draggable="false"

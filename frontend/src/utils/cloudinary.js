@@ -8,7 +8,8 @@ export const optimiseUrl = (url, opts = {}) => {
   } = opts;
 
   // Check if transforms are already in the URL to avoid double-injecting
-  if (url.match(/\/upload\/[a-z0-9_,]+/)) {
+  // Cloudinary transformations contain underscores (e.g., w_800, q_auto) whereas version tags do not
+  if (url.match(/\/upload\/[^\/]*_[^\/]*\//)) {
     return url;
   }
 

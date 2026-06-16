@@ -268,8 +268,8 @@ export default function Details() {
           {wallpaper.type === 'live' ? (
             <div className="w-full aspect-[16/10] max-h-[70vh]">
               <LivePlayer
-                src={wallpaper.downloadFile}
-                poster={wallpaper.previewImage}
+                src={optimiseUrl(wallpaper.downloadFile, { width: 1200 })}
+                poster={optimiseUrl(wallpaper.previewImage, { width: 1200 })}
                 autoplay={true}
                 hoverToPlay={false}
                 className="w-full h-full"
@@ -277,7 +277,7 @@ export default function Details() {
             </div>
           ) : (
             <img
-              src={wallpaper.downloadFile}
+              src={optimiseUrl(wallpaper.previewImage, { width: 1200 })}
               alt={wallpaper.title}
               className="w-full h-auto max-h-[70vh] object-contain"
             />
@@ -778,7 +778,7 @@ export default function Details() {
             </div>
 
             <div className="w-full aspect-video rounded-2xl bg-[#121212] border border-white/5 relative overflow-hidden flex flex-col items-center justify-center">
-              <div className="absolute inset-0 bg-cover bg-center filter brightness-50 opacity-40 animate-pulse" style={{ backgroundImage: `url(${wallpaper.previewImage})` }} />
+              <div className="absolute inset-0 bg-cover bg-center filter brightness-50 opacity-40 animate-pulse" style={{ backgroundImage: `url(${optimiseUrl(wallpaper.previewImage, { width: 600 })})` }} />
               
               <div className="relative z-10 space-y-4 flex flex-col items-center">
                 <div className="relative w-16 h-16 flex items-center justify-center">
