@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Bookmark, Download, Lock, Check } from 'lucide-react';
+import { Heart, Bookmark, Lock } from 'lucide-react';
 import { optimiseUrl } from '../../utils/cloudinary';
 import useAuthStore from '../../store/authStore';
 import useFavoritesStore from '../../store/favoritesStore';
 import useLikesStore from '../../store/likesStore';
 import { useToggleFavorite } from '../../hooks/useFavorites';
 import { useToggleLike } from '../../hooks/useLikes';
-import { useRecordDownload } from '../../hooks/useDownloads';
 import useUIStore from '../../store/uiStore';
 import LivePlayer from './LivePlayer';
 
@@ -18,7 +17,6 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
   const toggleFavMutation = useToggleFavorite();
   const isLiked = useLikesStore((state) => state.isLiked(wallpaper._id));
   const toggleLikeMutation = useToggleLike();
-  const recordDownloadMutation = useRecordDownload();
   const addToast = useUIStore((state) => state.addToast);
 
   // Check permissions: Admin, or free, or purchased
@@ -44,21 +42,6 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       return;
     }
     toggleLikeMutation.mutate(wallpaper);
-  };
-
-  const handleDownload = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isAuthenticated) {
-      addToast('Please register or login to download wallpapers.', 'info');
-      navigate('/login');
-      return;
-    }
-    if (wallpaper.isPremium && !hasAccess) {
-      navigate(`/checkout?wallpaperId=${wallpaper._id}`);
-      return;
-    }
-    recordDownloadMutation.mutate(wallpaper);
   };
 
   const src400 = optimiseUrl(wallpaper.previewImage, { width: 400 });
@@ -152,8 +135,8 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         </div>
       </div>
 
-      {/* Details / Action panel at bottom */}
-      <div className="p-4 relative z-10 w-full md:transform md:translate-y-3 md:group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
+      {/* Details panel at bottom */}
+      <div className="p-4 relative z-10 w-full pointer-events-none">
         <div className="block mb-1">
           <h3 className="font-display font-semibold text-lg text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
             {wallpaper.title}
@@ -161,35 +144,6 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
           <p className="text-[11px] text-gray-400 font-medium tracking-wide">
             {wallpaper.category} • {wallpaper.resolution}
           </p>
-        </div>
-
-        {/* Interactive Action Bar (revealed on hover, desktop only) */}
-        <div className="hidden md:flex items-center justify-between mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
-          <span className="font-display font-bold text-sm text-white">
-            {wallpaper.isPremium ? (hasAccess ? <span className="text-emerald-400 flex items-center gap-0.5 text-xs"><Check className="w-3.5 h-3.5"/> Unlocked</span> : `$${wallpaper.price.toFixed(2)}`) : 'Free'}
-          </span>
-
-          <button
-            onClick={handleDownload}
-            disabled={recordDownloadMutation.isPending}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-              wallpaper.isPremium && !hasAccess
-                ? 'bg-primary hover:bg-primary/95 text-white shadow-lg shadow-primary/20'
-                : 'bg-white hover:bg-gray-100 text-[#121212]'
-            }`}
-          >
-            {wallpaper.isPremium && !hasAccess ? (
-              <>
-                <Lock className="w-3 h-3" />
-                Unlock
-              </>
-            ) : (
-              <>
-                <Download className="w-3 h-3 animate-bounce" />
-                Get
-              </>
-            )}
-          </button>
         </div>
       </div>
     </div>
