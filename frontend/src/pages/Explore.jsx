@@ -307,7 +307,7 @@ export default function Explore() {
         <div className="lg:col-span-3 space-y-8">
           {isLoading ? (
             // Shimmer Loaders
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
               {Array(6)
                 .fill(0)
                 .map((_, i) => <SkeletonCard key={i} />)}
@@ -330,7 +330,7 @@ export default function Explore() {
           ) : (
             // Results Grid
             <div className="space-y-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {data?.pages.map((page) =>
                   page.data.map((wp) => (
                     <WallpaperCard

@@ -94,7 +94,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       </Link>
 
       {/* Top badges bar */}
-      <div className="absolute top-3 inset-x-3 flex justify-between items-start z-10">
+      <div className="absolute top-3 inset-x-3 flex justify-between items-start z-20">
         <div className="flex flex-col gap-1.5">
           {/* Static/Live and device type badges */}
           <div className="flex flex-wrap gap-1">
@@ -148,18 +148,18 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
       </div>
 
       {/* Details / Action panel at bottom */}
-      <div className="p-4 relative z-10 w-full transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
-        <Link to={`/wallpaper/${wallpaper.slug}`} className="block mb-1">
+      <div className="p-4 relative z-10 w-full md:transform md:translate-y-3 md:group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
+        <div className="block mb-1">
           <h3 className="font-display font-semibold text-lg text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
             {wallpaper.title}
           </h3>
           <p className="text-[11px] text-gray-400 font-medium tracking-wide">
             {wallpaper.category} • {wallpaper.resolution}
           </p>
-        </Link>
+        </div>
 
-        {/* Interactive Action Bar (revealed on hover) */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* Interactive Action Bar (revealed on hover, desktop only) */}
+        <div className="hidden md:flex items-center justify-between mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-auto">
           <span className="font-display font-bold text-sm text-white">
             {wallpaper.isPremium ? (hasAccess ? <span className="text-emerald-400 flex items-center gap-0.5 text-xs"><Check className="w-3.5 h-3.5"/> Unlocked</span> : `$${wallpaper.price.toFixed(2)}`) : 'Free'}
           </span>

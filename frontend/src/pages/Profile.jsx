@@ -156,7 +156,7 @@ export default function Profile() {
               <h2 className="font-display font-bold text-lg text-white">My Favorite Wallpapers</h2>
               
               {favsLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !favorites || favorites.length === 0 ? (
@@ -174,7 +174,7 @@ export default function Profile() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {favorites.map((wp) => (
                     <WallpaperCard
                       key={`fav-${wp._id}`}
@@ -193,7 +193,7 @@ export default function Profile() {
               <h2 className="font-display font-bold text-lg text-white">Purchased Premium Licenses</h2>
               
               {purchasesLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !purchases || purchases.length === 0 ? (
@@ -211,7 +211,7 @@ export default function Profile() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {purchases.map((p) =>
                     p.wallpaperId ? (
                       <WallpaperCard key={`purchased-${p._id}`} wallpaper={p.wallpaperId} purchased={true} />
