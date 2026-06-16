@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-// @desc    Send contact email via Nodemailer
+// @desc    Send contact email via Resend
 // @route   POST /api/contact
 // @access  Public
 export const sendContactEmail = async (req, res) => {
@@ -12,38 +12,27 @@ export const sendContactEmail = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please fill in all required fields.' });
     }
 
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || emailUser;
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || 'velorahdwallart@gmail.com';
 
     // If credentials are not configured
-    if (!emailUser || !emailPass || emailUser === 'your-gmail-address@gmail.com') {
-      console.warn('Nodemailer SMTP credentials are not configured in .env. Logging message instead:');
+    if (!resendApiKey) {
+      console.warn('Resend API key is not configured in .env. Logging contact message instead:');
       console.log(`--- CONTACT INQUIRY ---\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}\n----------------------`);
       
       return res.status(500).json({
         success: false,
-        message: 'Email service is not configured on the server. Please check the EMAIL_USER and EMAIL_PASS variables.'
+        message: 'Email service is not configured on the server. Please check the RESEND_API_KEY variable.'
       });
     }
 
-    // Configure the Gmail transporter with timeouts to prevent hanging
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: emailUser,
-        pass: emailPass,
-      },
-      connectionTimeout: 8000, // 8 seconds
-      greetingTimeout: 8000,   // 8 seconds
-      socketTimeout: 10000,    // 10 seconds
-    });
+    const resend = new Resend(resendApiKey);
 
-    // Email content options
-    const mailOptions = {
-      from: `"${name}" <${emailUser}>`,
+    // Send email via Resend API
+    await resend.emails.send({
+      from: 'VeloraHD Contact Form <onboarding@resend.dev>',
       to: receiverEmail,
-      replyTo: email, // Allows direct replies to the sender
+      replyTo: email, // Allows replying directly to the person who submitted
       subject: `[VeloraHD Contact] ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #ffffff;">
@@ -63,19 +52,16 @@ export const sendContactEmail = async (req, res) => {
           </div>
         </div>
       `,
-    };
-
-    // Send the email
-    await transporter.sendMail(mailOptions);
+    });
 
     res.status(200).json({ success: true, message: 'Your message has been sent successfully!' });
   } catch (error) {
-    console.error('Nodemailer error:', error);
+    console.error('Resend contact error:', error);
     res.status(500).json({ success: false, message: 'Failed to send your message. Please try again later.' });
   }
 };
 
-// @desc    Send DMCA complaint email via Nodemailer
+// @desc    Send DMCA complaint email via Resend
 // @route   POST /api/contact/dmca
 // @access  Public
 export const sendDmcaEmail = async (req, res) => {
@@ -106,38 +92,27 @@ export const sendDmcaEmail = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please fill in all required fields and accept the declarations.' });
     }
 
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || emailUser;
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || 'velorahdwallart@gmail.com';
 
     // If credentials are not configured
-    if (!emailUser || !emailPass || emailUser === 'your-gmail-address@gmail.com') {
-      console.warn('Nodemailer SMTP credentials are not configured in .env. Logging DMCA notice instead:');
+    if (!resendApiKey) {
+      console.warn('Resend API key is not configured in .env. Logging DMCA notice instead:');
       console.log(
         `--- DMCA NOTICE ---\nReporter: ${reporterName}\nEmail: ${reporterEmail}\nPhone: ${reporterPhone}\nOwner: ${copyrightOwner}\nInfringing URL: ${infringingUrl}\nWork Desc: ${workDescription}\nInfringement Details: ${infringementDetails}\n-------------------`
       );
       
       return res.status(500).json({
         success: false,
-        message: 'Email service is not configured on the server. Please check the EMAIL_USER and EMAIL_PASS variables.'
+        message: 'Email service is not configured on the server. Please check the RESEND_API_KEY variable.'
       });
     }
 
-    // Configure the Gmail transporter with timeouts to prevent hanging
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: emailUser,
-        pass: emailPass,
-      },
-      connectionTimeout: 8000, // 8 seconds
-      greetingTimeout: 8000,   // 8 seconds
-      socketTimeout: 10000,    // 10 seconds
-    });
+    const resend = new Resend(resendApiKey);
 
-    // Email content options
-    const mailOptions = {
-      from: `"VeloraHD DMCA Portal" <dmca@velorahd.in>`,
+    // Send email via Resend API
+    await resend.emails.send({
+      from: 'VeloraHD DMCA Portal <onboarding@resend.dev>',
       to: receiverEmail,
       replyTo: reporterEmail,
       subject: `[VeloraHD DMCA Complaint] Infringement Claim by ${reporterName}`,
@@ -172,14 +147,11 @@ export const sendDmcaEmail = async (req, res) => {
           </div>
         </div>
       `,
-    };
-
-    // Send the email
-    await transporter.sendMail(mailOptions);
+    });
 
     res.status(200).json({ success: true, message: 'Your DMCA complaint has been submitted successfully!' });
   } catch (error) {
-    console.error('Nodemailer DMCA error:', error);
+    console.error('Resend DMCA error:', error);
     res.status(500).json({ success: false, message: 'Failed to submit your complaint. Please try again later.' });
   }
 };
