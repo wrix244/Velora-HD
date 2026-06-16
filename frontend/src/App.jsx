@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { ReactLenis } from 'lenis/react';
 import axios from 'axios';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -168,52 +169,54 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#121212]">
-      {/* Route state scroll restorer */}
-      <ScrollToTop />
+    <ReactLenis root>
+      <div className="flex flex-col min-h-screen bg-[#121212]">
+        {/* Route state scroll restorer */}
+        <ScrollToTop />
 
-      {/* Global Header Navigation */}
-      <Navbar />
+        {/* Global Header Navigation */}
+        <Navbar />
 
-      {/* Primary Page Layout Portal */}
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/mobile" element={<Explore />} />
-          <Route path="/pc" element={<Explore />} />
-          <Route path="/premium" element={<Explore />} />
-          <Route path="/wallpaper/:slug" element={<Details />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/success/:slug" element={<Success />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/dashboard" element={<LiveDashboard />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/refunds" element={<Refunds />} />
-          <Route path="/ai-policy" element={<AiPolicy />} />
-          <Route path="/copyright" element={<Copyright />} />
-          <Route path="/cookies" element={<CookiePolicy />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
+        {/* Primary Page Layout Portal */}
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/mobile" element={<Explore />} />
+            <Route path="/pc" element={<Explore />} />
+            <Route path="/premium" element={<Explore />} />
+            <Route path="/wallpaper/:slug" element={<Details />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/success/:slug" element={<Success />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard" element={<LiveDashboard />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/refunds" element={<Refunds />} />
+            <Route path="/ai-policy" element={<AiPolicy />} />
+            <Route path="/copyright" element={<Copyright />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-      {/* Toast Notification Container */}
-      <ToastContainer />
+        {/* Toast Notification Container */}
+        <ToastContainer />
 
-      {/* PWA Install Bottom Sheet */}
-      <InstallPrompt />
+        {/* PWA Install Bottom Sheet */}
+        <InstallPrompt />
 
-      {/* Cookie Preferences Banner */}
-      <CookieConsent />
+        {/* Cookie Preferences Banner */}
+        <CookieConsent />
 
-      {/* Global Footer */}
-      <Footer />
-    </div>
+        {/* Global Footer */}
+        <Footer />
+      </div>
+    </ReactLenis>
   );
 }
