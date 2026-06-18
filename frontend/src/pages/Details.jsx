@@ -50,6 +50,19 @@ export default function Details() {
   const [playingAd, setPlayingAd] = useState(false);
   const [adCountdown, setAdCountdown] = useState(8);
 
+  // Custom Confirmation Modal States
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+  const [confirmOnApprove, setConfirmOnApprove] = useState(null);
+
+  const requestConfirmation = (title, message, onApprove) => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmOnApprove(() => onApprove);
+    setConfirmOpen(true);
+  };
+
   useEffect(() => {
     let timer;
     if (playingAd && adCountdown > 0) {
@@ -184,13 +197,17 @@ export default function Details() {
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this wallpaper?')) {
-      deleteMutation.mutate(wallpaper._id, {
-        onSuccess: () => {
-          navigate('/explore');
-        },
-      });
-    }
+    requestConfirmation(
+      'Delete Wallpaper Artwork',
+      'Are you sure you want to permanently delete this wallpaper artwork? It will be removed from the library and users will no longer be able to discover or download it. This action is irreversible.',
+      () => {
+        deleteMutation.mutate(wallpaper._id, {
+          onSuccess: () => {
+            navigate('/explore');
+          },
+        });
+      }
+    );
   };
 
   if (isLoading) {
@@ -799,6 +816,42 @@ export default function Details() {
 
             <div className="text-[10px] text-gray-500 italic leading-relaxed pt-2">
               Watching this short ad helps us keep the servers running and pay the original artists. Thank you for your support!
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM CONFIRMATION MODAL */}
+      {confirmOpen && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-6 relative shadow-2xl">
+            <div className="space-y-2">
+              <h3 className="font-display font-bold text-lg text-white">
+                {confirmTitle}
+              </h3>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                {confirmMessage}
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
+              <button
+                type="button"
+                onClick={() => setConfirmOpen(false)}
+                className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirmOnApprove) confirmOnApprove();
+                  setConfirmOpen(false);
+                }}
+                className="px-5 py-2 text-white font-bold text-xs rounded-xl shadow-lg bg-rose-600 hover:bg-rose-500 shadow-rose-600/10 transition cursor-pointer"
+              >
+                Confirm
+              </button>
             </div>
           </div>
         </div>
