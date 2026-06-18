@@ -299,7 +299,7 @@ export default function Contact() {
                 className="w-full py-2.5 bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
-                {submitting ? 'Sending...' : 'Send Message'}
+                <span>{submitting ? 'Sending...' : 'Send Message'}</span>
               </button>
             </form>
           </motion.div>

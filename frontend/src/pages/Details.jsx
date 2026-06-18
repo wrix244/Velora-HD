@@ -280,7 +280,7 @@ export default function Details() {
           The requested wallpaper does not exist or has been removed by the administrator.
         </p>
         <Link to="/explore" className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-lg inline-block">
-          Return to Explore
+          <span>Return to Explore</span>
         </Link>
       </div>
     );
@@ -422,7 +422,7 @@ export default function Details() {
                       className="flex-grow py-3 px-6 bg-primary hover:bg-primary/95 text-white rounded-lg font-bold text-xs tracking-wider uppercase transition-all shadow flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Lock className="w-4 h-4" />
-                      Unlock for ${wallpaper.price.toFixed(2)}
+                      <span>Unlock for ${wallpaper.price.toFixed(2)}</span>
                     </button>
 
                     {/* Like Button */}
@@ -474,7 +474,7 @@ export default function Details() {
                     className="flex-grow py-3 px-6 bg-primary hover:bg-primary/95 text-white rounded-lg font-bold text-xs tracking-wider uppercase transition-all shadow flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
-                    Download Instantly
+                    <span>Download Instantly</span>
                   </button>
 
                   {/* Like Button */}
@@ -669,19 +669,19 @@ export default function Details() {
                   onClick={() => handleSetNativeWallpaper('home')}
                   className="w-full py-3 px-5 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
                 >
-                  Home Screen
+                  <span>Home Screen</span>
                 </button>
                 <button
                   onClick={() => handleSetNativeWallpaper('lock')}
                   className="w-full py-3 px-5 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
                 >
-                  Lock Screen
+                  <span>Lock Screen</span>
                 </button>
                 <button
                   onClick={() => handleSetNativeWallpaper('both')}
                   className="w-full py-3 px-5 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
                 >
-                  Home & Lock Screen
+                  <span>Home & Lock Screen</span>
                 </button>
                 <button
                   onClick={() => setShowInstructions(false)}
@@ -767,7 +767,7 @@ export default function Details() {
                         className="py-2 px-3 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-[10px] tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow"
                       >
                         <Download className="w-3.5 h-3.5" />
-                        Microsoft Store
+                        <span>Microsoft Store</span>
                       </a>
                       <a
                         href="https://rocksdanister.github.io/lively/"
@@ -857,7 +857,7 @@ export default function Details() {
                 className="w-full py-3 px-6 rounded-lg bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase transition-all shadow flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Download className="w-4 h-4" />
-                Download Artwork
+                <span>Download Artwork</span>
               </button>
               <div className="flex gap-2 items-start text-[10px] text-text-muted leading-relaxed">
                 <Info className="w-4 h-4 flex-shrink-0 text-primary" />

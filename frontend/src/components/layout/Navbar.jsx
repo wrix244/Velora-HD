@@ -214,7 +214,7 @@ export default function Navbar() {
                 to="/register"
                 className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-primary hover:bg-primary/90 text-white transition-colors"
               >
-                Register
+                <span>Register</span>
               </Link>
             </div>
           )}
@@ -351,7 +351,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className="w-full py-2 rounded-lg text-xs font-semibold text-center bg-primary hover:bg-primary/90 text-white"
                   >
-                    Register
+                    <span>Register</span>
                   </Link>
                 </div>
               )}

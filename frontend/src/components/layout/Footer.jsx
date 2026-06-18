@@ -97,7 +97,7 @@ export default function Footer() {
                 type="submit"
                 className="px-4 py-1.5 bg-primary hover:bg-primary/95 text-white font-semibold rounded-lg text-xs transition"
               >
-                Join
+                <span>Join</span>
               </button>
             </form>
           </div>

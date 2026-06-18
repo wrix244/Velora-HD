@@ -165,7 +165,7 @@ export default function Register() {
             disabled={registerMutation.isPending}
             className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
           >
-            {registerMutation.isPending ? 'Creating Account...' : 'Register Account'}
+            <span>{registerMutation.isPending ? 'Creating Account...' : 'Register Account'}</span>
           </button>
         </form>
 

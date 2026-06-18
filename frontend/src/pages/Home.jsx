@@ -102,7 +102,7 @@ export default function Home() {
               to="/explore"
               className="px-6 py-3 rounded-lg bg-primary hover:bg-primary/95 text-white font-semibold text-xs tracking-wider uppercase transition shadow-lg shadow-primary/10"
             >
-              Browse Collections
+              <span>Browse Collections</span>
             </Link>
             <Link
               to="/explore?isPremium=true"

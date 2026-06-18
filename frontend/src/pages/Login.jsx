@@ -149,7 +149,7 @@ export default function Login() {
             disabled={loginMutation.isPending}
             className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
           >
-            {loginMutation.isPending ? 'Logging In...' : 'Log In'}
+            <span>{loginMutation.isPending ? 'Logging In...' : 'Log In'}</span>
           </button>
         </form>
 

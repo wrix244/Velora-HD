@@ -733,7 +733,7 @@ export default function AdminDashboard() {
               className="px-4 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl shadow-lg flex items-center gap-1"
             >
               <Plus className="w-4 h-4" />
-              Add Wallpaper
+              <span>Add Wallpaper</span>
             </button>
           </div>
 
@@ -967,7 +967,7 @@ export default function AdminDashboard() {
                         disabled={createCategoryMutation.isPending}
                         className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold uppercase rounded-lg hover:bg-primary/90 transition disabled:opacity-50"
                       >
-                        {createCategoryMutation.isPending ? '...' : 'Add'}
+                        <span>{createCategoryMutation.isPending ? '...' : 'Add'}</span>
                       </button>
                     </div>
                   ) : (
@@ -1229,14 +1229,14 @@ export default function AdminDashboard() {
                   onClick={() => setModalOpen(false)}
                   className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
                 >
-                  Cancel
+                  <span>Cancel</span>
                 </button>
                 <button
                   type="submit"
                   disabled={createMutation.isPending || updateMutation.isPending}
                   className="px-6 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl shadow-lg transition"
                 >
-                  {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Wallpaper'}
+                  <span>{createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Wallpaper'}</span>
                 </button>
               </div>
             </form>
@@ -1277,7 +1277,7 @@ export default function AdminDashboard() {
                     : 'bg-primary hover:bg-primary/95 shadow-primary/10'
                 }`}
               >
-                Confirm
+                <span>Confirm</span>
               </button>
             </div>
           </div>

@@ -90,7 +90,7 @@ export default function CookieConsent() {
                   onClick={handleAcceptAll}
                   className="w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wide transition-all shadow-lg cursor-pointer"
                 >
-                  Accept All Cookies
+                  <span>Accept All Cookies</span>
                 </button>
                 <div className="flex gap-2">
                   <button
@@ -172,7 +172,7 @@ export default function CookieConsent() {
                   onClick={handleSavePreferences}
                   className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wide transition shadow-lg cursor-pointer"
                 >
-                  Save Choices
+                  <span>Save Choices</span>
                 </button>
               </div>
             </div>

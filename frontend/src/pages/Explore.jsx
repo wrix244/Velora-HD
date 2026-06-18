@@ -294,7 +294,7 @@ export default function Explore() {
             type="submit"
             className="px-5 py-2 bg-primary hover:bg-primary/95 text-white font-semibold rounded-lg text-xs transition"
           >
-            Search
+            <span>Search</span>
           </button>
         </form>
       </div>
@@ -404,7 +404,7 @@ export default function Explore() {
               onClick={() => setMobileFiltersOpen(false)}
               className="w-full py-3 rounded-lg bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider transition"
             >
-              Show Results
+              <span>Show Results</span>
             </button>
           </div>
         </>

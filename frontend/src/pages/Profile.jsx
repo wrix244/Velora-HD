@@ -170,7 +170,7 @@ export default function Profile() {
                     onClick={() => navigate('/explore')}
                     className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
                   >
-                    Browse Collections
+                    <span>Browse Collections</span>
                   </button>
                 </div>
               ) : (
@@ -207,7 +207,7 @@ export default function Profile() {
                     onClick={() => navigate('/explore?isPremium=true')}
                     className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
                   >
-                    Explore Premium Layouts
+                    <span>Explore Premium Layouts</span>
                   </button>
                 </div>
               ) : (
@@ -359,7 +359,7 @@ export default function Profile() {
                   disabled={updateProfileMutation.isPending}
                   className="px-6 py-2.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition"
                 >
-                  {updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}
+                  <span>{updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}</span>
                 </button>
               </form>
 

@@ -191,7 +191,7 @@ export default function Faq() {
               href="mailto:support@velorahd.in"
               className="inline-flex px-5 py-2.5 rounded-lg bg-primary hover:bg-primary/95 text-white font-semibold text-xs tracking-wider uppercase transition shadow"
             >
-              Contact Support
+              <span>Contact Support</span>
             </a>
           </div>
         </div>

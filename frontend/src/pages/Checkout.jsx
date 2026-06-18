@@ -139,7 +139,7 @@ export default function Checkout() {
         <h2 className="font-display font-bold text-xl text-white">Item Not Found</h2>
         <p className="text-xs text-gray-400">Could not resolve checkout for the specified wallpaper.</p>
         <Link to="/explore" className="px-4 py-2 bg-primary text-white text-xs font-semibold rounded-lg inline-block">
-          Back to Explore
+          <span>Back to Explore</span>
         </Link>
       </div>
     );
@@ -273,7 +273,7 @@ export default function Checkout() {
               disabled={checkoutMutation.isPending}
               className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition cursor-pointer"
             >
-              {checkoutMutation.isPending ? 'Processing Mock Payment...' : `Pay $${wallpaper.price.toFixed(2)} Now`}
+              <span>{checkoutMutation.isPending ? 'Processing Mock Payment...' : `Pay $${wallpaper.price.toFixed(2)} Now`}</span>
             </button>
           </form>
         </div>

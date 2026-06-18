@@ -57,7 +57,7 @@ export default function InstallPrompt() {
                   className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold tracking-wide transition-all shadow-lg shadow-primary/20"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  Install App
+                  <span>Install App</span>
                 </button>
                 <button
                   onClick={handleDismiss}

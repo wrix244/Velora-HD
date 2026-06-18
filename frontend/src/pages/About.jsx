@@ -140,7 +140,7 @@ export default function About() {
               to="/explore"
               className="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary/95 text-white font-semibold text-xs tracking-wider uppercase transition shadow"
             >
-              Explore Wallpapers
+              <span>Explore Wallpapers</span>
             </Link>
             <Link
               to="/faq"
