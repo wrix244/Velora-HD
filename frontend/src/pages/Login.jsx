@@ -3,11 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useLogin, useGoogleLogin } from '../hooks/useAuth';
 import useAuthStore from '../store/authStore';
-import useThemeStore from '../store/themeStore';
 
 export default function Login() {
   const navigate = useNavigate();
-  const theme = useThemeStore((s) => s.theme);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const loginMutation = useLogin();
   const googleLoginMutation = useGoogleLogin();
@@ -78,7 +76,7 @@ export default function Login() {
       clearInterval(interval);
       window.removeEventListener('resize', initGoogleSignIn);
     };
-  }, [theme]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -88,27 +86,7 @@ export default function Login() {
 
   return (
     <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Theme-aware auth background */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={theme === 'space' ? '/space-bg.webp' : '/graffiti-bg.webp'} 
-          srcSet={
-            theme === 'space'
-              ? '/space-bg-mobile.webp 640w, /space-bg.webp 1024w'
-              : '/graffiti-bg-mobile.webp 640w, /graffiti-bg.webp 1024w'
-          }
-          sizes="(max-width: 640px) 640px, 1024px"
-          alt="" 
-          className="w-full h-full object-cover" 
-        />
-        <div className={`absolute inset-0 ${theme === 'space' ? 'bg-[#0B0F19]/70' : 'bg-[#121212]/75'}`} />
-        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'space' ? 'from-[#0B0F19] via-transparent to-[#0B0F19]/80' : 'from-[#121212] via-transparent to-[#121212]/80'}`} />
-      </div>
-
-      {/* Neon glow accent */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/8 blur-[100px] pointer-events-none z-0" />
-
-      <div className="w-full max-w-md p-8 rounded-3xl glass-panel space-y-6 relative z-10 shadow-2xl">
+      <div className="w-full max-w-md p-8 card rounded-3xl space-y-6 relative z-10 shadow-lg">
         
         {/* Branding header */}
         <div className="text-center space-y-2">
@@ -138,7 +116,7 @@ export default function Login() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                 required
               />
             </div>
@@ -157,7 +135,7 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                 required
               />
             </div>
@@ -167,7 +145,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loginMutation.isPending}
-            className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg shadow-primary/10 transition flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition flex items-center justify-center gap-2"
           >
             {loginMutation.isPending ? 'Logging In...' : 'Log In'}
           </button>
@@ -175,9 +153,9 @@ export default function Login() {
 
         {/* OR separator */}
         <div className="relative flex py-2 items-center">
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-border"></div>
           <span className="flex-shrink mx-4 text-gray-500 text-[10px] font-bold uppercase tracking-wider">or</span>
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-border"></div>
         </div>
 
         {/* Google Sign-In button container */}
@@ -186,7 +164,7 @@ export default function Login() {
         </div>
 
         {/* Redirect toggle */}
-        <div className="pt-2 text-center text-xs text-gray-400 border-t border-white/5">
+        <div className="pt-2 text-center text-xs text-gray-400 border-t border-border">
           Don't have an account?{' '}
           <Link to="/register" className="font-semibold text-primary hover:underline inline-flex items-center gap-0.5">
             Register Account
