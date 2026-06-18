@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/common/SEO';
-import { Compass, Sparkles, TrendingUp, Clock, Layers, ArrowRight } from 'lucide-react';
+import { Compass, Sparkles, TrendingUp, Clock, Layers, ArrowRight, ShieldCheck, CheckCircle, Users, Award, Shield } from 'lucide-react';
 import { useTrendingWallpapers, useLatestWallpapers } from '../hooks/useWallpapers';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
@@ -91,11 +91,11 @@ export default function Home() {
             </div>
           </div>
           <h1 className="font-display font-black text-4xl sm:text-6xl tracking-tight text-white leading-[1.05]">
-            Screens<br />
-            <span className="text-primary">Elevated as Art.</span>
+            Free 4K & Live<br />
+            <span className="text-primary">Wallpapers.</span>
           </h1>
           <p className="text-sm sm:text-base text-text-muted max-w-lg leading-relaxed">
-            Discover a curated collection of ultra-high-resolution 4K static graphics and cinematically styled loop-ready live motion wallpapers.
+            VeloraHD is a clean, growing digital backdrop community. Access our curated catalog of <strong className="text-white">free 4K static wallpapers</strong>, <strong className="text-white">free loop live wallpapers</strong>, and original AI-curated content—built today for collectors, and designed tomorrow as a creator-friendly publishing platform.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
@@ -110,6 +110,26 @@ export default function Home() {
             >
               Exclusive Art
             </Link>
+          </div>
+
+          {/* Hero Trust Badges */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3 pt-6 border-t border-border/60 max-w-md">
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs text-text-muted">
+              <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span>Original AI-Generated Art</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs text-text-muted">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+              <span>Secure HTTPS Experience</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs text-text-muted">
+              <Users className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span>Creator-Friendly Platform</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs text-text-muted">
+              <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span>Free Personal Backdrop Use</span>
+            </div>
           </div>
         </div>
 
@@ -182,6 +202,48 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Why VeloraHD Value Proposition Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-border">
+        <div className="mb-10 text-center space-y-2">
+          <span className="text-[10px] font-bold text-primary tracking-widest uppercase">The VeloraHD Difference</span>
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-white">Why Choose VeloraHD?</h2>
+          <p className="text-xs text-text-muted max-w-md mx-auto">We cut through the spam and ads of traditional wallpaper directories to bring you a clean, secure gallery.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">01 / Free Access</span>
+            <h3 className="font-display font-bold text-base text-white">Always Free Downloads</h3>
+            <p className="text-xs text-text-muted leading-relaxed">Download high-definition wallpapers without paywalls or expensive recurring subscription models.</p>
+          </div>
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">02 / Curation</span>
+            <h3 className="font-display font-bold text-base text-white">Original AI-Generated Art</h3>
+            <p className="text-xs text-text-muted leading-relaxed">Visuals designed and upscaled by our team using modern generative workflows and custom creative touch-ups.</p>
+          </div>
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">03 / Performance</span>
+            <h3 className="font-display font-bold text-base text-white">Fast & CDN-Cached</h3>
+            <p className="text-xs text-text-muted leading-relaxed">Direct links powered by Cloudinary. Quick asset loading that never slows down your device browser.</p>
+          </div>
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">04 / Clean UI</span>
+            <h3 className="font-display font-bold text-base text-white">No Fake Download Buttons</h3>
+            <p className="text-xs text-text-muted leading-relaxed">No misleading advertisement popups, cookie loops, or deceptive redirects. Click, get, and set.</p>
+          </div>
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">05 / Safety</span>
+            <h3 className="font-display font-bold text-base text-white">Secure HTTPS Encryption</h3>
+            <p className="text-xs text-text-muted leading-relaxed">100% encrypted, malware-free direct file distribution. No system installers or executables.</p>
+          </div>
+          <div className="card p-6 rounded-2xl border border-border bg-surface space-y-2.5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">06 / Layouts</span>
+            <h3 className="font-display font-bold text-base text-white">Desktop & Mobile Support</h3>
+            <p className="text-xs text-text-muted leading-relaxed">Art pieces specifically formatted and checked for widescreen monitors and vertical smartphones.</p>
+          </div>
+        </div>
+      </section>
+
       {/* 3. Trending Creations */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-border">
         <div className="flex justify-between items-end mb-8">
@@ -210,7 +272,7 @@ export default function Home() {
       </section>
 
       {/* 4. Latest Releases */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-border">
         <div className="flex justify-between items-end mb-8">
           <div>
             <span className="text-[10px] font-bold text-primary tracking-widest uppercase flex items-center gap-1">
@@ -233,6 +295,60 @@ export default function Home() {
             : latest?.slice(0, 4).map((wp) => (
                 <WallpaperCard key={wp._id} wallpaper={wp} />
               ))}
+        </div>
+      </section>
+
+      {/* 5. Platform, Mission & Creator Community Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Our Mission & Licensing */}
+          <div className="space-y-6">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Our Core Mission</span>
+            <h2 className="font-display font-black text-3xl sm:text-4xl tracking-tight text-white leading-tight">
+              Making premium art accessible to everyone.
+            </h2>
+            <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
+              We believe high-quality screen backdrops shouldn't be locked behind expensive memberships or buried in spyware-filled directories. VeloraHD operates as a clean repository where curated designs are shared transparently.
+            </p>
+            
+            <div className="pt-4 border-t border-border space-y-3">
+              <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider">Licensing & Usage Transparency</h4>
+              <p className="text-[11px] text-text-muted leading-relaxed">
+                All standard downloads on VeloraHD are licensed for <strong className="text-white">personal backdrops</strong> on desktop monitors, laptops, and smartphones. Commercial use, product bundling, or distribution requires explicit consent. Direct copyright ownership details and license types are listed under the "Technical Metadata" on every wallpaper's page. Read our full <Link to="/copyright" className="text-primary hover:underline font-semibold">Copyright Framework</Link> to learn more.
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Creator Program Teaser */}
+          <div className="card p-6 sm:p-8 rounded-3xl border border-border bg-surface space-y-5">
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Coming Soon</span>
+            <h3 className="font-display font-bold text-xl text-white">VeloraHD Creator Program</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              We are building a creator-friendly publishing platform for digital designers, AI illustrators, and motion artists. In the future, creators will be able to:
+            </p>
+            <ul className="text-[11px] text-text-muted space-y-2.5 pl-1">
+              <li className="flex gap-2 items-start">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                <span>Upload and showcase high-resolution static or live wallpapers directly.</span>
+              </li>
+              <li className="flex gap-2 items-start">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                <span>Choose your own licensing preferences and usage guidelines for every asset.</span>
+              </li>
+              <li className="flex gap-2 items-start">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                <span>Set premium price tiers or offer files free with options for community support.</span>
+              </li>
+            </ul>
+            <div className="pt-2">
+              <Link
+                to="/contact?subject=Creator Program Inquiry"
+                className="inline-flex px-4 py-2 bg-white text-black hover:bg-gray-100 font-semibold text-[10px] tracking-wider uppercase rounded-lg transition"
+              >
+                Get Early Alerts
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>
