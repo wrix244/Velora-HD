@@ -35,6 +35,7 @@ const Copyright = lazy(() => import('./pages/Copyright'));
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Faq = lazy(() => import('./pages/Faq'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Lazy Loaded Overlays
@@ -240,6 +241,7 @@ export default function App() {
               <Route path="/cookies" element={<CookiePolicy />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<Faq />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
