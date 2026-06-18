@@ -107,6 +107,21 @@ export default function Details() {
     return 'windows';
   };
 
+  // Disable body scroll when instructions modal is open
+  useEffect(() => {
+    if (showInstructions) {
+      document.documentElement.classList.add('lenis-stopped');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    };
+  }, [showInstructions]);
+
   const handleOpenInstructions = () => {
     setSelectedOS(detectOS());
     setShowInstructions(true);
@@ -555,7 +570,10 @@ export default function Details() {
 
       {/* Set as Wallpaper Picker Modal for Native App Wrapper */}
       {showInstructions && Capacitor.isNativePlatform() && (
-        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+        <div 
+          data-lenis-prevent
+          className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4"
+        >
           <div className="relative w-full max-w-sm rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200 text-center">
             {/* Header */}
             <div className="flex flex-col items-center gap-3">
@@ -608,7 +626,10 @@ export default function Details() {
 
       {/* Set as Wallpaper Instructions Modal (Web Browser fallback) */}
       {showInstructions && !Capacitor.isNativePlatform() && (
-        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] overflow-y-auto">
+        <div 
+          data-lenis-prevent
+          className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] overflow-y-auto"
+        >
           <div className="flex min-h-full items-center justify-center p-4 py-8">
             <div className="relative w-full max-w-lg rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200">
             {/* Close */}

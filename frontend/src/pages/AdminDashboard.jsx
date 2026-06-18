@@ -459,6 +459,21 @@ export default function AdminDashboard() {
     }
   }, [location.state]);
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (modalOpen) {
+      document.documentElement.classList.add('lenis-stopped');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    };
+  }, [modalOpen]);
+
   const handleToggleBan = (id, currentBannedStatus) => {
     const action = currentBannedStatus ? 'unban' : 'ban';
     const title = currentBannedStatus ? 'Unban User Account' : 'Ban User Account';
@@ -870,7 +885,10 @@ export default function AdminDashboard() {
       {/* ADD / EDIT MODAL */}
       {modalOpen && (
         <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative">
+          <div 
+            data-lenis-prevent
+            className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative"
+          >
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
