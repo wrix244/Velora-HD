@@ -129,9 +129,9 @@ export default function Home() {
                   <h2 className="font-display font-bold text-lg sm:text-xl text-white">{dailySpotlight.title}</h2>
                   <p className="text-[10px] text-text-muted">{dailySpotlight.category} • {dailySpotlight.resolution}</p>
                 </div>
-                <span className="px-3 py-1.5 rounded-lg bg-white text-black font-semibold text-[10px] tracking-wider uppercase flex items-center gap-1">
+                <div className="px-3 py-1.5 rounded-lg bg-white text-black font-semibold text-[10px] tracking-wider uppercase flex items-center gap-1">
                   View Space <ArrowRight className="w-3.5 h-3.5" />
-                </span>
+                </div>
               </div>
             </Link>
           ) : (

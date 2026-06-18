@@ -107,7 +107,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
                 Live
               </span>
             )}
-            <span className="text-[9px] font-semibold tracking-wider bg-surface/80 border border-border px-2 py-0.5 rounded capitalize text-gray-300">
+            <span className="text-[9px] font-semibold tracking-wider bg-zinc-950/80 border border-zinc-800/80 px-2 py-0.5 rounded capitalize text-gray-300">
               {wallpaper.deviceType}
             </span>
             {wallpaper.isPremium && (
@@ -129,7 +129,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
             className={`p-2 rounded-lg border transition-all cursor-pointer ${
               isLiked
                 ? 'bg-rose-500 border-rose-600 text-white'
-                : 'bg-surface/50 border-border text-gray-300 hover:text-white hover:bg-surface'
+                : 'bg-zinc-950/50 border-zinc-800/80 text-gray-300 hover:text-white hover:bg-zinc-900'
             }`}
             title="Like"
           >
@@ -144,7 +144,7 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
             className={`p-2 rounded-lg border transition-all cursor-pointer ${
               isFavorite
                 ? 'bg-amber-500 border-amber-600 text-white'
-                : 'bg-surface/50 border-border text-gray-300 hover:text-white hover:bg-surface'
+                : 'bg-zinc-950/50 border-zinc-800/80 text-gray-300 hover:text-white hover:bg-zinc-900'
             }`}
             title="Add to Favorites"
           >
