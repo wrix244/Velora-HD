@@ -1,42 +1,128 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Mail, Sparkles } from 'lucide-react';
+import useUIStore from '../../store/uiStore';
 
 export default function Footer() {
-  return (
-    <footer className="border-t border-border relative z-10 py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top row: Logo + nav */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-              <span className="font-display font-black text-white text-[9px]">VH</span>
-            </div>
-            <span className="font-display font-bold text-base tracking-tight text-white">
-              Velora<span className="text-primary">HD</span>
-            </span>
-          </Link>
+  const addToast = useUIStore((state) => state.addToast);
+  const [email, setEmail] = useState('');
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-text-muted">
-            <Link to="/explore" className="hover:text-white transition-colors">Explore</Link>
-            <Link to="/explore?isPremium=true" className="hover:text-white transition-colors">Premium</Link>
-            <Link to="/explore?type=live" className="hover:text-white transition-colors">Live</Link>
-            <Link to="/about" className="hover:text-white transition-colors">About</Link>
-            <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      addToast('Please enter a valid email address.', 'error');
+      return;
+    }
+    addToast('Thank you for subscribing to our newsletter!', 'success');
+    setEmail('');
+  };
+
+  return (
+    <footer className="bg-[#0D0D0D] border-t border-white/5 relative z-10 pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          
+          {/* Logo & Description */}
+          <div className="md:col-span-1 space-y-4">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center">
+                <span className="font-display font-black text-white text-xs">VH</span>
+              </div>
+              <span className="font-display font-black text-lg tracking-tight text-white">
+                Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
+              </span>
+            </Link>
+            <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
+              Transform every screen into art. Discover, download, and purchase premium cinematically styled wallpapers and interactive live motion files.
+            </p>
+            <div className="flex gap-3 text-gray-400">
+              <a href="#" aria-label="Visit our website" className="hover:text-primary transition-colors">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </a>
+              <a href="#" aria-label="Visit our Instagram page" className="hover:text-primary transition-colors">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+              <a href="#" aria-label="Visit our GitHub page" className="hover:text-primary transition-colors">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              </a>
+            </div>
           </div>
+
+          {/* Column 2: Categories */}
+          <div>
+            <h4 className="font-display font-semibold text-sm text-white mb-4 tracking-wide uppercase">
+              Collections
+            </h4>
+            <ul className="space-y-2 text-xs text-gray-400">
+              <li><Link to="/explore?category=Nature" className="hover:text-white transition-colors">Nature Film</Link></li>
+              <li><Link to="/explore?category=Space" className="hover:text-white transition-colors">Cosmos & Space</Link></li>
+              <li><Link to="/explore?category=Cyberpunk" className="hover:text-white transition-colors">Cyberpunk Neon</Link></li>
+              <li><Link to="/explore?category=Anime" className="hover:text-white transition-colors">Anime Scenery</Link></li>
+              <li><Link to="/explore?category=Minimal" className="hover:text-white transition-colors">Minimal Art</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Devices */}
+          <div>
+            <h4 className="font-display font-semibold text-sm text-white mb-4 tracking-wide uppercase">
+              Formats
+            </h4>
+            <ul className="space-y-2 text-xs text-gray-400">
+              <li><Link to="/about" className="hover:text-white transition-colors font-semibold">About Our Story</Link></li>
+              <li><Link to="/explore?deviceType=mobile" className="hover:text-white transition-colors">Mobile Wallpapers</Link></li>
+              <li><Link to="/explore?deviceType=desktop" className="hover:text-white transition-colors">PC Wallpapers</Link></li>
+              <li><Link to="/explore?type=live" className="hover:text-white transition-colors">Live Wallpapers</Link></li>
+              <li><Link to="/explore?isPremium=true" className="hover:text-white transition-colors">Premium Collection</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Newsletter */}
+          <div className="space-y-4">
+            <h4 className="font-display font-semibold text-sm text-white tracking-wide uppercase">
+              Stay Inspired
+            </h4>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Get the latest uploads and artist highlights straight to your inbox.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <div className="relative flex-grow">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-label="Enter your email to subscribe"
+                  className="w-full pl-9 pr-3 py-2 text-xs glass-input focus:bg-slate-900/80"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-primary/10 flex items-center gap-1"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Join
+              </button>
+            </form>
+          </div>
+
         </div>
 
-        {/* Bottom row: Legal + Copyright */}
-        <div className="pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-[11px] text-text-muted">
+        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-[10px] text-gray-500">
             © {new Date().getFullYear()} Velora HD. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-[11px] text-text-muted">
-            <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-            <Link to="/refunds" className="hover:text-white transition-colors">Refunds</Link>
-            <Link to="/copyright" className="hover:text-white transition-colors">DMCA</Link>
-            <Link to="/cookies" className="hover:text-white transition-colors">Cookies</Link>
+          <div className="flex flex-wrap justify-center gap-4 text-[10px] text-gray-500">
+            <Link to="/about" className="hover:text-white transition-colors font-semibold">About Us</Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/refunds" className="hover:text-white transition-colors">Refund Policy</Link>
+            <Link to="/ai-policy" className="hover:text-white transition-colors">AI Policy</Link>
+            <Link to="/copyright" className="hover:text-white transition-colors">Copyright & DMCA</Link>
+            <Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link>
             <Link to="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
+            <Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link>
+            <a href="#" className="hover:text-white transition-colors font-semibold">Cookie Settings</a>
           </div>
         </div>
       </div>

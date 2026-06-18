@@ -261,10 +261,10 @@ export default function Details() {
     return (
       <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
         <SEO title="Loading..." />
-        <div className="h-6 w-24 bg-surface rounded" />
+        <div className="h-6 w-24 bg-[#1A1A1A] rounded" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 aspect-video rounded-3xl bg-surface" />
-          <div className="lg:col-span-4 h-96 rounded-3xl bg-surface" />
+          <div className="lg:col-span-8 aspect-video rounded-3xl bg-[#1A1A1A]" />
+          <div className="lg:col-span-4 h-96 rounded-3xl bg-[#1A1A1A]" />
         </div>
       </div>
     );
@@ -328,7 +328,7 @@ export default function Details() {
       {/* Main Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Large Preview Frame */}
-        <div className="lg:col-span-8 rounded-3xl overflow-hidden card border-border relative shadow-lg flex items-center justify-center bg-bg-dark">
+        <div className="lg:col-span-8 rounded-3xl overflow-hidden glass-panel border-white/10 relative shadow-2xl flex items-center justify-center bg-[#121212]">
           {wallpaper.type === 'live' ? (
             <div className="w-full aspect-[16/10] max-h-[70vh]">
               <LivePlayer
@@ -349,17 +349,17 @@ export default function Details() {
 
           {/* Absolute labels */}
           <div className="absolute top-4 left-4 flex gap-2">
-            <span className="px-2.5 py-1 text-[10px] font-bold bg-black/70 text-white rounded-full tracking-wide border border-border uppercase">
+            <span className="px-2.5 py-1 text-[10px] font-bold bg-[#121212]/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
               {wallpaper.type}
             </span>
-            <span className="px-2.5 py-1 text-[10px] font-bold bg-black/70 text-white rounded-full tracking-wide border border-border uppercase">
+            <span className="px-2.5 py-1 text-[10px] font-bold bg-[#121212]/80 text-white rounded-full tracking-wide backdrop-blur-sm border border-white/5 uppercase">
               {wallpaper.deviceType}
             </span>
           </div>
         </div>
 
         {/* Right: Info Sidebar Panel */}
-        <div className="lg:col-span-4 p-6 rounded-3xl card space-y-6">
+        <div className="lg:col-span-4 p-6 rounded-3xl glass-panel space-y-6">
           <div className="space-y-2">
             <span className="text-[10px] font-bold tracking-widest text-primary uppercase">
               {wallpaper.category}
@@ -371,7 +371,7 @@ export default function Details() {
               {wallpaper.description || 'No description provided for this artwork.'}
             </p>
             {user?.role === 'admin' && (
-              <div className="flex gap-2 pt-4 border-t border-border mt-2">
+              <div className="flex gap-2 pt-4 border-t border-white/5 mt-2">
                 <button
                   onClick={handleEdit}
                   className="flex-grow py-2.5 px-4 bg-primary/10 hover:bg-primary/25 border border-primary/20 hover:border-primary/40 text-primary text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
@@ -391,7 +391,7 @@ export default function Details() {
           </div>
 
           {/* Asset Stats details */}
-          <div className="grid grid-cols-2 gap-4 py-4 border-y border-border text-center">
+          <div className="grid grid-cols-2 gap-4 py-4 border-y border-white/5 text-center">
             <div>
               <p className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">Downloads</p>
               <p className="font-display font-bold text-lg text-white mt-0.5">{wallpaper.downloads || 0}</p>
@@ -411,7 +411,7 @@ export default function Details() {
                     {/* Buy Button */}
                     <button
                       onClick={handleAction}
-                      className="flex-grow py-3.5 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2"
+                      className="flex-grow py-3.5 px-6 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2"
                     >
                       <Lock className="w-4 h-4" />
                       Unlock for ${wallpaper.price.toFixed(2)}
@@ -454,7 +454,7 @@ export default function Details() {
                     disabled={adUnlockMutation.isPending}
                     className="w-full py-3.5 px-6 bg-white/[0.04] hover:bg-white/10 border border-white/10 hover:border-white/20 text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                   >
-                    <Play className="w-4 h-4 text-accent fill-accent/20" />
+                    <Play className="w-4 h-4 text-accent animate-pulse fill-accent/20" />
                     Watch Ad to Unlock Free
                   </button>
                 </div>
@@ -464,7 +464,7 @@ export default function Details() {
                   <button
                     onClick={handleAction}
                     disabled={recordDownloadMutation.isPending}
-                    className="flex-grow py-3.5 px-6 bg-white hover:bg-gray-100 text-bg-dark rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2"
+                    className="flex-grow py-3.5 px-6 bg-white hover:bg-gray-100 text-[#121212] rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2"
                   >
                     <Download className="w-4 h-4" />
                     Download Instantly
@@ -579,7 +579,7 @@ export default function Details() {
 
           {/* Tags cloud */}
           {wallpaper.tags && wallpaper.tags.length > 0 && (
-            <div className="pt-4 border-t border-border space-y-2">
+            <div className="pt-4 border-t border-white/5 space-y-2">
               <p className="text-[10px] font-bold tracking-wider text-gray-500 uppercase">Tags</p>
               <div className="flex flex-wrap gap-1.5">
                 {wallpaper.tags.map((t) => (
@@ -599,12 +599,12 @@ export default function Details() {
 
       {/* Related Wallpapers */}
       {related && related.length > 0 && (
-        <section className="space-y-6 pt-8 border-t border-border">
+        <section className="space-y-6 pt-8 border-t border-white/5">
           <div>
             <span className="text-[10px] font-bold text-primary tracking-widest uppercase">
               Recommendation Engine
             </span>
-            <h3 className="font-display font-bold text-2xl text-text-light mt-0.5">
+            <h3 className="font-display font-bold text-2xl text-white mt-0.5">
               Related Designs
             </h3>
           </div>
@@ -629,13 +629,13 @@ export default function Details() {
       {showInstructions && Capacitor.isNativePlatform() && (
         <div 
           data-lenis-prevent
-          className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] flex items-center justify-center p-4"
         >
-          <div className="relative w-full max-w-sm rounded-3xl card border-border p-6 md:p-8 space-y-6 shadow-lg animate-in fade-in-50 zoom-in-95 duration-200 text-center">
+          <div className="relative w-full max-w-sm rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200 text-center">
             {/* Header */}
             <div className="flex flex-col items-center gap-3">
               <div className="p-3.5 rounded-2xl bg-accent/10 border border-accent/20">
-                <Monitor className="w-8 h-8 text-accent" />
+                <Monitor className="w-8 h-8 text-accent animate-pulse" />
               </div>
               <div>
                 <h3 className="font-display font-black text-xl text-white">Apply Wallpaper</h3>
@@ -653,19 +653,19 @@ export default function Details() {
               <div className="space-y-2 pt-2">
                 <button
                   onClick={() => handleSetNativeWallpaper('home')}
-                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-bg-dark font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
+                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
                 >
                   Home Screen
                 </button>
                 <button
                   onClick={() => handleSetNativeWallpaper('lock')}
-                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-bg-dark font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
+                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-gray-100 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
                 >
                   Lock Screen
                 </button>
                 <button
                   onClick={() => handleSetNativeWallpaper('both')}
-                  className="w-full py-3 px-5 rounded-xl bg-accent hover:bg-accent/90 text-bg-dark font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md"
+                  className="w-full py-3 px-5 rounded-xl bg-accent hover:bg-accent/90 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer shadow-md shadow-accent/10"
                 >
                   Home & Lock Screen
                 </button>
@@ -685,10 +685,10 @@ export default function Details() {
       {showInstructions && !Capacitor.isNativePlatform() && (
         <div 
           data-lenis-prevent
-          className="fixed inset-0 bg-black/70 z-[100] overflow-y-auto"
+          className="fixed inset-0 bg-[#121212]/80 backdrop-blur-md z-[100] overflow-y-auto"
         >
           <div className="flex min-h-full items-center justify-center p-4 py-8">
-            <div className="relative w-full max-w-lg rounded-3xl card border-border p-6 md:p-8 space-y-6 shadow-lg animate-in fade-in-50 zoom-in-95 duration-200">
+            <div className="relative w-full max-w-lg rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in-50 zoom-in-95 duration-200">
             {/* Close */}
             <button
               onClick={() => setShowInstructions(false)}
@@ -709,7 +709,7 @@ export default function Details() {
             </div>
 
             {/* OS Tabs */}
-            <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-white/[0.02] border border-border">
+            <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-white/[0.02] border border-white/5">
               {[
                 { id: 'windows', label: 'Windows' },
                 { id: 'mac', label: 'macOS' },
@@ -731,13 +731,13 @@ export default function Details() {
             </div>
 
             {/* Step Guide List */}
-            <div className="space-y-4 p-5 rounded-2xl bg-white/[0.02] border border-border">
+            <div className="space-y-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
               {/* Windows Instructions */}
               {selectedOS === 'windows' && wallpaper.type === 'live' && (
                 <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 space-y-3 text-left">
                     <div className="flex gap-2.5 items-start">
-                      <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5 animate-pulse" />
                       <div>
                         <h4 className="font-bold text-xs text-white">Lively Wallpaper Required</h4>
                         <p className="text-[11px] text-gray-300 leading-relaxed mt-1">
@@ -840,13 +840,13 @@ export default function Details() {
               <button
                 onClick={handleAction}
                 disabled={recordDownloadMutation.isPending}
-                className="w-full py-3.5 px-6 rounded-xl bg-accent hover:bg-accent/90 text-bg-dark font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-6 rounded-xl bg-accent hover:bg-accent/90 text-[#121212] font-bold text-xs tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 Download Artwork
               </button>
               <div className="flex gap-2 items-start text-[10px] text-gray-500 leading-relaxed">
-                <Info className="w-4 h-4 flex-shrink-0 text-accent" />
+                <Info className="w-4 h-4 flex-shrink-0 text-accent animate-pulse" />
                 <p>
                   Security sandbox rule: Web applications cannot directly modify system settings. Doing this download-and-apply step ensures maximum security for your device.
                 </p>
@@ -859,9 +859,10 @@ export default function Details() {
 
       {/* Simulated Ad Player Modal Overlay */}
       {playingAd && (
-        <div className="fixed inset-0 bg-black/90 z-[150] flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-3xl card border-border p-6 md:p-8 space-y-6 shadow-lg text-center relative overflow-hidden animate-in zoom-in-95 duration-200">
-
+        <div className="fixed inset-0 bg-[#0a0a0a]/95 backdrop-blur-xl z-[150] flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-3xl glass-panel-glow border-white/10 p-6 md:p-8 space-y-6 shadow-2xl text-center relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
 
             <div className="space-y-4">
               <span className="px-3 py-1 text-[10px] font-black tracking-widest bg-white/5 border border-white/10 text-accent uppercase rounded-full">
@@ -875,7 +876,7 @@ export default function Details() {
               </p>
             </div>
 
-            <div className="w-full aspect-video rounded-2xl bg-bg-dark border border-border relative overflow-hidden flex flex-col items-center justify-center">
+            <div className="w-full aspect-video rounded-2xl bg-[#121212] border border-white/5 relative overflow-hidden flex flex-col items-center justify-center">
               <div className="absolute inset-0 bg-cover bg-center filter brightness-50 opacity-40 animate-pulse" style={{ backgroundImage: `url(${optimiseUrl(wallpaper.previewImage, { width: 600 })})` }} />
               
               <div className="relative z-10 space-y-4 flex flex-col items-center">
@@ -900,8 +901,8 @@ export default function Details() {
 
       {/* CUSTOM CONFIRMATION MODAL */}
       {confirmOpen && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6 space-y-6 relative shadow-lg">
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-6 relative shadow-2xl">
             <div className="space-y-2">
               <h3 className="font-display font-bold text-lg text-white">
                 {confirmTitle}
@@ -911,11 +912,11 @@ export default function Details() {
               </p>
             </div>
 
-            <div className="flex justify-end gap-2 border-t border-border pt-4">
+            <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
               <button
                 type="button"
                 onClick={() => setConfirmOpen(false)}
-                className="px-4 py-2 border border-border bg-surface/50 hover:bg-surface text-gray-300 font-semibold text-xs rounded-xl transition cursor-pointer"
+                className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition cursor-pointer"
               >
                 Cancel
               </button>
@@ -936,8 +937,8 @@ export default function Details() {
 
       {/* SOCIAL SHARING MODAL */}
       {shareOpen && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-6 space-y-6 relative shadow-lg">
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-6 relative shadow-2xl">
             <button
               type="button"
               onClick={() => setShareOpen(false)}
@@ -955,7 +956,7 @@ export default function Details() {
                 type="text"
                 readOnly
                 value={window.location.href}
-                className="flex-grow px-3 py-2 text-xs clean-input select-all"
+                className="flex-grow px-3 py-2 text-xs glass-input select-all"
               />
               <button
                 type="button"
@@ -1022,8 +1023,8 @@ export default function Details() {
 
       {/* DEVICE PREVIEW MODAL */}
       {previewOpen && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-3xl bg-surface border border-border rounded-3xl p-6 space-y-6 relative shadow-lg flex flex-col items-center">
+        <div className="fixed inset-0 bg-[#121212]/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 relative shadow-2xl flex flex-col items-center">
             <button
               type="button"
               onClick={() => setPreviewOpen(false)}
@@ -1037,13 +1038,13 @@ export default function Details() {
             </div>
 
             {/* Toggle Preview device */}
-            <div className="inline-flex p-1 rounded-full bg-white/5 border border-border">
+            <div className="inline-flex p-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
               <button
                 type="button"
                 onClick={() => setPreviewDevice('desktop')}
                 className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
                   previewDevice === 'desktop'
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -1054,7 +1055,7 @@ export default function Details() {
                 onClick={() => setPreviewDevice('mobile')}
                 className={`px-4 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
                   previewDevice === 'mobile'
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -1063,11 +1064,11 @@ export default function Details() {
             </div>
 
             {/* Preview Frame Area */}
-            <div className="w-full min-h-[350px] flex items-center justify-center py-4 bg-slate-950/20 rounded-2xl border border-border relative overflow-hidden">
+            <div className="w-full min-h-[350px] flex items-center justify-center py-4 bg-slate-950/20 rounded-2xl border border-white/5 relative overflow-hidden">
               {previewDevice === 'desktop' ? (
                 /* Desktop Monitor Frame */
                 <div className="flex flex-col items-center">
-                  <div className="w-[380px] md:w-[480px] aspect-[16/10] border-[6px] border-neutral-800 bg-neutral-950 rounded-t-2xl shadow-lg relative overflow-hidden">
+                  <div className="w-[380px] md:w-[480px] aspect-[16/10] border-[6px] border-neutral-800 bg-neutral-950 rounded-t-2xl shadow-2xl relative overflow-hidden">
                     <img
                       src={wallpaper.previewImage}
                       alt={wallpaper.title}
@@ -1087,7 +1088,7 @@ export default function Details() {
                 </div>
               ) : (
                 /* Mobile Phone Frame */
-                <div className="w-[200px] h-[390px] rounded-[36px] border-[6px] border-neutral-800 bg-neutral-950 shadow-lg relative overflow-hidden flex flex-col justify-between p-4 animate-in zoom-in-95">
+                <div className="w-[200px] h-[390px] rounded-[36px] border-[6px] border-neutral-800 bg-neutral-950 shadow-2xl relative overflow-hidden flex flex-col justify-between p-4 animate-in zoom-in-95">
                   {/* Dynamic Island Notcher */}
                   <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-3 rounded-full bg-black z-20" />
                   

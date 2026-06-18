@@ -51,32 +51,32 @@ export default function Navbar() {
     { name: 'Live', path: '/explore?type=live', icon: <Film className="w-3.5 h-3.5" /> },
     { name: 'Premium', path: '/explore?isPremium=true', icon: <Sparkles className="w-3.5 h-3.5" /> },
     ...(isAuthenticated ? [{ name: 'Dashboard', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> }] : []),
-    ...(!isInstalled ? [{ name: 'Install', onClick: handlePWAInstall, icon: <Download className="w-3.5 h-3.5" /> }] : []),
+    ...(!isInstalled ? [{ name: 'Add to Home Screen', onClick: handlePWAInstall, icon: <Download className="w-3.5 h-3.5" /> }] : []),
   ];
 
   return (
-    <nav className="fixed top-0 inset-x-0 h-14 bg-bg-dark/80 backdrop-blur-md border-b border-border z-50">
+    <nav className="fixed top-0 inset-x-0 h-16 glass-panel border-b border-white/5 z-50 transition-all">
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
         
-        {/* Logo */}
+        {/* Branding Logo */}
         <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <span className="font-display font-black text-white text-xs">VH</span>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:rotate-6 transition-transform">
+            <span className="font-display font-black text-white text-base">VH</span>
           </div>
-          <span className="font-display font-bold text-lg tracking-tight text-white">
-            Velora<span className="text-primary">HD</span>
+          <span className="font-display font-black text-xl tracking-tight text-white group-hover:text-primary transition-colors">
+            Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-0.5 overflow-x-auto py-1 scrollbar-none">
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-1 overflow-x-auto py-1 scrollbar-none">
           {navLinks.map((link) => {
             if (link.onClick) {
               return (
                 <button
                   key={link.name}
                   onClick={link.onClick}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-text-muted hover:text-white hover:bg-surface transition-colors cursor-pointer flex-shrink-0"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all text-accent hover:text-accent-active border border-accent/20 bg-accent/5 hover:bg-accent/10 cursor-pointer flex-shrink-0"
                 >
                   {link.icon}
                   {link.name}
@@ -90,10 +90,10 @@ export default function Navbar() {
                 key={link.name}
                 to={link.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex-shrink-0 ${
+                  `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all flex-shrink-0 ${
                     (isActive && location.search.substring(1) === linkQuery) || (isActive && !hasQuery && location.search === '')
-                      ? 'text-white bg-surface'
-                      : 'text-text-muted hover:text-white hover:bg-surface'
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-gray-300 hover:text-white border border-transparent hover:bg-white/5'
                   }`
                 }
               >
@@ -106,54 +106,56 @@ export default function Navbar() {
 
         {/* Desktop Search */}
         <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center relative max-w-xs w-full flex-grow">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search wallpapers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs clean-input"
+            className="w-full pl-9 pr-3 py-1.5 text-xs glass-input"
           />
         </form>
 
-        {/* Right side */}
-        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-          {/* Theme Toggle */}
+        {/* Right side CTA / Actions */}
+        <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+          {/* Light/Dark Toggle */}
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="p-2 rounded-lg text-text-muted hover:text-white hover:bg-surface transition-colors cursor-pointer"
+            className="p-2 rounded-full border border-white/5 bg-white/2 hover:bg-white/5 text-gray-300 hover:text-white transition cursor-pointer"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >
-            {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            {theme === 'light' ? <Moon className="w-4.5 h-4.5" /> : <Sun className="w-4.5 h-4.5" />}
           </button>
 
           {isAuthenticated ? (
             <div className="relative">
+              {/* Profile dropdown trigger */}
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 p-1 pr-3 rounded-lg bg-surface border border-border hover:border-zinc-500 transition-colors text-left cursor-pointer"
+                className="flex items-center gap-2 p-1 pr-3 rounded-full bg-[#1A1A1A] border border-white/5 hover:border-white/15 transition-all text-left cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center font-display font-bold text-white uppercase text-[10px]">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary via-secondary to-accent flex items-center justify-center font-display font-bold text-[#121212] uppercase text-xs">
                   {user?.name?.slice(0, 2)}
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-white leading-none max-w-[80px] truncate">
+                  <p className="text-[11px] font-bold text-white leading-none max-w-[80px] truncate">
                     {user?.name}
                   </p>
-                  <p className="text-[9px] text-text-muted capitalize leading-none mt-0.5">
+                  <p className="text-[9px] text-gray-400 capitalize leading-none mt-0.5">
                     {user?.role}
                   </p>
                 </div>
               </button>
 
+              {/* Dropdown menu */}
               {dropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl bg-surface border border-border shadow-lg py-1.5 z-50 text-sm">
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl glass-panel-glow border-white/10 shadow-xl py-1.5 z-50 text-sm">
                     <Link
                       to="/profile"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-white hover:bg-surface-2 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                     >
                       <User className="w-4 h-4" />
                       My Profile
@@ -161,7 +163,7 @@ export default function Navbar() {
                     <Link
                       to="/profile?tab=favorites"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-white hover:bg-surface-2 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                     >
                       <Heart className="w-4 h-4" />
                       Favorites
@@ -169,7 +171,7 @@ export default function Navbar() {
                     <Link
                       to="/profile?tab=purchases"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-text-muted hover:text-white hover:bg-surface-2 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                     >
                       <History className="w-4 h-4" />
                       Purchases
@@ -179,7 +181,7 @@ export default function Navbar() {
                       <Link
                         to="/admin"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-surface-2 border-t border-border transition-colors font-medium"
+                        className="flex items-center gap-2 px-4 py-2 text-primary hover:text-primary-active hover:bg-primary/5 border-t border-white/5 transition-colors font-medium"
                       >
                         <LayoutDashboard className="w-4 h-4" />
                         Admin Dashboard
@@ -188,7 +190,7 @@ export default function Navbar() {
 
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-rose-400 hover:bg-surface-2 border-t border-border transition-colors text-left"
+                      className="w-full flex items-center gap-2 px-4 py-2 text-rose-400 hover:bg-rose-500/5 border-t border-white/5 transition-colors text-left"
                     >
                       <LogOut className="w-4 h-4" />
                       Logout
@@ -201,13 +203,13 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="px-4 py-1.5 rounded-lg text-xs font-medium text-text-muted hover:text-white transition-colors"
+                className="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-300 hover:text-white transition-colors"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-1.5 rounded-lg text-xs font-medium bg-primary hover:bg-primary/90 text-white transition-colors"
+                className="px-4 py-1.5 rounded-full text-xs font-semibold bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/10 transition-colors btn-glow"
               >
                 Register
               </Link>
@@ -215,11 +217,11 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile controls */}
-        <div className="flex md:hidden items-center gap-1 flex-shrink-0">
+        {/* Mobile controls & Menu trigger */}
+        <div className="flex md:hidden items-center gap-2 flex-shrink-0">
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="p-1.5 rounded-lg text-text-muted hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-full text-gray-400 hover:text-white transition-colors cursor-pointer"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >
             {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
@@ -227,9 +229,9 @@ export default function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            className="p-1.5 text-text-muted hover:text-white transition-colors cursor-pointer"
+            className="p-1 text-gray-400 hover:text-white transition-colors cursor-pointer"
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -237,24 +239,24 @@ export default function Navbar() {
       {/* Mobile Sidebar */}
       {isOpen && (
         <>
-          <div className="fixed inset-0 top-14 bg-black/50 z-40" onClick={() => setIsOpen(false)} />
-          <div className="fixed top-14 right-0 bottom-0 w-64 bg-surface border-l border-border z-50 p-4 flex flex-col justify-between">
+          <div className="fixed inset-0 top-16 bg-[#121212]/60 backdrop-blur-sm z-40" onClick={() => setIsOpen(false)} />
+          <div className="fixed top-16 right-0 bottom-0 w-64 glass-panel border-l border-white/10 z-50 p-4 flex flex-col justify-between">
             <div className="space-y-4">
               
-              {/* Mobile Search */}
+              {/* Mobile Search input */}
               <form onSubmit={handleSearchSubmit} className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search wallpapers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs clean-input"
+                  className="w-full pl-9 pr-3 py-2 text-xs glass-input"
                 />
               </form>
 
               {/* Nav links */}
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-1">
                 {navLinks.map((link) => {
                   if (link.onClick) {
                     return (
@@ -264,7 +266,7 @@ export default function Navbar() {
                           link.onClick();
                           setIsOpen(false);
                         }}
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-text-muted hover:text-white hover:bg-surface-2 transition-colors text-left w-full cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-accent hover:text-accent-active border border-accent/20 bg-accent/5 hover:bg-accent/10 text-left w-full cursor-pointer"
                       >
                         {link.icon}
                         {link.name}
@@ -279,10 +281,10 @@ export default function Navbar() {
                       to={link.path}
                       onClick={() => setIsOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        `flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                           (isActive && location.search.substring(1) === linkQuery) || (isActive && !hasQuery && location.search === '')
-                            ? 'text-white bg-surface-2'
-                            : 'text-text-muted hover:text-white hover:bg-surface-2'
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
                         }`
                       }
                     >
@@ -294,23 +296,23 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Bottom: Profile / Auth */}
-            <div className="border-t border-border pt-4">
+            {/* Profile / CTAs */}
+            <div className="border-t border-white/5 pt-4">
               {isAuthenticated ? (
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <div className="flex items-center gap-2 px-3 py-1.5">
-                    <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center font-display font-bold text-white text-xs">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white text-xs">
                       {user?.name?.slice(0, 2)}
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-white max-w-[120px] truncate">{user?.name}</p>
-                      <p className="text-[10px] text-text-muted capitalize">{user?.role}</p>
+                      <p className="text-xs font-bold text-white max-w-[120px] truncate">{user?.name}</p>
+                      <p className="text-[10px] text-gray-400 capitalize">{user?.role}</p>
                     </div>
                   </div>
                   <Link
                     to="/profile"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-text-muted hover:text-white hover:bg-surface-2 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:bg-white/5 transition-colors"
                   >
                     <User className="w-4 h-4" />
                     Profile
@@ -319,7 +321,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-primary hover:bg-surface-2 transition-colors font-medium"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-primary hover:bg-primary/5 transition-colors font-semibold"
                     >
                       <LayoutDashboard className="w-4 h-4" />
                       Admin Dashboard
@@ -327,7 +329,7 @@ export default function Navbar() {
                   )}
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-rose-400 hover:bg-surface-2 transition-colors text-left"
+                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-rose-400 hover:bg-rose-500/5 transition-colors text-left"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout
@@ -338,14 +340,14 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="w-full py-2.5 rounded-lg text-sm font-medium text-center border border-border text-text-muted hover:text-white transition-colors"
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-center border border-white/10 text-gray-300 hover:text-white"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setIsOpen(false)}
-                    className="w-full py-2.5 rounded-lg text-sm font-medium text-center bg-primary hover:bg-primary/90 text-white transition-colors"
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-center bg-primary hover:bg-primary/90 text-white shadow-lg"
                   >
                     Register
                   </Link>

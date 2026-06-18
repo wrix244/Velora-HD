@@ -140,7 +140,7 @@ export default function Explore() {
           <span className="text-xs font-bold text-primary tracking-widest uppercase flex items-center gap-1">
             <Compass className="w-3.5 h-3.5" /> Discovery Engine
           </span>
-          <h1 className="font-display font-black text-3xl text-text-light mt-1">
+          <h1 className="font-display font-black text-3xl text-white mt-1">
             {displayTitle}
           </h1>
         </div>
@@ -154,7 +154,7 @@ export default function Explore() {
               placeholder="Search by title, tags..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm clean-input"
+              className="w-full pl-10 pr-4 py-2 text-sm glass-input"
             />
             {search && (
               <button
@@ -171,7 +171,7 @@ export default function Explore() {
           </div>
           <button
             type="submit"
-            className="px-5 py-2.5 bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl text-xs transition shadow-sm"
+            className="px-5 py-2.5 bg-primary hover:bg-primary/95 text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-primary/10"
           >
             Search
           </button>
@@ -181,9 +181,9 @@ export default function Explore() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left Side: Advanced Filters Bar */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="p-6 card rounded-2xl space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-border">
-              <h2 className="font-display font-bold text-sm text-text-light flex items-center gap-2">
+          <div className="p-6 rounded-2xl glass-panel space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-white/5">
+              <h2 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <SlidersHorizontal className="w-4 h-4" />
                 Refine Search
               </h2>
@@ -197,14 +197,14 @@ export default function Explore() {
 
             {/* Filter: Categories */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Category</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Category</label>
               <select
                 value={category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 text-xs clean-input focus:bg-surface-2"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
                 {categories.map((cat) => (
-                  <option key={cat} value={cat} className="bg-surface text-white">
+                  <option key={cat} value={cat} className="bg-[#121212] text-white">
                     {cat}
                   </option>
                 ))}
@@ -213,7 +213,7 @@ export default function Explore() {
 
             {/* Filter: Device Screen */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Device Layout</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Device Layout</label>
               <div className="grid grid-cols-3 gap-1">
                 {['All', 'desktop', 'mobile'].map((d) => (
                   <button
@@ -222,7 +222,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       deviceType === d
                         ? 'bg-primary border-primary text-white font-black'
-                        : 'border-border bg-white/[0.02] hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {d === 'desktop' ? 'PC' : d === 'mobile' ? 'Mobile' : 'All'}
@@ -233,7 +233,7 @@ export default function Explore() {
 
             {/* Filter: Wallpaper Form (Static/Live) */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Format</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Format</label>
               <div className="grid grid-cols-3 gap-1">
                 {['All', 'static', 'live'].map((t) => (
                   <button
@@ -242,7 +242,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       type === t
                         ? 'bg-accent border-accent text-slate-950 font-black'
-                        : 'border-border bg-white/[0.02] hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {t}
@@ -253,7 +253,7 @@ export default function Explore() {
 
             {/* Filter: Price (Free/Premium) */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Access</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Access</label>
               <div className="grid grid-cols-3 gap-1">
                 {['All', 'false', 'true'].map((p) => (
                   <button
@@ -262,7 +262,7 @@ export default function Explore() {
                     className={`py-1.5 rounded-lg text-[10px] font-bold tracking-wide border uppercase transition ${
                       isPremium === p
                         ? 'bg-amber-500 border-amber-500 text-slate-950 font-black'
-                        : 'border-border bg-white/[0.02] hover:border-white/10 text-gray-300'
+                        : 'border-white/5 bg-white/[0.02] hover:border-white/10 text-gray-300'
                     }`}
                   >
                     {p === 'true' ? 'Premium' : p === 'false' ? 'Free' : 'All'}
@@ -273,14 +273,14 @@ export default function Explore() {
 
             {/* Filter: Resolution */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Resolution</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Resolution</label>
               <select
                 value={resolution}
                 onChange={(e) => handleFilterChange('resolution', e.target.value)}
-                className="w-full px-3 py-2 text-xs clean-input focus:bg-surface-2"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
                 {resolutions.map((res) => (
-                  <option key={res} value={res} className="bg-surface text-white">
+                  <option key={res} value={res} className="bg-[#121212] text-white">
                     {res}
                   </option>
                 ))}
@@ -289,15 +289,15 @@ export default function Explore() {
 
             {/* Filter: Sorting */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-wider text-text-muted uppercase">Sort By</label>
+              <label className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">Sort By</label>
               <select
                 value={sort}
                 onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="w-full px-3 py-2 text-xs clean-input focus:bg-surface-2"
+                className="w-full px-3 py-2 text-xs glass-input focus:bg-[#1A1A1A]"
               >
-                <option value="latest" className="bg-surface text-white">Latest Uploads</option>
-                <option value="downloads" className="bg-surface text-white">Most Downloaded</option>
-                <option value="likes" className="bg-surface text-white">Most Liked</option>
+                <option value="latest" className="bg-[#121212] text-white">Latest Uploads</option>
+                <option value="downloads" className="bg-[#121212] text-white">Most Downloaded</option>
+                <option value="likes" className="bg-[#121212] text-white">Most Liked</option>
               </select>
             </div>
           </div>
@@ -314,10 +314,10 @@ export default function Explore() {
             </div>
           ) : data?.pages[0]?.data?.length === 0 ? (
             // Empty State
-            <div className="p-16 card rounded-2xl text-center flex flex-col items-center justify-center space-y-4">
-              <SlidersHorizontal className="w-10 h-10 text-gray-500" />
-              <h3 className="font-display font-bold text-lg text-text-light">No wallpapers match these filters</h3>
-              <p className="text-xs text-text-muted max-w-sm leading-relaxed">
+            <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+              <SlidersHorizontal className="w-10 h-10 text-gray-500 animate-pulse" />
+              <h3 className="font-display font-bold text-lg text-white">No wallpapers match these filters</h3>
+              <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
                 Try widening your search terms, changing screen device layout constraints, or resetting the filters.
               </p>
               <button
@@ -348,7 +348,7 @@ export default function Explore() {
                   <button
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
-                    className="px-8 py-3 rounded-xl bg-surface-2 border border-border hover:border-white/20 text-white font-semibold text-xs transition flex items-center gap-2 shadow-sm disabled:opacity-50"
+                    className="px-8 py-3 rounded-xl bg-[#1A1A1A] border border-white/10 hover:border-white/20 text-white font-semibold text-xs transition flex items-center gap-2 shadow-lg disabled:opacity-50"
                   >
                     {isFetchingNextPage ? (
                       <>
@@ -368,13 +368,13 @@ export default function Explore() {
 
       {/* 4. Recently Viewed Section */}
       {recentlyViewed.length > 0 && (
-        <section className="mt-20 border-t border-border pt-12 space-y-6">
+        <section className="mt-20 border-t border-white/5 pt-12 space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-[10px] font-bold text-accent tracking-widest uppercase">
                 Your Browsing Session
               </span>
-              <h3 className="font-display font-bold text-xl text-text-light mt-0.5">
+              <h3 className="font-display font-bold text-xl text-white mt-0.5">
                 Recently Viewed
               </h3>
             </div>

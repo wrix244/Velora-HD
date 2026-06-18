@@ -100,17 +100,18 @@ export default function Profile() {
     <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 min-h-screen">
       
       {/* Profile Banner */}
-      <div className="p-8 card rounded-3xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="p-8 rounded-3xl bg-gradient-to-r from-primary/10 via-secondary/5 to-transparent border border-white/5 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
 
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center font-display font-black text-white text-2xl uppercase">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center font-display font-black text-white text-2xl uppercase">
             {profile?.name?.slice(0, 2) || 'DL'}
           </div>
           <div className="space-y-1">
-            <h1 className="font-display font-black text-2xl text-text-light">
+            <h1 className="font-display font-black text-2xl text-white">
               {profile?.name || 'User Profile'}
             </h1>
-            <p className="text-xs text-text-muted">
+            <p className="text-xs text-gray-400">
               {profile?.email} • Member since {new Date(profile?.createdAt || Date.now()).toLocaleDateString()}
             </p>
           </div>
@@ -129,14 +130,14 @@ export default function Profile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Side: Tab controls */}
-        <div className="lg:col-span-3 p-4 card rounded-2xl flex flex-col gap-1.5">
+        <div className="lg:col-span-3 p-4 rounded-2xl glass-panel flex flex-col gap-1.5">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
               className={`w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide transition ${
                 activeTab === tab.id
-                  ? 'bg-primary text-white font-black shadow-sm'
+                  ? 'bg-primary text-white font-black shadow-lg shadow-primary/10'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -152,17 +153,17 @@ export default function Profile() {
           {/* TAB 1: Favorites */}
           {activeTab === 'favorites' && (
             <div className="space-y-6">
-              <h2 className="font-display font-bold text-lg text-text-light">My Favorite Wallpapers</h2>
+              <h2 className="font-display font-bold text-lg text-white">My Favorite Wallpapers</h2>
               
               {favsLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !favorites || favorites.length === 0 ? (
-                <div className="p-16 card rounded-2xl text-center flex flex-col items-center justify-center space-y-4">
-                  <Bookmark className="w-10 h-10 text-gray-600" />
-                  <h3 className="font-display font-bold text-base text-text-light">Your favorites folder is empty</h3>
-                  <p className="text-xs text-text-muted max-w-sm">
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <Bookmark className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">Your favorites folder is empty</h3>
+                  <p className="text-xs text-gray-400 max-w-sm">
                     Browse the collections and click the bookmark icon on any design to save it here.
                   </p>
                   <button
@@ -189,17 +190,17 @@ export default function Profile() {
           {/* TAB 2: Purchases */}
           {activeTab === 'purchases' && (
             <div className="space-y-6">
-              <h2 className="font-display font-bold text-lg text-text-light">Purchased Premium Licenses</h2>
+              <h2 className="font-display font-bold text-lg text-white">Purchased Premium Licenses</h2>
               
               {purchasesLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !purchases || purchases.length === 0 ? (
-                <div className="p-16 card rounded-2xl text-center flex flex-col items-center justify-center space-y-4">
-                  <ShoppingBag className="w-10 h-10 text-gray-600" />
-                  <h3 className="font-display font-bold text-base text-text-light">No purchased wallpapers</h3>
-                  <p className="text-xs text-text-muted max-w-sm">
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <ShoppingBag className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">No purchased wallpapers</h3>
+                  <p className="text-xs text-gray-400 max-w-sm">
                     Premium layouts you buy via mock checkout will show up here for lifetime unlimited downloads.
                   </p>
                   <button
@@ -224,34 +225,34 @@ export default function Profile() {
           {/* TAB 3: Downloads Log */}
           {activeTab === 'downloads' && (
             <div className="space-y-6">
-              <h2 className="font-display font-bold text-lg text-text-light">Downloads History</h2>
+              <h2 className="font-display font-bold text-lg text-white">Downloads History</h2>
               
               {downloadsLoading ? (
                 <div className="space-y-3">
                   {Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="h-14 bg-surface-2 rounded-xl animate-pulse" />
+                    <div key={i} className="h-14 bg-[#1A1A1A]/40 rounded-xl animate-pulse" />
                   ))}
                 </div>
               ) : !downloads || downloads.length === 0 ? (
-                <div className="p-16 card rounded-2xl text-center flex flex-col items-center justify-center space-y-4">
-                  <Download className="w-10 h-10 text-gray-600" />
-                  <h3 className="font-display font-bold text-base text-text-light">No downloads recorded</h3>
-                  <p className="text-xs text-text-muted max-w-xs">
+                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                  <Download className="w-10 h-10 text-gray-600 animate-pulse" />
+                  <h3 className="font-display font-bold text-base text-white">No downloads recorded</h3>
+                  <p className="text-xs text-gray-400 max-w-xs">
                     Once you start downloading static or motion loops, they will be logged here.
                   </p>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-border overflow-hidden">
+                <div className="rounded-2xl border border-white/5 overflow-hidden">
                   <table className="w-full text-left border-collapse text-xs select-none">
                     <thead>
-                      <tr className="bg-white/2 text-text-muted font-semibold border-b border-border">
+                      <tr className="bg-white/2 text-gray-400 font-semibold border-b border-white/5">
                         <th className="p-4">Wallpaper</th>
                         <th className="p-4">Resolution</th>
                         <th className="p-4">Format</th>
                         <th className="p-4">Downloaded At</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border text-gray-300">
+                    <tbody className="divide-y divide-white/5 text-gray-300">
                       {downloads.map((d) => (
                         <tr key={d._id} className="hover:bg-white/2 transition">
                           <td className="p-4">
@@ -282,8 +283,8 @@ export default function Profile() {
 
           {/* TAB 4: Account Settings */}
           {activeTab === 'settings' && (
-            <div className="p-6 card rounded-2xl space-y-6 max-w-xl">
-              <h2 className="font-display font-bold text-lg text-text-light border-b border-border pb-3 flex items-center gap-1.5">
+            <div className="p-6 rounded-2xl glass-panel space-y-6 max-w-xl">
+              <h2 className="font-display font-bold text-lg text-white border-b border-white/5 pb-3 flex items-center gap-1.5">
                 <Settings className="w-5 h-5 text-primary" />
                 Update Profile Settings
               </h2>
@@ -291,7 +292,7 @@ export default function Profile() {
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 {/* Name */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-text-muted uppercase tracking-wide">Full Name</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Full Name</label>
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
@@ -299,7 +300,7 @@ export default function Profile() {
                       placeholder="Your Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                       required
                     />
                   </div>
@@ -307,14 +308,14 @@ export default function Profile() {
 
                 {/* Email (Read Only for safety/mocking or allow change) */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-text-muted uppercase tracking-wide">Email Address</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Email Address</label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                       required
                     />
                   </div>
@@ -322,7 +323,7 @@ export default function Profile() {
 
                 {/* Password field */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-text-muted uppercase tracking-wide">New Password (Optional)</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">New Password (Optional)</label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
@@ -330,7 +331,7 @@ export default function Profile() {
                       placeholder="Leave blank to keep current"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                     />
                   </div>
                 </div>
@@ -338,7 +339,7 @@ export default function Profile() {
                 {/* Confirm Password field */}
                 {password && (
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-wide">Confirm New Password</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Confirm New Password</label>
                     <div className="relative">
                       <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                       <input
@@ -346,7 +347,7 @@ export default function Profile() {
                         placeholder="Confirm password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
+                        className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
                         required={!!password}
                       />
                     </div>
@@ -363,7 +364,7 @@ export default function Profile() {
               </form>
 
               {/* Danger Zone */}
-              <div className="border-t border-border pt-6 mt-6 space-y-4">
+              <div className="border-t border-white/5 pt-6 mt-6 space-y-4">
                 <div>
                   <h3 className="text-sm font-bold text-rose-500">Danger Zone</h3>
                   <p className="text-[11px] text-gray-500 mt-1">
@@ -386,12 +387,12 @@ export default function Profile() {
 
       {/* Custom Account Deletion Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 transition-all duration-300">
-          <div className="w-full max-w-md bg-surface border border-border rounded-3xl p-6 shadow-lg relative overflow-hidden space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md transition-all duration-300">
+          <div className="w-full max-w-md bg-[#161618] border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden space-y-4">
             {/* Header */}
-            <div className="flex items-center gap-3 border-b border-border pb-4">
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
               <div className="p-2 bg-rose-500/10 rounded-xl text-rose-500">
-                <ShieldAlert className="w-6 h-6" />
+                <ShieldAlert className="w-6 h-6 animate-pulse" />
               </div>
               <div>
                 <h3 className="font-display font-black text-lg text-white">Delete Account</h3>
@@ -400,7 +401,7 @@ export default function Profile() {
             </div>
 
             {/* Warning Message */}
-            <div className="space-y-2 text-xs text-text-muted leading-relaxed bg-white/5 rounded-2xl p-4 border border-border">
+            <div className="space-y-2 text-xs text-gray-400 leading-relaxed bg-white/5 rounded-2xl p-4 border border-white/5">
               <p className="font-semibold text-rose-400">WARNING: You are about to permanently delete your VeloraHD account.</p>
               <p>Once deleted, all of your associated records, including:</p>
               <ul className="list-disc list-inside space-y-1 text-[11px] pl-1 font-semibold text-white">
