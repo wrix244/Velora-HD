@@ -5,6 +5,7 @@ import { Compass, Sparkles, TrendingUp, Clock, Layers, ArrowRight } from 'lucide
 import { useTrendingWallpapers, useLatestWallpapers } from '../hooks/useWallpapers';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
+import { optimiseUrl } from '../utils/cloudinary';
 
 // 4 main premium curated collections with unsplash backgrounds
 const curatedCollections = [
@@ -117,7 +118,7 @@ export default function Home() {
           {dailySpotlight ? (
             <Link to={`/wallpaper/${dailySpotlight.slug}`} className="absolute inset-0 block">
               <img
-                src={dailySpotlight.previewImage}
+                src={optimiseUrl(dailySpotlight.previewImage, { width: 800 })}
                 alt={dailySpotlight.title}
                 loading="eager"
                 className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700"
@@ -158,7 +159,7 @@ export default function Home() {
               className="group dark-card h-80 rounded-2xl overflow-hidden border border-border bg-surface relative flex flex-col justify-end p-6 hover:border-gray-500 transition-all duration-300"
             >
               <img
-                src={col.photo}
+                src={optimiseUrl(col.photo, { width: 400 })}
                 alt={col.label}
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-102 transition-transform duration-500"
