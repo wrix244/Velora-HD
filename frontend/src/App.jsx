@@ -203,7 +203,7 @@ export default function App() {
         wheelMultiplier: 1.0,
       }}
     >
-      <div className="flex flex-col min-h-screen bg-[#121212]">
+      <div className="flex flex-col min-h-screen bg-bg-dark">
         {/* Route state scroll restorer */}
         <ScrollToTop />
 
