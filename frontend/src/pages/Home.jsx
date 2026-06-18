@@ -21,7 +21,7 @@ const categories = [
   { name: 'Architecture', photo: '1486406146926-c627a92ad1ab', gradient: 'from-blue-400 to-indigo-300' },
 ];
 
-import useThemeStore from '../store/themeStore';
+// Theme managed globally via CSS data-theme attribute
 
 const stats = [
   { value: '15,000+', label: 'Total Wallpapers', icon: <Layers className="w-5 h-5 text-primary" /> },
@@ -56,7 +56,7 @@ export default function Home() {
   const { data: trending, isLoading: trendingLoading } = useTrendingWallpapers();
   const { data: latest, isLoading: latestLoading } = useLatestWallpapers();
   const { data: recommended, isLoading: recommendedLoading } = useRecommendedWallpapers();
-  const { theme, setTheme } = useThemeStore();
+
 
   return (
     <div className="pt-16 pb-12 overflow-hidden">
@@ -64,56 +64,39 @@ export default function Home() {
         title="Premium 4K & Live Wallpapers Marketplace"
         description="Velora HD — Premium wallpaper marketplace. Discover loop-ready live video motion wallpapers, high resolution 4K desktop themes, and mobile backgrounds. Transform every screen into art."
         keywords={["wallpapers", "4k wallpapers", "live wallpapers", "desktop setups", "mobile wallpapers", "velora hd"]}
-        image="https://velorahd.in/graffiti-bg.webp"
       />
       
-      {/* 1. Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center py-20 px-4 overflow-hidden">
-        {/* Theme-aware hero background */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/space-hero.webp"
-            srcSet="/space-hero-mobile.webp 640w, /space-hero.webp 1024w"
-            sizes="(max-width: 640px) 640px, 1024px"
-            alt=""
-            fetchpriority="high"
-            loading="eager"
-            className={`w-full h-full object-cover transition-opacity duration-700 ${theme === 'light' ? 'opacity-5' : 'opacity-35'}`}
-          />
-          <div className="absolute inset-0 bg-[#0B0F19]/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F19] via-transparent to-transparent h-32" />
-        </div>
+      {/* 1. Hero Section — Minimalist */}
+      <section className="relative min-h-[80vh] flex items-center justify-center py-24 px-4 overflow-hidden">
+        {/* Subtle gradient orbs — no image dependency */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/[0.07] blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-secondary/[0.05] blur-[120px] pointer-events-none" />
 
-        {/* Neon glowing radial backgrounds */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none z-[1]" />
-        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none z-[1]" />
-
-        <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
-          <h1 className="font-display font-black text-5xl md:text-7xl tracking-tight text-white leading-[1.1] animate-slide-up-hero-title">
-            Transform Your Screen <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
-              Into Masterpiece Art
+        <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+          <h1 className="font-display font-black text-5xl md:text-7xl tracking-tight text-white leading-[1.08] animate-slide-up-hero-title">
+            Your Screen,{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
+              Elevated.
             </span>
           </h1>
 
-          <p className="text-base md:text-lg text-gray-400 max-w-xl mx-auto leading-relaxed animate-fade-in-hero-para">
-            Discover a curated collection of ultra-high-definition 4K PC setups, mobile vertical aesthetics, and looping 3D live wallpapers.
+          <p className="text-base md:text-lg text-gray-400 max-w-lg mx-auto leading-relaxed animate-fade-in-hero-para">
+            Curated 4K wallpapers, live motion backgrounds, and premium digital art — all in one place.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-4 animate-slide-up-hero-buttons">
+          <div className="flex flex-wrap justify-center gap-3 pt-4 animate-slide-up-hero-buttons">
             <Link
               to="/explore"
-              className="px-8 py-3 rounded-xl bg-primary hover:bg-primary/95 text-white font-semibold text-sm shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all flex items-center gap-2 btn-glow"
+              className="px-8 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition-all flex items-center gap-2 btn-glow"
             >
               <Compass className="w-4 h-4" />
-              Browse Wallpapers
+              Browse Collection
             </Link>
             <Link
               to="/explore?isPremium=true"
-              className="px-8 py-3 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white font-semibold text-sm border border-white/10 hover:border-white/20 transition-all"
+              className="px-8 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white font-semibold text-sm border border-white/10 hover:border-white/15 transition-all"
             >
-              Explore Premium
+              View Premium
             </Link>
           </div>
         </div>
@@ -340,7 +323,7 @@ export default function Home() {
           <div className="flex-shrink-0">
             <Link
               to="/explore?isPremium=true"
-              className="px-8 py-4 bg-gradient-to-r from-primary via-secondary to-accent text-white font-bold rounded-xl text-sm shadow-xl hover:shadow-primary/20 hover:scale-105 transition-all inline-flex items-center gap-2"
+              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl text-sm hover:scale-[1.02] transition-all inline-flex items-center gap-2"
             >
               Explore Premium Collection
             </Link>
