@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Bookmark, Download, Lock, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe, Link2 } from 'lucide-react';
+import { Heart, Bookmark, Download, Lock, Shield, Calendar, ArrowLeft, Image, Share2, Info, Monitor, Smartphone, X, Edit, Trash2, Play, Globe, Link2 } from 'lucide-react';
 import { registerPlugin, Capacitor } from '@capacitor/core';
 import { useLenis } from 'lenis/react';
 import SEO from '../components/common/SEO';
