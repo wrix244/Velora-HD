@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, HelpCircle, Download, Monitor, Smartphone, Key, Award, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 
 export default function Faq() {
