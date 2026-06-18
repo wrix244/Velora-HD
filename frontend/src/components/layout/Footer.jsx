@@ -34,9 +34,17 @@ export default function Footer() {
                 Velora<span className="text-primary">HD</span>
               </span>
             </Link>
-            <p className="text-text-muted leading-relaxed max-w-sm">
-              Premium content-first digital art and wallpaper marketplace. Transform every screen into art with high-fidelity curated collections.
-            </p>
+            <div className="space-y-2 max-w-sm">
+              <p className="text-text-muted leading-relaxed">
+                Premium digital art and wallpapers.
+              </p>
+              <a 
+                href="mailto:hello@velorahd.in" 
+                className="text-primary hover:underline font-semibold block text-[11px]"
+              >
+                hello@velorahd.in
+              </a>
+            </div>
           </div>
 
           {/* Column 2: Curated Collections */}

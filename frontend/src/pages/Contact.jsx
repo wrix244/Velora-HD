@@ -108,6 +108,22 @@ export default function Contact() {
           </motion.p>
         </div>
 
+        {/* Email Us Top Highlight */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="card p-8 rounded-3xl border border-border text-center space-y-3 bg-surface-2/30"
+        >
+          <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Email Us</span>
+          <h2 className="font-display font-black text-2xl sm:text-3xl text-white">
+            <a href="mailto:hello@velorahd.in" className="hover:text-primary transition-colors">hello@velorahd.in</a>
+          </h2>
+          <p className="text-xs text-text-muted">
+            We typically respond within 24–48 hours.
+          </p>
+        </motion.div>
+
         {/* Intro */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}

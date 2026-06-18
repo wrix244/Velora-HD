@@ -128,6 +128,13 @@ export default function About() {
               In the future, we plan to expand our wallpaper collection, launch creator accounts/artist profiles, build a stronger community around digital art, and introduce new collections and premium live motion backdrops.
             </p>
           </div>
+          
+          <div className="pt-3 border-t border-border/40 max-w-md mx-auto space-y-1">
+            <p className="text-[11px] text-text-muted">Questions, feedback, or business inquiries?</p>
+            <p className="text-xs font-semibold text-white">
+              Contact us at <a href="mailto:hello@velorahd.in" className="text-primary hover:underline">hello@velorahd.in</a>
+            </p>
+          </div>
           <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
             <Link
               to="/explore"
