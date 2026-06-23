@@ -15,26 +15,6 @@ import { getCookie } from './utils/cookies';
 
 // Synchronous Page Import (for instant LCP rendering)
 import Home from './pages/Home';
-import Explore from './pages/Explore';
-import Details from './pages/Details';
-import Checkout from './pages/Checkout';
-import Success from './pages/Success';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import AdminDashboard from './pages/AdminDashboard';
-import LiveDashboard from './pages/LiveDashboard';
-import BecomeCreator from './pages/BecomeCreator';
-import CreatorDashboard from './pages/CreatorDashboard';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import Refunds from './pages/Refunds';
-import AiPolicy from './pages/AiPolicy';
-import Copyright from './pages/Copyright';
-import CookiePolicy from './pages/CookiePolicy';
-import Disclaimer from './pages/Disclaimer';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
 
 // Lazy Loaded Pages (Chunk split for speed)
 const Explore = lazy(() => import('./pages/Explore'));
@@ -46,6 +26,8 @@ const Register = lazy(() => import('./pages/Register'));
 const Profile = lazy(() => import('./pages/Profile'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const LiveDashboard = lazy(() => import('./pages/LiveDashboard'));
+const BecomeCreator = lazy(() => import('./pages/BecomeCreator'));
+const CreatorDashboard = lazy(() => import('./pages/CreatorDashboard'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const About = lazy(() => import('./pages/About'));
@@ -214,52 +196,6 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#121212]">
-      {/* Route state scroll restorer */}
-      <ScrollToTop />
-
-      {/* Global Header Navigation */}
-      <Navbar />
-
-      {/* Primary Page Layout Portal */}
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/wallpaper/:slug" element={<Details />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/success/:slug" element={<Success />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/dashboard" element={<LiveDashboard />} />
-          <Route path="/become-creator" element={<BecomeCreator />} />
-          <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/refunds" element={<Refunds />} />
-          <Route path="/ai-policy" element={<AiPolicy />} />
-          <Route path="/copyright" element={<Copyright />} />
-          <Route path="/cookies" element={<CookiePolicy />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-
-      {/* Toast Notification Container */}
-      <ToastContainer />
-
-      {/* PWA Install Bottom Sheet */}
-      <InstallPrompt />
-
-      {/* Cookie Preferences Banner */}
-      <CookieConsent />
-
-      {/* Global Footer */}
-      <Footer />
-    </div>
     <ReactLenis 
       root 
       options={{
@@ -298,7 +234,9 @@ export default function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/dashboard" element={<LiveDashboard />} />
-               <Route path="/about" element={<About />} />
+              <Route path="/become-creator" element={<BecomeCreator />} />
+              <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+              <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/refunds" element={<Refunds />} />
