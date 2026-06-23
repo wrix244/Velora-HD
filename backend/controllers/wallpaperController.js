@@ -17,7 +17,7 @@ export const getWallpapers = async (req, res) => {
       limit = 12,
     } = req.query;
 
-    const query = {};
+    const query = { status: { $nin: ['pending', 'rejected'] } };
 
     // 1. Search Query
     if (search) {
@@ -101,6 +101,15 @@ export const getWallpaperBySlug = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Wallpaper not found' });
     }
 
+    // Hide if pending or rejected (only visible to uploader or admin)
+    if (wallpaper.status && wallpaper.status !== 'approved') {
+      const isOwner = req.user && wallpaper.uploadedBy && req.user._id.toString() === wallpaper.uploadedBy.toString();
+      const isAdmin = req.user && req.user.role === 'admin';
+      if (!isOwner && !isAdmin) {
+        return res.status(404).json({ success: false, message: 'Wallpaper not found' });
+      }
+    }
+
     res.json({ success: true, data: wallpaper });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -113,7 +122,7 @@ export const getWallpaperBySlug = async (req, res) => {
 export const getTrendingWallpapers = async (req, res) => {
   try {
     // Top 8 sorted by downloads + likes desc
-    const wallpapers = await Wallpaper.find({})
+    const wallpapers = await Wallpaper.find({ status: { $nin: ['pending', 'rejected'] } })
       .sort({ downloads: -1, likes: -1, createdAt: -1 })
       .limit(8);
 
@@ -128,7 +137,7 @@ export const getTrendingWallpapers = async (req, res) => {
 // @access  Public
 export const getLatestWallpapers = async (req, res) => {
   try {
-    const wallpapers = await Wallpaper.find({})
+    const wallpapers = await Wallpaper.find({ status: { $nin: ['pending', 'rejected'] } })
       .sort({ createdAt: -1 })
       .limit(8);
 
@@ -151,6 +160,7 @@ export const getRelatedWallpapers = async (req, res) => {
     // Find wallpapers in the same category OR with matching tags, excluding current
     const candidates = await Wallpaper.find({
       _id: { $ne: wallpaper._id },
+      status: { $nin: ['pending', 'rejected'] },
       $or: [
         { category: wallpaper.category },
         { tags: { $in: wallpaper.tags || [] } }
@@ -216,7 +226,7 @@ export const getRecentWallpapers = async (req, res) => {
     }
 
     // Fetch wallpapers matching those IDs
-    const wallpapers = await Wallpaper.find({ _id: { $in: ids } });
+    const wallpapers = await Wallpaper.find({ _id: { $in: ids }, status: { $nin: ['pending', 'rejected'] } });
 
     // Preserve viewed order
     const orderMap = {};
@@ -282,6 +292,7 @@ export const getRecommendedWallpapers = async (req, res) => {
         // Find other wallpapers matching the same categories or tags, excluding viewed ones
         const recommendations = await Wallpaper.find({
           _id: { $not: { $in: recentlyViewedIds } },
+          status: { $nin: ['pending', 'rejected'] },
           $or: [
             { category: { $in: categories } },
             { tags: { $in: tags } }
@@ -297,7 +308,8 @@ export const getRecommendedWallpapers = async (req, res) => {
         // If not enough, fill the rest with trending wallpapers
         const existingIds = [...recentlyViewedIds, ...recommendations.map(r => r._id.toString())];
         const filler = await Wallpaper.find({
-          _id: { $not: { $in: existingIds } }
+          _id: { $not: { $in: existingIds } },
+          status: { $nin: ['pending', 'rejected'] }
         })
           .sort({ downloads: -1, likes: -1, createdAt: -1 })
           .limit(8 - recommendations.length);
@@ -307,7 +319,7 @@ export const getRecommendedWallpapers = async (req, res) => {
     }
 
     // Default Fallback: If no history, recommend trending wallpapers
-    const trending = await Wallpaper.find({})
+    const trending = await Wallpaper.find({ status: { $nin: ['pending', 'rejected'] } })
       .sort({ downloads: -1, likes: -1, createdAt: -1 })
       .limit(8);
 

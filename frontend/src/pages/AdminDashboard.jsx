@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity, RotateCw } from 'lucide-react';
+import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity, RotateCw, CheckCircle2, XCircle, Globe, Ban } from 'lucide-react';
 import {
   useAdminAnalytics,
   useAdminUsers,
@@ -12,6 +12,13 @@ import {
   useAdminWallpapers,
   useDeleteUser,
   useBanUser,
+  useAdminApplications,
+  useApproveApplication,
+  useRejectApplication,
+  useAdminCreatorUploads,
+  useApproveCreatorWallpaper,
+  useRejectCreatorWallpaper,
+  useSuspendCreator,
 } from '../hooks/useAdmin';
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
@@ -26,6 +33,17 @@ export default function AdminDashboard() {
 
   const [activeTab, setActiveTab] = useState('overview');
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Creator Review States
+  const [rejectingAppId, setRejectingAppId] = useState(null);
+  const [rejectAppModalOpen, setRejectAppModalOpen] = useState(false);
+  const [appRejectionNotes, setAppRejectionNotes] = useState('');
+  const [cooldownDays, setCooldownDays] = useState(30);
+
+  const [rejectingUploadId, setRejectingUploadId] = useState(null);
+  const [rejectUploadModalOpen, setRejectUploadModalOpen] = useState(false);
+  const [wpRejectionNotes, setWpRejectionNotes] = useState('');
+  const [creatorFilter, setCreatorFilter] = useState('All');
   const [editingWallpaper, setEditingWallpaper] = useState(null);
 
   // Form States
@@ -315,6 +333,8 @@ export default function AdminDashboard() {
   const { data: purchasesList } = useAdminPurchases();
   const { data: downloadsList } = useAdminDownloads();
   const { data: wallpapersList } = useAdminWallpapers();
+  const { data: applicationsList } = useAdminApplications();
+  const { data: creatorUploadsList } = useAdminCreatorUploads();
 
   // Mutations
   const createMutation = useCreateWallpaper();
@@ -322,6 +342,11 @@ export default function AdminDashboard() {
   const deleteMutation = useDeleteWallpaper();
   const deleteUserMutation = useDeleteUser();
   const banUserMutation = useBanUser();
+  const approveAppMutation = useApproveApplication();
+  const rejectAppMutation = useRejectApplication();
+  const approveUploadMutation = useApproveCreatorWallpaper();
+  const rejectUploadMutation = useRejectCreatorWallpaper();
+  const suspendCreatorMutation = useSuspendCreator();
 
   const handleOpenAddModal = () => {
     setEditingWallpaper(null);
@@ -571,7 +596,7 @@ export default function AdminDashboard() {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Tab switches */}
-          {['overview', 'wallpapers', 'users', 'purchases'].map((tab) => (
+          {['overview', 'wallpapers', 'users', 'purchases', 'creator-applications', 'creator-uploads'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -581,7 +606,7 @@ export default function AdminDashboard() {
                   : 'text-gray-400 hover:text-white bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]'
               }`}
             >
-              {tab}
+              {tab.replace('-', ' ')}
             </button>
           ))}
         </div>
@@ -840,6 +865,370 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* TAB 5: CREATOR APPLICATIONS */}
+      {activeTab === 'creator-applications' && (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="font-display font-bold text-lg text-white">Become a Creator Requests</h2>
+          </div>
+
+          {!applicationsList || applicationsList.length === 0 ? (
+            <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+              <Users className="w-10 h-10 text-gray-600" />
+              <h3 className="font-display font-bold text-base text-white">No applications found</h3>
+              <p className="text-xs text-gray-400 max-w-sm">
+                There are currently no creator requests submitted by users.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-white/5 overflow-x-auto bg-black/20">
+              <table className="w-full text-left border-collapse text-xs min-w-[800px]">
+                <thead>
+                  <tr className="bg-white/2 text-gray-400 font-semibold border-b border-white/5">
+                    <th className="p-4">Applicant</th>
+                    <th className="p-4">Portfolio</th>
+                    <th className="p-4">Submission Date</th>
+                    <th className="p-4">Sample Wallpapers</th>
+                    <th className="p-4">Declarations</th>
+                    <th className="p-4">Status</th>
+                    <th className="p-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5 text-gray-300">
+                  {applicationsList.map((app) => (
+                    <tr key={app._id} className="hover:bg-white/2 transition">
+                      <td className="p-4">
+                        <p className="font-semibold text-white">{app.fullName}</p>
+                        <p className="text-[10px] text-gray-500">{app.email}</p>
+                        <p className="text-[9px] text-gray-600 font-mono mt-0.5">ID: {app.user?._id || app.user || 'N/A'}</p>
+                      </td>
+                      <td className="p-4">
+                        {app.portfolioLink ? (
+                          <a
+                            href={app.portfolioLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline flex items-center gap-1"
+                          >
+                            <Globe className="w-3.5 h-3.5" /> Visit Site
+                          </a>
+                        ) : (
+                          <span className="text-gray-500">None</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-gray-450">
+                        {new Date(app.submissionDate).toLocaleDateString()}
+                      </td>
+                      <td className="p-4">
+                        <div className="flex gap-1.5">
+                          {app.wallpapers?.map((url, idx) => (
+                            <a
+                              key={idx}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded border border-white/10 overflow-hidden hover:scale-105 transition block"
+                            >
+                              <img src={url} alt="sample" className="w-full h-full object-cover" />
+                            </a>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="p-4 text-[10px]">
+                        <p className={app.answers?.areOwnWallpapers ? 'text-emerald-400' : 'text-rose-450'}>
+                          {app.answers?.areOwnWallpapers ? '✓ Created by Self' : '✗ Not Created by Self'}
+                        </p>
+                        <p className={app.answers?.ownRights ? 'text-emerald-400' : 'text-rose-455'}>
+                          {app.answers?.ownRights ? '✓ Owns Rights' : '✗ No Rights'}
+                        </p>
+                        <p className="text-gray-500">
+                          {app.answers?.soldElsewhere ? '• Published Elsewhere' : '• First Publication'}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        {app.status === 'pending' && (
+                          <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                            Pending
+                          </span>
+                        )}
+                        {app.status === 'approved' && (
+                          <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                            Approved
+                          </span>
+                        )}
+                        {app.status === 'rejected' && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full">
+                              Rejected
+                            </span>
+                            {app.rejectionNotes && (
+                              <p className="text-[9px] text-gray-500 max-w-[120px] truncate" title={app.rejectionNotes}>
+                                Notes: {app.rejectionNotes}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        {app.status === 'pending' ? (
+                          <div className="flex justify-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => requestConfirmation(
+                                'Approve Creator Application',
+                                `Are you sure you want to approve ${app.fullName} as an authorized creator?`,
+                                () => approveAppMutation.mutate(app._id)
+                              )}
+                              className="px-2 py-1 rounded bg-emerald-500/15 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white text-[10px] text-emerald-400 font-bold transition cursor-pointer"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setRejectingAppId(app._id);
+                                setAppRejectionNotes('');
+                                setCooldownDays(30);
+                                setRejectAppModalOpen(true);
+                              }}
+                              className="px-2 py-1 rounded bg-rose-500/15 border border-rose-500/20 hover:bg-rose-500 hover:text-white text-[10px] text-rose-400 font-bold transition cursor-pointer"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-gray-500 text-[10px]">Reviewed</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 6: CREATOR UPLOADS */}
+      {activeTab === 'creator-uploads' && (
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <h2 className="font-display font-bold text-lg text-white">Creator Wallpapers Moderation</h2>
+            
+            {/* Filter by Creator */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-400">Creator:</span>
+              <select
+                value={creatorFilter}
+                onChange={(e) => setCreatorFilter(e.target.value)}
+                className="px-3 py-1.5 rounded-xl bg-[#1A1A1A] border border-white/10 text-white text-xs focus:outline-none cursor-pointer text-gray-300"
+              >
+                <option value="All">All Creators</option>
+                {Array.from(new Set(creatorUploadsList?.map(wp => wp.uploadedBy?.name).filter(Boolean))).map(name => (
+                  <option key={name} value={name}>{name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {!creatorUploadsList || creatorUploadsList.length === 0 ? (
+            <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+              <Image className="w-10 h-10 text-gray-600" />
+              <h3 className="font-display font-bold text-base text-white">No creator uploads found</h3>
+              <p className="text-xs text-gray-400 max-w-sm">
+                Creators have not uploaded any designs yet.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-white/5 overflow-x-auto bg-black/20">
+              <table className="w-full text-left border-collapse text-xs min-w-[900px]">
+                <thead>
+                  <tr className="bg-white/2 text-gray-400 font-semibold border-b border-white/5">
+                    <th className="p-4">Wallpaper</th>
+                    <th className="p-4">Creator</th>
+                    <th className="p-4">Details</th>
+                    <th className="p-4">License Type</th>
+                    <th className="p-4">Status</th>
+                    <th className="p-4">Submission Date</th>
+                    <th className="p-4 text-center">Moderation Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5 text-gray-300">
+                  {creatorUploadsList
+                    .filter(wp => creatorFilter === 'All' || wp.uploadedBy?.name === creatorFilter)
+                    .map((wp) => (
+                      <tr key={wp._id} className="hover:bg-white/2 transition">
+                        
+                        {/* Wallpaper thumbnail & title */}
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <a
+                              href={wp.downloadFile}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-12 h-12 rounded-lg border border-white/10 overflow-hidden shrink-0 group relative block"
+                            >
+                              <img src={wp.previewImage} alt="thumbnail" className="w-full h-full object-cover" />
+                            </a>
+                            <div className="min-w-0">
+                              <p className="font-bold text-white truncate max-w-[150px]">{wp.title}</p>
+                              <p className="text-[10px] text-gray-500">{wp.resolution}</p>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Creator name & email */}
+                        <td className="p-4">
+                          <p className="font-semibold text-white">{wp.uploadedBy?.name || 'Unknown Creator'}</p>
+                          <p className="text-[10px] text-gray-500">{wp.uploadedBy?.email || 'N/A'}</p>
+                        </td>
+
+                        {/* Specs */}
+                        <td className="p-4 capitalize text-[10px]">
+                          <p>Category: <strong className="text-white">{wp.category}</strong></p>
+                          <p>Device: <strong className="text-white">{wp.deviceType}</strong></p>
+                          <p>Format: <strong className="text-white">{wp.type}</strong></p>
+                        </td>
+
+                        {/* Premium Price */}
+                        <td className="p-4">
+                          {wp.isPremium ? (
+                            <span className="text-amber-400 font-bold">${wp.price.toFixed(2)}</span>
+                          ) : (
+                            <span className="text-gray-400">Free</span>
+                          )}
+                        </td>
+
+                        {/* Status */}
+                        <td className="p-4">
+                          {wp.status === 'pending' && (
+                            <span className="text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                              Pending
+                            </span>
+                          )}
+                          {wp.status === 'approved' && (
+                            <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                              Approved
+                            </span>
+                          )}
+                          {wp.status === 'rejected' && (
+                            <div className="space-y-1">
+                              <span className="text-[9px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full">
+                                Rejected
+                              </span>
+                              {wp.rejectionNotes && (
+                                <p className="text-[9px] text-gray-500 max-w-[120px] truncate" title={wp.rejectionNotes}>
+                                  Reason: {wp.rejectionNotes}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Created At */}
+                        <td className="p-4 text-gray-550">
+                          {new Date(wp.createdAt).toLocaleDateString()}
+                        </td>
+
+                        {/* Moderation Actions */}
+                        <td className="p-4 text-center space-x-2 space-y-1">
+                          
+                          {/* Approve/Reject pending uploads */}
+                          {wp.status === 'pending' && (
+                            <div className="inline-block space-x-1">
+                              <button
+                                type="button"
+                                onClick={() => requestConfirmation(
+                                  'Approve Wallpaper Upload',
+                                  `Are you sure you want to approve "${wp.title}"? It will be made publicly available in the gallery.`,
+                                  () => approveUploadMutation.mutate(wp._id)
+                                )}
+                                className="px-2 py-1 rounded bg-emerald-500/15 border border-emerald-500/20 hover:bg-emerald-500 hover:text-white text-[10px] text-emerald-400 font-bold transition cursor-pointer"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setRejectingUploadId(wp._id);
+                                  setWpRejectionNotes('');
+                                  setRejectUploadModalOpen(true);
+                                }}
+                                className="px-2 py-1 rounded bg-rose-500/15 border border-rose-500/20 hover:bg-rose-500 hover:text-white text-[10px] text-rose-400 font-bold transition cursor-pointer"
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Edit / Remove uploads */}
+                          <div className="inline-flex gap-1 align-middle">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingWallpaper(wp);
+                                setTitle(wp.title);
+                                setDescription(wp.description || '');
+                                setCategory(wp.category);
+                                setType(wp.type || 'static');
+                                setDeviceType(wp.deviceType || 'desktop');
+                                setResolution(wp.resolution);
+                                setPrice(wp.price || 0);
+                                setIsPremium(wp.isPremium || false);
+                                setTags(wp.tags ? wp.tags.join(', ') : '');
+                                setPreviewImageUrl(wp.previewImage);
+                                setDownloadFileUrl(wp.downloadFile);
+                                setModalOpen(true);
+                              }}
+                              className="p-1 rounded bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white transition cursor-pointer"
+                              title="Edit Wallpaper Specs"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                            </button>
+                            
+                            <button
+                              type="button"
+                              onClick={() => requestConfirmation(
+                                'Delete Wallpaper',
+                                `Are you sure you want to delete "${wp.title}" permanently from the database?`,
+                                () => deleteMutation.mutate(wp._id),
+                                'danger'
+                              )}
+                              className="p-1 rounded bg-rose-500/10 border border-rose-500/20 hover:bg-rose-600 hover:text-white text-rose-400 transition cursor-pointer"
+                              title="Delete Wallpaper"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+
+                          {/* Suspend Creator */}
+                          {wp.uploadedBy && !wp.uploadedBy.isBanned && (
+                            <button
+                              type="button"
+                              onClick={() => requestConfirmation(
+                                'Suspend Creator Account',
+                                `Warning: This will suspend ${wp.uploadedBy.name}'s account, revoke their creator role, ban their user account, and reject all their uploads due to copyright issues.`,
+                                () => suspendCreatorMutation.mutate(wp.uploadedBy._id),
+                                'danger'
+                              )}
+                              className="px-2 py-1 rounded bg-rose-950 border border-rose-800 text-rose-450 hover:bg-rose-600 hover:text-white text-[10px] font-bold transition cursor-pointer inline-block"
+                              title="Suspend Creator Account"
+                            >
+                              <Ban className="w-3 h-3 inline align-middle mr-0.5" /> Suspend
+                            </button>
+                          )}
+
+                        </td>
+
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
@@ -1191,6 +1580,112 @@ export default function AdminDashboard() {
                 }`}
               >
                 Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* REJECT APPLICATION MODAL */}
+      {rejectAppModalOpen && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-rose-500" /> Reject Creator Application
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Rejection Feedback Notes</label>
+                <textarea
+                  required
+                  placeholder="Provide detailed feedback so the applicant knows what to fix..."
+                  value={appRejectionNotes}
+                  onChange={(e) => setAppRejectionNotes(e.target.value)}
+                  rows="3"
+                  className="w-full px-3 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary focus:bg-[#121212]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Cooldown Period (Days)</label>
+                <select
+                  value={cooldownDays}
+                  onChange={(e) => setCooldownDays(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 text-xs bg-[#1A1A1A] border border-white/10 rounded-xl text-white focus:outline-none cursor-pointer text-gray-300"
+                >
+                  <option value={7}>7 Days Cooldown</option>
+                  <option value={14}>14 Days Cooldown</option>
+                  <option value={30}>30 Days Cooldown (Default)</option>
+                  <option value={90}>90 Days Cooldown</option>
+                  <option value={0}>No Cooldown (Allow instant reapply)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
+              <button
+                type="button"
+                onClick={() => setRejectAppModalOpen(false)}
+                className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (rejectingAppId) {
+                    rejectAppMutation.mutate({ id: rejectingAppId, rejectionNotes: appRejectionNotes, cooldownDays });
+                    setRejectAppModalOpen(false);
+                  }
+                }}
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
+              >
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REJECT WALLPAPER UPLOAD MODAL */}
+      {rejectUploadModalOpen && (
+        <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#1A1A1A] border border-white/10 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-rose-500" /> Reject Wallpaper Upload
+            </h3>
+            
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Rejection Reason Notes</label>
+              <textarea
+                required
+                placeholder="Why is this wallpaper rejected? (e.g. poor resolution, trademark text, copyright concern)..."
+                value={wpRejectionNotes}
+                onChange={(e) => setWpRejectionNotes(e.target.value)}
+                rows="3"
+                className="w-full px-3 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary focus:bg-[#121212]"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
+              <button
+                type="button"
+                onClick={() => setRejectUploadModalOpen(false)}
+                className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (rejectingUploadId) {
+                    rejectUploadMutation.mutate({ id: rejectingUploadId, rejectionNotes: wpRejectionNotes });
+                    setRejectUploadModalOpen(false);
+                  }
+                }}
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
+              >
+                Confirm Rejection
               </button>
             </div>
           </div>

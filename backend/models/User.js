@@ -30,12 +30,16 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'creator', 'admin'],
       default: 'user',
     },
     isBanned: {
       type: Boolean,
       default: false,
+    },
+    cooldownUntil: {
+      type: Date,
+      default: null,
     },
   },
   {

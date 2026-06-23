@@ -74,6 +74,28 @@ const wallpaperSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    uploadedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'approved', // Default is approved for backwards-compatibility
+    },
+    rejectionNotes: {
+      type: String,
+      default: '',
+    },
+    creatorAcceptedCopyright: {
+      type: Boolean,
+      default: false,
+    },
+    copyrightAcceptedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

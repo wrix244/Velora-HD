@@ -200,3 +200,148 @@ export const useBanUser = () => {
     },
   });
 };
+
+// Fetch all creator applications list
+export const useAdminApplications = () => {
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user?.role === 'admin';
+
+  return useQuery({
+    queryKey: ['admin', 'applications'],
+    queryFn: async () => {
+      const response = await axios.get('/api/admin/applications');
+      return response.data.data;
+    },
+    enabled: isAdmin,
+  });
+};
+
+// Approve Creator Application Mutation
+export const useApproveApplication = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async (id) => {
+      const response = await axios.put(`/api/admin/applications/${id}/approve`);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast('Application approved successfully!', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'applications'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to approve application.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Reject Creator Application Mutation
+export const useRejectApplication = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async ({ id, rejectionNotes, cooldownDays }) => {
+      const response = await axios.put(`/api/admin/applications/${id}/reject`, { rejectionNotes, cooldownDays });
+      return response.data;
+    },
+    onSuccess: () => {
+      addToast('Application rejected.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'applications'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to reject application.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Fetch all creator uploaded wallpapers
+export const useAdminCreatorUploads = () => {
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user?.role === 'admin';
+
+  return useQuery({
+    queryKey: ['admin', 'creator-uploads'],
+    queryFn: async () => {
+      const response = await axios.get('/api/admin/creator-uploads');
+      return response.data.data;
+    },
+    enabled: isAdmin,
+  });
+};
+
+// Approve Creator Wallpaper Upload Mutation
+export const useApproveCreatorWallpaper = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async (id) => {
+      const response = await axios.put(`/api/admin/creator-uploads/${id}/approve`);
+      return response.data;
+    },
+    onSuccess: () => {
+      addToast('Wallpaper approved successfully!', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'creator-uploads'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'wallpapers'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to approve wallpaper.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Reject Creator Wallpaper Upload Mutation
+export const useRejectCreatorWallpaper = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async ({ id, rejectionNotes }) => {
+      const response = await axios.put(`/api/admin/creator-uploads/${id}/reject`, { rejectionNotes });
+      return response.data;
+    },
+    onSuccess: () => {
+      addToast('Wallpaper rejected.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'creator-uploads'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'wallpapers'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to reject wallpaper.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Suspend Creator Mutation
+export const useSuspendCreator = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async (id) => {
+      const response = await axios.put(`/api/admin/users/${id}/suspend-creator`);
+      return response.data;
+    },
+    onSuccess: () => {
+      addToast('Creator account suspended. All their uploads rejected.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'creator-uploads'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'analytics'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to suspend creator.';
+      addToast(message, 'error');
+    },
+  });
+};

@@ -38,7 +38,13 @@ export default function Navbar() {
     { name: 'PC', path: '/explore?deviceType=desktop', icon: <Monitor className="w-3.5 h-3.5" /> },
     { name: 'Live', path: '/explore?type=live', icon: <Film className="w-3.5 h-3.5" /> },
     { name: 'Premium', path: '/explore?isPremium=true', icon: <Sparkles className="w-3.5 h-3.5" /> },
-    ...(isAuthenticated ? [{ name: 'Dashboard', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> }] : []),
+    ...(isAuthenticated && user?.role === 'creator'
+      ? [{ name: 'Creator Dashboard', path: '/creator-dashboard', icon: <LayoutDashboard className="w-3.5 h-3.5" /> }]
+      : []),
+    ...(!isAuthenticated || user?.role === 'user'
+      ? [{ name: 'Become a Creator', path: '/become-creator', icon: <Sparkles className="w-3.5 h-3.5" /> }]
+      : []),
+    ...(isAuthenticated ? [{ name: 'Stats Board', path: '/dashboard', icon: <Activity className="w-3.5 h-3.5" /> }] : []),
     ...(!isInstalled ? [{ name: 'Add to Home Screen', onClick: handlePWAInstall, icon: <Download className="w-3.5 h-3.5" /> }] : []),
   ];
 
@@ -141,6 +147,17 @@ export default function Navbar() {
                       <History className="w-4 h-4" />
                       Purchases
                     </Link>
+                    
+                    {user?.role === 'creator' && (
+                      <Link
+                        to="/creator-dashboard"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-primary hover:text-primary-active hover:bg-primary/5 border-t border-white/5 transition-colors font-medium"
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        Creator Dashboard
+                      </Link>
+                    )}
                     
                     {user?.role === 'admin' && (
                       <Link
@@ -259,6 +276,16 @@ export default function Navbar() {
                     <User className="w-4 h-4" />
                     Profile
                   </Link>
+                  {user?.role === 'creator' && (
+                    <Link
+                      to="/creator-dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-primary hover:bg-primary/5 transition-colors font-semibold"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Creator Dashboard
+                    </Link>
+                  )}
                   {user?.role === 'admin' && (
                     <Link
                       to="/admin"

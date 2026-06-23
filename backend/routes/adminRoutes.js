@@ -15,6 +15,13 @@ import {
   getAdminWallpapers,
   deleteUser,
   banUser,
+  getCreatorApplications,
+  approveCreatorApplication,
+  rejectCreatorApplication,
+  getCreatorUploads,
+  approveCreatorWallpaper,
+  rejectCreatorWallpaper,
+  suspendCreator,
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -65,5 +72,16 @@ router.delete('/wallpapers/:id', deleteWallpaper);
 // User Management
 router.delete('/users/:id', deleteUser);
 router.put('/users/:id/ban', banUser);
+router.put('/users/:id/suspend-creator', suspendCreator);
+
+// Creator Applications Review
+router.get('/applications', getCreatorApplications);
+router.put('/applications/:id/approve', approveCreatorApplication);
+router.put('/applications/:id/reject', rejectCreatorApplication);
+
+// Creator Uploads Moderation
+router.get('/creator-uploads', getCreatorUploads);
+router.put('/creator-uploads/:id/approve', approveCreatorWallpaper);
+router.put('/creator-uploads/:id/reject', rejectCreatorWallpaper);
 
 export default router;
