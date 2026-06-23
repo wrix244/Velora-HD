@@ -975,17 +975,24 @@ export default function AdminDashboard() {
                       </td>
                       <td className="p-4">
                         <div className="flex gap-1.5">
-                          {app.wallpapers?.map((url, idx) => (
-                            <a
-                              key={idx}
-                              href={url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-10 h-10 rounded border border-white/10 overflow-hidden hover:scale-105 transition block"
-                            >
-                              <img src={url} alt="sample" className="w-full h-full object-cover" />
-                            </a>
-                          ))}
+                          {app.wallpapers?.map((url, idx) => {
+                            const isVideo = url?.includes('/video/') || url?.endsWith('.mp4') || url?.endsWith('.webm');
+                            return (
+                              <a
+                                key={idx}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-10 h-10 rounded border border-white/10 overflow-hidden hover:scale-105 transition block"
+                              >
+                                {isVideo ? (
+                                  <video src={url} className="w-full h-full object-cover" muted />
+                                ) : (
+                                  <img src={url} alt="sample" className="w-full h-full object-cover" />
+                                )}
+                              </a>
+                            );
+                          })}
                         </div>
                       </td>
                       <td className="p-4 text-[10px]">

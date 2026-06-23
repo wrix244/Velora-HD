@@ -17,10 +17,14 @@ const scanBufferForMalice = (buffer, filename) => {
   const isGif = hex.startsWith('47494638'); // GIF8
   const isWebp = hex.startsWith('52494646'); // RIFF (check WEBP signature in next bytes)
   
+  // Video signatures
+  const isWebm = hex.startsWith('1A45DFA3');
+  const isMp4 = buffer.length >= 8 && buffer.toString('ascii', 4, 8) === 'ftyp';
+  
   const ext = filename.split('.').pop().toLowerCase();
   
-  // Verify magic bytes matches image signatures
-  if (!isJpeg && !isPng && !isGif && !isWebp) {
+  // Verify magic bytes matches image or video signatures
+  if (!isJpeg && !isPng && !isGif && !isWebp && !isWebm && !isMp4) {
     return { isMalicious: true, reason: 'Invalid file signature (magic bytes verification failed).' };
   }
 
@@ -33,6 +37,10 @@ const scanBufferForMalice = (buffer, filename) => {
     if (!isWebp) return { isMalicious: true, reason: 'WEBP file extension mismatch.' };
   } else if (ext === 'gif') {
     if (!isGif) return { isMalicious: true, reason: 'GIF file extension mismatch.' };
+  } else if (ext === 'mp4') {
+    if (!isMp4) return { isMalicious: true, reason: 'MP4 file extension mismatch.' };
+  } else if (ext === 'webm') {
+    if (!isWebm) return { isMalicious: true, reason: 'WebM file extension mismatch.' };
   }
 
   // Basic script/HTML injection check
@@ -111,9 +119,13 @@ export const applyToBecomeCreator = async (req, res) => {
     // 3. Upload files to Cloudinary
     const uploadedUrls = [];
     for (const file of req.files) {
+      const isVideo = file.mimetype?.startsWith('video') || 
+                      file.originalname?.endsWith('.mp4') || 
+                      file.originalname?.endsWith('.webm');
+      
       const result = await uploadToCloudinary(file.buffer, {
         folder: 'velorahd/applications',
-        resource_type: 'image',
+        resource_type: isVideo ? 'video' : 'image',
       });
       uploadedUrls.push(result.secure_url);
     }
@@ -134,7 +146,8 @@ export const applyToBecomeCreator = async (req, res) => {
       status: 'pending',
     });
 
-    // 5. Send Email to creator@velorahd.in
+    // 5. Send Email to receiver Gmail
+    const adminEmail = process.env.CONTACT_RECEIVER_EMAIL || 'velorahdwallart@gmail.com';
     const emailHtml = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; padding: 25px; border: 1px solid #222; border-radius: 12px; background-color: #121212; color: #e0e0e0;">
         <div style="background-color: #6366f1; padding: 20px; border-top-left-radius: 12px; border-top-right-radius: 12px; color: #ffffff; text-align: center;">
@@ -184,14 +197,21 @@ export const applyToBecomeCreator = async (req, res) => {
 
           <h3 style="font-size: 16px; color: #ffffff; border-bottom: 1px solid #333; padding-bottom: 5px; margin-top: 25px;">Uploaded Wallpapers (${uploadedUrls.length})</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
-            ${uploadedUrls.map((url, idx) => `
+            ${uploadedUrls.map((url, idx) => {
+              const isVideo = url.includes('/video/') || url.endsWith('.mp4') || url.endsWith('.webm');
+              return `
               <div style="flex: 1 1 120px; text-align: center; margin-bottom: 15px;">
                 <a href="${url}" target="_blank" style="text-decoration: none;">
-                  <img src="${url}" alt="Preview ${idx + 1}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #333;" />
-                  <div style="font-size: 11px; color: #6366f1; margin-top: 5px;">View Full Size</div>
+                  ${isVideo ? `
+                    <div style="width: 100px; height: 100px; background-color: #222; border-radius: 8px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 24px; font-weight: bold; margin: 0 auto; line-height: 100px;">▶</div>
+                  ` : `
+                    <img src="${url}" alt="Preview ${idx + 1}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #333;" />
+                  `}
+                  <div style="font-size: 11px; color: #6366f1; margin-top: 5px;">${isVideo ? 'Play Video' : 'View Full Size'}</div>
                 </a>
               </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </div>
         <div style="border-top: 1px solid #222; padding: 15px 20px; text-align: center; font-size: 11px; color: #666; background-color: #0b0b0b; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
@@ -201,7 +221,7 @@ export const applyToBecomeCreator = async (req, res) => {
     `;
 
     await sendEmail({
-      to: 'creator@velorahd.in',
+      to: adminEmail,
       subject: `New Creator Application - ${fullName}`,
       html: emailHtml,
     });

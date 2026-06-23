@@ -309,13 +309,13 @@ export default function BecomeCreator() {
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/*,video/*"
               onChange={handleFileChange}
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
             />
             <Upload className="w-8 h-8 text-gray-500 group-hover:text-primary transition-colors mx-auto mb-3" />
-            <p className="text-xs font-bold text-white">Click or Drag & Drop to upload images</p>
-            <p className="text-[10px] text-gray-500 mt-1">PNG, JPG, WEBP formats up to 10MB each</p>
+            <p className="text-xs font-bold text-white">Click or Drag & Drop to upload images or videos</p>
+            <p className="text-[10px] text-gray-500 mt-1">PNG, JPG, WEBP, MP4, WEBM formats up to 10MB each</p>
           </div>
 
           {/* Uploaded File Previews */}
