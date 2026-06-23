@@ -26,6 +26,27 @@ export const useBecomeCreator = () => {
   });
 };
 
+// Cancel/Retract Become a Creator Application
+export const useCancelCreatorApplication = () => {
+  const queryClient = useQueryClient();
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await axios.delete('/api/creator/apply');
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast(data.message || 'Application canceled successfully.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['creator', 'application-status'] });
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to cancel application.';
+      addToast(message, 'error');
+    },
+  });
+};
+
 // Get Creator Application Status
 export const useCreatorApplicationStatus = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);

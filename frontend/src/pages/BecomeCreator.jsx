@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Upload, Check, AlertTriangle, ShieldCheck, Mail, Globe, User, Clock, ArrowRight, FileImage, LayoutDashboard } from 'lucide-react';
-import { useBecomeCreator, useCreatorApplicationStatus } from '../hooks/useCreator';
+import { useBecomeCreator, useCreatorApplicationStatus, useCancelCreatorApplication } from '../hooks/useCreator';
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
 
@@ -12,6 +12,7 @@ export default function BecomeCreator() {
 
   const { data: appStatus, isLoading: statusLoading } = useCreatorApplicationStatus();
   const becomeCreatorMutation = useBecomeCreator();
+  const cancelCreatorApplicationMutation = useCancelCreatorApplication();
 
   // Form States
   const [fullName, setFullName] = useState('');
@@ -187,16 +188,36 @@ export default function BecomeCreator() {
             <p className="text-gray-400 text-sm max-w-md mx-auto">
               Thank you for applying! Our moderation team is currently reviewing your uploaded wallpapers. We will send an email update to <span className="text-primary font-semibold">{appStatus.email}</span> once a decision is made.
             </p>
+            <div className="pt-4">
+              <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to cancel and delete your creator application? This will retract your submission.')) {
+                    cancelCreatorApplicationMutation.mutate();
+                  }
+                }}
+                disabled={cancelCreatorApplicationMutation.isPending}
+                className="px-6 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider rounded-xl transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {cancelCreatorApplicationMutation.isPending ? 'Canceling...' : 'Cancel Application'}
+              </button>
+            </div>
           </div>
           
           <div className="border-t border-white/5 pt-6 text-left space-y-4">
             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide">Submitted Artworks:</h4>
             <div className="grid grid-cols-3 gap-4">
-              {appStatus.wallpapers?.map((url, idx) => (
-                <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-white/5 group">
-                  <img src={url} alt={`Submission ${idx + 1}`} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-                </div>
-              ))}
+              {appStatus.wallpapers?.map((url, idx) => {
+                const isVideo = url?.includes('/video/') || url?.endsWith('.mp4') || url?.endsWith('.webm');
+                return (
+                  <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-white/5 group">
+                    {isVideo ? (
+                      <video src={url} className="w-full h-full object-cover transition-transform group-hover:scale-110" muted playsInline />
+                    ) : (
+                      <img src={url} alt={`Submission ${idx + 1}`} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

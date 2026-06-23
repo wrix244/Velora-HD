@@ -220,11 +220,11 @@ export const applyToBecomeCreator = async (req, res) => {
       </div>
     `;
 
-    await sendEmail({
+    sendEmail({
       to: adminEmail,
       subject: `New Creator Application - ${fullName}`,
       html: emailHtml,
-    });
+    }).catch((err) => console.error('Background email notification error:', err));
 
     res.status(201).json({
       success: true,
@@ -532,6 +532,43 @@ export const deleteCreatorWallpaper = async (req, res) => {
     await Wallpaper.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Wallpaper deleted successfully.' });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Cancel/Retract pending creator application
+// @route   DELETE /api/creator/apply
+// @access  Private
+export const cancelCreatorApplication = async (req, res) => {
+  try {
+    const application = await CreatorApplication.findOne({
+      user: req.user._id,
+      status: 'pending',
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'No pending creator application found to cancel.',
+      });
+    }
+
+    // 1. Delete uploaded files from Cloudinary
+    if (application.wallpapers && application.wallpapers.length > 0) {
+      for (const url of application.wallpapers) {
+        await deleteFromCloudinary(url);
+      }
+    }
+
+    // 2. Delete application from database
+    await CreatorApplication.findByIdAndDelete(application._id);
+
+    res.json({
+      success: true,
+      message: 'Your creator application was canceled and removed successfully.',
+    });
+  } catch (error) {
+    console.error('Cancel creator application error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -5,6 +5,7 @@ import { protect } from '../middleware/auth.js';
 import {
   applyToBecomeCreator,
   getApplicationStatus,
+  cancelCreatorApplication,
   creatorUploadWallpaper,
   getCreatorWallpapers,
   updateCreatorWallpaper,
@@ -47,6 +48,7 @@ router.use(protect);
 // Application endpoints
 router.post('/apply', uploadAppFiles, applyToBecomeCreator);
 router.get('/application-status', getApplicationStatus);
+router.delete('/apply', cancelCreatorApplication);
 
 // Creator Dashboard endpoints
 router.post('/upload', uploadWallpaperFields, creatorUploadWallpaper);
