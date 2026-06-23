@@ -32,6 +32,21 @@ if ('caches' in window) {
   });
 }
 
+// Listen for Vite dynamic import preload errors (e.g. hash mismatched chunks after deployment)
+window.addEventListener('vite:preloadError', (event) => {
+  console.warn('Vite preload error detected, reloading page to fetch latest chunks...', event);
+  window.location.reload();
+});
+
+// Fallback for general dynamic import errors
+window.addEventListener('error', (event) => {
+  const errorText = event.message || '';
+  if (errorText.includes('Failed to fetch dynamically imported module') || errorText.includes('Importing a module script failed')) {
+    console.warn('Dynamic import failure detected, forcing page reload...', event);
+    window.location.reload();
+  }
+}, true);
+
 createRoot(document.getElementById('root')).render(
 
   <StrictMode>
