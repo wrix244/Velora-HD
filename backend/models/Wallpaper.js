@@ -18,19 +18,6 @@ const wallpaperSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Please specify a category'],
-      enum: [
-        'Nature',
-        'Space',
-        'Cyberpunk',
-        'Anime',
-        'Cars',
-        'Gaming',
-        'Minimal',
-        'Abstract',
-        'Fantasy',
-        'Technology',
-        'Architecture',
-      ],
     },
     type: {
       type: String,

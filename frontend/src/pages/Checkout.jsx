@@ -139,7 +139,7 @@ export default function Checkout() {
         <h2 className="font-display font-bold text-xl text-white">Item Not Found</h2>
         <p className="text-xs text-gray-400">Could not resolve checkout for the specified wallpaper.</p>
         <Link to="/explore" className="px-4 py-2 bg-primary text-white text-xs font-semibold rounded-lg inline-block">
-          Back to Explore
+          <span>Back to Explore</span>
         </Link>
       </div>
     );
@@ -159,7 +159,7 @@ export default function Checkout() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         {/* Left: Card Payment Form */}
-        <div className="md:col-span-7 p-6 rounded-3xl glass-panel space-y-6">
+        <div className="md:col-span-7 p-6 rounded-3xl card space-y-6">
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-primary tracking-wider uppercase flex items-center gap-1">
               <CreditCard className="w-3.5 h-3.5" /> Secure Mock Payment
@@ -181,7 +181,7 @@ export default function Checkout() {
                   placeholder="John Doe"
                   value={cardHolder}
                   onChange={(e) => setCardHolder(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2 ${
                     validationErrors.cardHolder ? 'border-rose-500/50 focus:border-rose-500' : ''
                   }`}
                   required
@@ -202,7 +202,7 @@ export default function Checkout() {
                   placeholder="4111 2222 3333 4444"
                   value={cardNumber}
                   onChange={handleCardNumberChange}
-                  className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
+                  className={`w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2 ${
                     validationErrors.cardNumber ? 'border-rose-500/50 focus:border-rose-500' : ''
                   }`}
                   required
@@ -224,7 +224,7 @@ export default function Checkout() {
                     placeholder="12/28"
                     value={expiry}
                     onChange={handleExpiryChange}
-                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
+                    className={`w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2 ${
                       validationErrors.expiry ? 'border-rose-500/50 focus:border-rose-500' : ''
                     }`}
                     required
@@ -244,7 +244,7 @@ export default function Checkout() {
                     placeholder="***"
                     value={cvv}
                     onChange={handleCvvChange}
-                    className={`w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A] ${
+                    className={`w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2 ${
                       validationErrors.cvv ? 'border-rose-500/50 focus:border-rose-500' : ''
                     }`}
                     required
@@ -257,7 +257,7 @@ export default function Checkout() {
             </div>
 
             {/* Security Callout */}
-            <div className="p-4 rounded-xl bg-white/2 border border-white/5 flex items-start gap-3">
+            <div className="p-4 rounded-xl bg-surface-2 border border-border flex items-start gap-3">
               <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0" />
               <div className="space-y-0.5">
                 <p className="text-xs font-semibold text-white">Encrypted Mock Sandboxed API</p>
@@ -271,15 +271,15 @@ export default function Checkout() {
             <button
               type="submit"
               disabled={checkoutMutation.isPending}
-              className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg shadow-primary/10 transition flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition cursor-pointer"
             >
-              {checkoutMutation.isPending ? 'Processing Mock Payment...' : `Pay $${wallpaper.price.toFixed(2)} Now`}
+              <span>{checkoutMutation.isPending ? 'Processing Mock Payment...' : `Pay $${wallpaper.price.toFixed(2)} Now`}</span>
             </button>
           </form>
         </div>
 
         {/* Right: Order Summary Side Panel */}
-        <div className="md:col-span-5 p-6 rounded-3xl glass-panel space-y-6">
+        <div className="md:col-span-5 p-6 rounded-3xl card space-y-6">
           <h2 className="font-display font-bold text-sm text-white flex items-center gap-1.5 border-b border-white/5 pb-3">
             <ShoppingCart className="w-4 h-4" />
             Order Summary
@@ -287,7 +287,7 @@ export default function Checkout() {
 
           {/* Cart Item Row */}
           <div className="flex gap-4">
-            <div className="w-20 aspect-[4/5] rounded-xl overflow-hidden flex-shrink-0 border border-white/10 bg-[#121212]">
+            <div className="w-20 aspect-[4/5] rounded-xl overflow-hidden flex-shrink-0 border border-border bg-surface-2">
               <img src={wallpaper.previewImage} alt={wallpaper.title} className="w-full h-full object-cover" />
             </div>
             <div className="space-y-1 select-none">
@@ -300,7 +300,7 @@ export default function Checkout() {
           </div>
 
           {/* Pricing calculations */}
-          <div className="border-t border-white/5 pt-4 space-y-3 text-xs">
+          <div className="border-t border-border pt-4 space-y-3 text-xs">
             <div className="flex justify-between text-gray-400">
               <span>Subtotal</span>
               <span>${wallpaper.price.toFixed(2)}</span>
@@ -313,9 +313,9 @@ export default function Checkout() {
               <span>Tax (VAT/GST)</span>
               <span className="text-emerald-400 font-semibold">FREE</span>
             </div>
-            <div className="flex justify-between text-white font-bold border-t border-white/5 pt-3 text-sm">
+            <div className="flex justify-between text-white font-bold border-t border-border pt-3 text-sm">
               <span>Total Price</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-primary">
                 ${wallpaper.price.toFixed(2)}
               </span>
             </div>

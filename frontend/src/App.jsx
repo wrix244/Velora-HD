@@ -1,12 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { ReactLenis } from 'lenis/react';
 import axios from 'axios';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
-import ToastContainer from './components/common/ToastContainer';
-import InstallPrompt from './components/common/InstallPrompt';
-import CookieConsent from './components/common/CookieConsent';
 import usePWAStore from './store/pwaStore';
 import useThemeStore from './store/themeStore';
 import useUIStore from './store/uiStore';
@@ -15,7 +13,7 @@ import useFavoritesStore from './store/favoritesStore';
 import useLikesStore from './store/likesStore';
 import { getCookie } from './utils/cookies';
 
-// Pages
+// Synchronous Page Import (for instant LCP rendering)
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import Details from './pages/Details';
@@ -37,6 +35,33 @@ import CookiePolicy from './pages/CookiePolicy';
 import Disclaimer from './pages/Disclaimer';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+
+// Lazy Loaded Pages (Chunk split for speed)
+const Explore = lazy(() => import('./pages/Explore'));
+const Details = lazy(() => import('./pages/Details'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Success = lazy(() => import('./pages/Success'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Profile = lazy(() => import('./pages/Profile'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const LiveDashboard = lazy(() => import('./pages/LiveDashboard'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
+const About = lazy(() => import('./pages/About'));
+const Refunds = lazy(() => import('./pages/Refunds'));
+const AiPolicy = lazy(() => import('./pages/AiPolicy'));
+const Copyright = lazy(() => import('./pages/Copyright'));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
+const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Faq = lazy(() => import('./pages/Faq'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Lazy Loaded Overlays
+const ToastContainer = lazy(() => import('./components/common/ToastContainer'));
+const InstallPrompt = lazy(() => import('./components/common/InstallPrompt'));
+const CookieConsent = lazy(() => import('./components/common/CookieConsent'));
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -69,6 +94,25 @@ export default function App() {
   // Initialize theme on app load
   useEffect(() => {
     initTheme();
+  }, []);
+
+  // Defer Google Tag Manager loading by 3 seconds to ensure page interactivity first
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-B6DKVHT422';
+      document.body.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-B6DKVHT422');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -216,5 +260,77 @@ export default function App() {
       {/* Global Footer */}
       <Footer />
     </div>
+    <ReactLenis 
+      root 
+      options={{
+        duration: 1.1,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // exponential ease-out
+        lerp: 0.12, // slightly higher value makes scroll catch up faster and feel snappier
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+      }}
+    >
+      <div className="flex flex-col min-h-screen bg-bg-dark">
+        {/* Route state scroll restorer */}
+        <ScrollToTop />
+
+        {/* Global Header Navigation */}
+        <Navbar />
+
+        {/* Primary Page Layout Portal */}
+        <main className="flex-grow">
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[50vh]">
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/mobile" element={<Explore />} />
+              <Route path="/pc" element={<Explore />} />
+              <Route path="/premium" element={<Explore />} />
+              <Route path="/wallpaper/:slug" element={<Details />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/success/:slug" element={<Success />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/dashboard" element={<LiveDashboard />} />
+               <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/refunds" element={<Refunds />} />
+              <Route path="/ai-policy" element={<AiPolicy />} />
+              <Route path="/copyright" element={<Copyright />} />
+              <Route path="/cookies" element={<CookiePolicy />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </main>
+
+        {/* Toast Notification Container */}
+        <Suspense fallback={null}>
+          <ToastContainer />
+        </Suspense>
+
+        {/* PWA Install Bottom Sheet */}
+        <Suspense fallback={null}>
+          <InstallPrompt />
+        </Suspense>
+
+        {/* Cookie Preferences Banner */}
+        <Suspense fallback={null}>
+          <CookieConsent />
+        </Suspense>
+
+        {/* Global Footer */}
+        <Footer />
+      </div>
+    </ReactLenis>
   );
 }

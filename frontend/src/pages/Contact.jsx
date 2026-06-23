@@ -13,6 +13,34 @@ export default function Contact() {
     message: ''
   });
   const [submitting, setSubmitting] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const faqs = [
+    {
+      q: "What types of wallpapers are available on VeloraHD?",
+      a: "We offer both static 4K/8K wallpapers (ideal for high-resolution PC and mobile screens) and looping live motion wallpapers (MP4/WebM files designed for animated desktop and lock screen setups)."
+    },
+    {
+      q: "How do I apply a live wallpaper to my desktop or phone?",
+      a: "For Windows PCs, you can use popular utilities like Lively Wallpaper or Wallpaper Engine. For mobile devices, native Android supports video lock screens directly, while iOS users can set live photos (depending on iOS version compatibility)."
+    },
+    {
+      q: "Are downloads safe and secure?",
+      a: "Absolutely. Security is our top priority. Every single wallpaper file uploaded to VeloraHD undergoes automated security scanning for malware. We guarantee all downloads are 100% secure and sandbox-friendly."
+    },
+    {
+      q: "What is your refund policy for premium downloads?",
+      a: "Since digital downloads are active instantly upon purchase, we typically do not offer refunds once a file is downloaded. However, if you experience a technical error or corrupt file, contact support@velorahd.in and we will gladly issue a replacement or refund."
+    },
+    {
+      q: "Can I use VeloraHD wallpapers for commercial projects?",
+      a: "Our standard downloads are licensed for personal use only (e.g. desktop/mobile backgrounds, home screen setup showcases). For commercial licensing or distribution inquiries, please email business@velorahd.in."
+    }
+  ];
+
+  const toggleFaq = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,23 +80,19 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-24 pb-20 min-h-screen relative overflow-hidden policy-container">
-      {/* Background decorations */}
-      <div className="absolute top-1/4 right-10 w-80 h-80 rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-10 w-96 h-96 rounded-full bg-accent/5 blur-[150px] pointer-events-none" />
-
+    <div className="pt-24 pb-20 min-h-screen policy-container">
       <div className="max-w-4xl mx-auto px-4 relative z-10 space-y-10">
         {/* Page Header */}
         <div className="text-center space-y-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex p-3 bg-primary/10 rounded-2xl border border-primary/20 text-primary mb-2 animate-pulse"
+            className="inline-flex p-3 bg-primary/10 rounded-2xl border border-primary/20 text-primary mb-2"
           >
             <Mail className="w-8 h-8" />
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="font-display font-black text-4xl md:text-5xl text-white tracking-tight leading-none"
           >
@@ -84,12 +108,28 @@ export default function Contact() {
           </motion.p>
         </div>
 
+        {/* Email Us Top Highlight */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="card p-8 rounded-3xl border border-border text-center space-y-3 bg-surface-2/30"
+        >
+          <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Email Us</span>
+          <h2 className="font-display font-black text-2xl sm:text-3xl text-white">
+            <a href="mailto:email@velorahd.in" className="hover:text-primary transition-colors">email@velorahd.in</a>
+          </h2>
+          <p className="text-xs text-text-muted">
+            We typically respond within 24–48 hours.
+          </p>
+        </motion.div>
+
         {/* Intro */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="glass-panel p-6 rounded-3xl border border-white/5 space-y-4"
+          className="card p-6 rounded-3xl space-y-4"
         >
           <p className="text-sm text-gray-300 leading-relaxed">
             Thank you for visiting <strong>VeloraHD</strong>.
@@ -106,13 +146,13 @@ export default function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contact Methods */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="space-y-6"
           >
             {/* General Support */}
-            <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-3">
+            <div className="card p-5 rounded-3xl space-y-3">
               <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <HelpCircle className="w-4.5 h-4.5 text-primary" />
                 General Support
@@ -126,7 +166,7 @@ export default function Contact() {
             </div>
 
             {/* Refund Requests */}
-            <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-3">
+            <div className="card p-5 rounded-3xl space-y-3">
               <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <ShieldCheck className="w-4.5 h-4.5 text-emerald-400" />
                 Refund Requests
@@ -140,7 +180,7 @@ export default function Contact() {
             </div>
 
             {/* Copyright & DMCA */}
-            <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-3">
+            <div className="card p-5 rounded-3xl space-y-3">
               <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <Scale className="w-4.5 h-4.5 text-accent" />
                 Copyright & DMCA
@@ -154,7 +194,7 @@ export default function Contact() {
             </div>
 
             {/* Legal Inquiries */}
-            <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-3">
+            <div className="card p-5 rounded-3xl space-y-3">
               <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <MessageSquare className="w-4.5 h-4.5 text-secondary" />
                 Legal Inquiries
@@ -168,7 +208,7 @@ export default function Contact() {
             </div>
 
             {/* Business Inquiries */}
-            <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-3">
+            <div className="card p-5 rounded-3xl space-y-3">
               <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
                 <Globe className="w-4.5 h-4.5 text-indigo-400" />
                 Business Inquiries
@@ -184,10 +224,10 @@ export default function Contact() {
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="glass-panel p-6 rounded-3xl border border-white/5 space-y-6"
+            className="card p-6 rounded-3xl space-y-6"
           >
             <div className="space-y-2">
               <h3 className="font-display font-bold text-lg text-white">Contact Form</h3>
@@ -206,7 +246,7 @@ export default function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full text-xs glass-input focus:bg-slate-900/80 p-2"
+                  className="w-full text-xs clean-input focus:bg-surface-2 p-2"
                   required
                 />
               </div>
@@ -220,7 +260,7 @@ export default function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="johndoe@example.com"
-                  className="w-full text-xs glass-input focus:bg-slate-900/80 p-2"
+                  className="w-full text-xs clean-input focus:bg-surface-2 p-2"
                   required
                 />
               </div>
@@ -234,7 +274,7 @@ export default function Contact() {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="Inquiry Subject"
-                  className="w-full text-xs glass-input focus:bg-slate-900/80 p-2"
+                  className="w-full text-xs clean-input focus:bg-surface-2 p-2"
                   required
                 />
               </div>
@@ -248,7 +288,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Describe your request in detail..."
                   rows="4"
-                  className="w-full text-xs glass-input focus:bg-slate-900/80 resize-none p-2"
+                  className="w-full text-xs clean-input focus:bg-surface-2 resize-none p-2"
                   required
                 />
               </div>
@@ -256,10 +296,10 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-2.5 bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-primary/10 flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 bg-primary hover:bg-primary/95 disabled:bg-primary/50 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Send className={`w-3.5 h-3.5 ${submitting ? 'animate-bounce' : ''}`} />
-                {submitting ? 'Sending...' : 'Send Message'}
+                <Send className="w-3.5 h-3.5" />
+                <span>{submitting ? 'Sending...' : 'Send Message'}</span>
               </button>
             </form>
           </motion.div>
@@ -267,7 +307,7 @@ export default function Contact() {
 
         {/* Response Times & Website */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-          <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-2">
+          <div className="card p-5 rounded-3xl space-y-2">
             <h3 className="font-display font-bold text-xs text-white flex items-center gap-1.5">
               <AlertCircle className="w-4 h-4 text-amber-500" />
               Response Times
@@ -277,7 +317,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="glass-panel p-5 rounded-3xl border border-white/5 space-y-2 flex flex-col justify-center">
+          <div className="card p-5 rounded-3xl space-y-2 flex flex-col justify-center">
             <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Website Link</span>
             <a href="https://velorahd.in" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline font-semibold tracking-tight">
               https://velorahd.in
@@ -285,6 +325,37 @@ export default function Contact() {
             <span className="text-[10px] text-gray-500 mt-2 block">
               Thank you for being part of the VeloraHD community.
             </span>
+          </div>
+        </div>
+
+        {/* FAQ Accordion Section */}
+        <div className="space-y-6 pt-8 border-t border-border">
+          <div className="text-center">
+            <h2 className="font-display font-bold text-2xl text-white">Frequently Asked Questions</h2>
+            <p className="text-xs text-gray-400 mt-1">Quick answers to common questions about downloads, pricing, and setups.</p>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div key={idx} className="card rounded-2xl overflow-hidden transition-all duration-300">
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(idx)}
+                    className="w-full px-5 py-4 text-left font-display font-bold text-xs md:text-sm text-white flex justify-between items-center hover:bg-white/2 transition cursor-pointer"
+                  >
+                    <span>{faq.q}</span>
+                    <span className="text-primary text-lg font-bold">{isOpen ? '−' : '+'}</span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-4 text-xs text-gray-400 leading-relaxed border-t border-border pt-3">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

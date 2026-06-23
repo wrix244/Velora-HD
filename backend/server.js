@@ -19,6 +19,8 @@ import statsRoutes from './routes/statsRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import creatorRoutes from './routes/creatorRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 
 // Load env vars
@@ -48,6 +50,16 @@ if (process.env.NODE_ENV !== 'production') {
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Sitemap Routes (mounted first to allow indexing)
+app.use('/api/sitemap.xml', sitemapRoutes);
+app.use('/sitemap.xml', sitemapRoutes);
+
+// Global noindex middleware for other API routes
+app.use('/api', (req, res, next) => {
+  res.header('X-Robots-Tag', 'noindex, nofollow');
+  next();
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/wallpapers', wallpaperRoutes);
@@ -60,6 +72,7 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/creator', creatorRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {

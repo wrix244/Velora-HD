@@ -2,10 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Velora HD — Premium wallpaper marketplace. Discover loop-ready live video motion wallpapers, high resolution 4K desktop themes, and mobile backgrounds. Transform every screen into art." />
-    <meta name="theme-color" content="#FF2D6F" />
+    <meta name="theme-color" content="#000000" />
     <meta name="color-scheme" content="dark" />
 
     <!-- PWA -->
@@ -16,25 +17,15 @@
     <meta name="apple-mobile-web-app-title" content="Velora HD" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- Google Fonts: Graffiti (Permanent Marker + Barlow) & Space (Outfit + Inter) -->
+    <!-- Google Fonts: Outfit + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <title>Velora HD</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B6DKVHT422"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-B6DKVHT422');
-    </script>
-    <!-- Google Identity Services client library for Google Sign-In -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
-  <body class="bg-[#121212]">
+  <body class="bg-bg-dark">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

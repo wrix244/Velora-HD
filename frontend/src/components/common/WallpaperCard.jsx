@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Bookmark, Download, Lock, Check } from 'lucide-react';
+import { Heart, Bookmark, Download, Lock } from 'lucide-react';
+import { optimiseUrl } from '../../utils/cloudinary';
 import useAuthStore from '../../store/authStore';
 import useFavoritesStore from '../../store/favoritesStore';
 import useLikesStore from '../../store/likesStore';
@@ -60,45 +61,57 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
     recordDownloadMutation.mutate(wallpaper);
   };
 
+  const src400 = optimiseUrl(wallpaper.previewImage, { width: 400 });
+  const src800 = optimiseUrl(wallpaper.previewImage, { width: 800 });
+  const src1200 = optimiseUrl(wallpaper.previewImage, { width: 1200 });
+
   return (
-    <div className="group relative rounded-2xl overflow-hidden glass-card aspect-[4/5] flex flex-col justify-end">
+    <div
+      className="group relative rounded-2xl overflow-hidden card dark-card aspect-[4/5] flex flex-col justify-end"
+      onContextMenu={(e) => e.preventDefault()}
+    >
       {/* Background Media Container */}
       <Link to={`/wallpaper/${wallpaper.slug}`} className="absolute inset-0 z-0">
         {wallpaper.type === 'live' ? (
           <LivePlayer
-            src={wallpaper.downloadFile}
-            poster={wallpaper.previewImage}
+            src={optimiseUrl(wallpaper.downloadFile, { width: 800 })}
+            poster={optimiseUrl(wallpaper.previewImage, { width: 800 })}
             hoverToPlay={true}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            draggable="false"
+            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-750 pointer-events-none select-none"
           />
         ) : (
           <img
-            src={wallpaper.previewImage}
+            src={src400}
+            srcSet={`${src400} 400w, ${src800} 800w, ${src1200} 1200w`}
+            sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
             alt={wallpaper.title}
             loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            width={400}
+            height={500}
+            draggable="false"
+            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-750 pointer-events-none select-none"
           />
         )}
         
         {/* Soft shadow gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/30 to-transparent opacity-80 z-1" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent opacity-90 z-1 pointer-events-none select-none" />
       </Link>
 
       {/* Top badges bar */}
-      <div className="absolute top-3 inset-x-3 flex justify-between items-start z-10">
+      <div className="absolute top-3 inset-x-3 flex justify-between items-start z-20">
         <div className="flex flex-col gap-1.5">
-          {/* Static/Live and device type badges */}
           <div className="flex flex-wrap gap-1">
             {wallpaper.type === 'live' && (
-              <span className="text-[10px] font-bold tracking-wide bg-accent/80 text-white px-2 py-0.5 rounded-full backdrop-blur-sm uppercase">
+              <span className="text-[9px] font-bold tracking-wider bg-primary text-white px-2 py-0.5 rounded uppercase">
                 Live
               </span>
             )}
-            <span className="text-[10px] font-semibold tracking-wide bg-[#121212]/70 border border-white/10 px-2 py-0.5 rounded-full capitalize backdrop-blur-sm text-gray-300">
+            <span className="text-[9px] font-semibold tracking-wider bg-zinc-950/80 border border-zinc-800/80 px-2 py-0.5 rounded capitalize text-gray-300">
               {wallpaper.deviceType}
             </span>
             {wallpaper.isPremium && (
-              <span className="text-[10px] font-semibold tracking-wide bg-amber-500/80 text-[#121212] px-2 py-0.5 rounded-full flex items-center gap-0.5 backdrop-blur-sm">
+              <span className="text-[9px] font-semibold tracking-wider bg-amber-500 text-black px-2 py-0.5 rounded flex items-center gap-0.5">
                 <Lock className="w-2.5 h-2.5" />
                 Premium
               </span>
@@ -112,10 +125,11 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
           <button
             onClick={handleLike}
             disabled={toggleLikeMutation.isPending}
-            className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
+            aria-label="Like wallpaper"
+            className={`p-2 rounded-lg border transition-all cursor-pointer ${
               isLiked
-                ? 'bg-rose-500/80 border-rose-500/20 text-white'
-                : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
+                ? 'bg-rose-500 border-rose-600 text-white'
+                : 'bg-zinc-950/50 border-zinc-800/80 text-gray-300 hover:text-white hover:bg-zinc-900'
             }`}
             title="Like"
           >
@@ -126,10 +140,11 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
           <button
             onClick={handleFavorite}
             disabled={toggleFavMutation.isPending}
-            className={`p-2 rounded-full backdrop-blur-md border border-white/10 transition-all ${
+            aria-label="Save wallpaper"
+            className={`p-2 rounded-lg border transition-all cursor-pointer ${
               isFavorite
-                ? 'bg-amber-500/80 border-amber-500/20 text-white'
-                : 'bg-[#121212]/40 text-gray-300 hover:text-white hover:bg-[#121212]/60'
+                ? 'bg-amber-500 border-amber-600 text-white'
+                : 'bg-zinc-950/50 border-zinc-800/80 text-gray-300 hover:text-white hover:bg-zinc-900'
             }`}
             title="Add to Favorites"
           >
@@ -138,41 +153,38 @@ export default function WallpaperCard({ wallpaper, purchased = false }) {
         </div>
       </div>
 
-      {/* Details / Action panel at bottom */}
-      <div className="p-4 relative z-10 w-full transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
-        <Link to={`/wallpaper/${wallpaper.slug}`} className="block mb-1">
-          <h3 className="font-display font-semibold text-lg text-white truncate drop-shadow-md group-hover:text-primary transition-colors">
+      {/* Details & Action panel at bottom */}
+      <div className="p-4 relative z-10 w-full flex items-end justify-between pointer-events-none">
+        {/* Left: Text Details */}
+        <div className="block min-w-0 flex-1 pr-2">
+          <h3 className="font-display font-semibold text-sm text-white truncate drop-shadow group-hover:text-primary transition-colors">
             {wallpaper.title}
           </h3>
-          <p className="text-[11px] text-gray-400 font-medium tracking-wide">
+          <p className="text-[10px] text-text-muted font-medium tracking-wide truncate">
             {wallpaper.category} • {wallpaper.resolution}
           </p>
-        </Link>
+        </div>
 
-        {/* Interactive Action Bar (revealed on hover) */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="font-display font-bold text-sm text-white">
-            {wallpaper.isPremium ? (hasAccess ? <span className="text-emerald-400 flex items-center gap-0.5 text-xs"><Check className="w-3.5 h-3.5"/> Unlocked</span> : `$${wallpaper.price.toFixed(2)}`) : 'Free'}
-          </span>
-
+        {/* Right: Floating action button for Download/Unlock */}
+        <div className="flex-shrink-0 pointer-events-auto opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleDownload}
             disabled={recordDownloadMutation.isPending}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-semibold tracking-wider uppercase transition-all shadow ${
               wallpaper.isPremium && !hasAccess
-                ? 'bg-primary hover:bg-primary/95 text-white shadow-lg shadow-primary/20'
-                : 'bg-white hover:bg-gray-100 text-[#121212]'
+                ? 'bg-primary text-white hover:bg-primary/95'
+                : 'bg-white text-black hover:bg-gray-100'
             }`}
           >
             {wallpaper.isPremium && !hasAccess ? (
               <>
                 <Lock className="w-3 h-3" />
-                Unlock
+                <span>${wallpaper.price.toFixed(2)}</span>
               </>
             ) : (
               <>
-                <Download className="w-3 h-3 animate-bounce" />
-                Get
+                <Download className="w-3 h-3" />
+                <span>Get</span>
               </>
             )}
           </button>

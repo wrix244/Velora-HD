@@ -68,40 +68,40 @@ export default function CookieConsent() {
         transition={{ type: 'spring', stiffness: 260, damping: 26 }}
         className="fixed bottom-6 left-6 right-6 md:right-auto md:max-w-md z-50"
       >
-        <div className="glass-panel-glow rounded-3xl p-6 border border-white/10 shadow-2xl bg-[#121212]/90 backdrop-blur-md">
+        <div className="card rounded-3xl p-6 shadow-2xl backdrop-blur-md">
           {!showCustomize ? (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-primary/10 rounded-2xl border border-primary/20 text-primary">
-                  <Cookie className="w-6 h-6 animate-pulse" />
+                  <Cookie className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-white text-base">Cookie Preferences</h3>
-                  <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Privacy & Custom Experience</p>
+                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">Privacy & Custom Experience</p>
                 </div>
               </div>
 
-              <p className="text-xs text-gray-400 leading-relaxed">
+              <p className="text-xs text-text-muted leading-relaxed">
                 We use cookies to secure your account authentication and personalize your experience. Custom themes and recommendation history require preference cookies. We value your privacy and data security.
               </p>
 
               <div className="flex flex-col gap-2 pt-2">
                 <button
                   onClick={handleAcceptAll}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent hover:from-primary/95 hover:to-accent/95 text-white font-bold text-xs tracking-wide transition-all shadow-lg shadow-primary/25"
+                  className="w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wide transition-all shadow-lg cursor-pointer"
                 >
-                  Accept All Cookies
+                  <span>Accept All Cookies</span>
                 </button>
                 <div className="flex gap-2">
                   <button
                     onClick={handleAcceptNecessary}
-                    className="flex-1 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5 font-semibold text-xs transition"
+                    className="flex-1 py-2 rounded-xl bg-surface-2 hover:bg-surface-2/80 text-text-muted hover:text-white border border-border font-semibold text-xs transition cursor-pointer"
                   >
                     Necessary Only
                   </button>
                   <button
                     onClick={() => setShowCustomize(true)}
-                    className="flex-1 py-2 rounded-xl bg-[#1A1A1A] hover:bg-[#252525] text-gray-300 hover:text-white border border-white/5 font-semibold text-xs transition"
+                    className="flex-1 py-2 rounded-xl bg-surface-2 hover:bg-surface-2/80 text-text-muted hover:text-white border border-border font-semibold text-xs transition cursor-pointer"
                   >
                     Customize
                   </button>
@@ -111,18 +111,18 @@ export default function CookieConsent() {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-secondary/10 rounded-2xl border border-secondary/20 text-secondary">
+                <div className="p-2.5 bg-primary/10 rounded-2xl border border-primary/20 text-primary">
                   <Shield className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-white text-base">Customize Settings</h3>
-                  <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Configure Cookies</p>
+                  <p className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">Configure Cookies</p>
                 </div>
               </div>
 
               <div className="space-y-3 pt-2">
                 {/* Essential Cookies */}
-                <div className="flex items-start justify-between p-3 rounded-2xl bg-white/5 border border-white/5">
+                <div className="flex items-start justify-between p-3 rounded-2xl bg-surface-2 border border-border">
                   <div className="space-y-0.5">
                     <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
                       Essential
@@ -134,12 +134,12 @@ export default function CookieConsent() {
                     type="checkbox"
                     checked={preferences.essential}
                     disabled
-                    className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4 bg-[#121212]"
+                    className="rounded border-border text-primary focus:ring-primary h-4 w-4 bg-surface"
                   />
                 </div>
 
                 {/* Functional Cookies */}
-                <div className="flex items-start justify-between p-3 rounded-2xl bg-white/5 border border-white/5">
+                <div className="flex items-start justify-between p-3 rounded-2xl bg-surface-2 border border-border">
                   <div className="space-y-0.5">
                     <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
                       Functional & Preferences
@@ -149,7 +149,7 @@ export default function CookieConsent() {
                   <button
                     onClick={() => setPreferences({ ...preferences, functional: !preferences.functional })}
                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                      preferences.functional ? 'bg-primary' : 'bg-zinc-700'
+                      preferences.functional ? 'bg-primary' : 'bg-neutral-800'
                     }`}
                   >
                     <span
@@ -164,15 +164,15 @@ export default function CookieConsent() {
               <div className="flex gap-2 pt-2">
                 <button
                   onClick={() => setShowCustomize(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 font-semibold text-xs border border-white/5 transition"
+                  className="flex-1 py-2.5 rounded-xl bg-surface-2 hover:bg-surface-2/80 text-text-muted font-semibold text-xs border border-border transition cursor-pointer"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleSavePreferences}
-                  className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wide transition shadow-lg shadow-primary/20"
+                  className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs tracking-wide transition shadow-lg cursor-pointer"
                 >
-                  Save Choices
+                  <span>Save Choices</span>
                 </button>
               </div>
             </div>

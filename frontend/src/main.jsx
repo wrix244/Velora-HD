@@ -14,13 +14,21 @@ const queryClient = new QueryClient({
   },
 });
 
-// Register Service Worker for PWA
+// Unregister service worker and clear caches to force clean, uncached load
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((reg) => console.log('SW Registered successfully:', reg.scope))
-      .catch((err) => console.error('SW Registration failed:', err));
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister().then((success) => {
+        if (success) console.log('SW Unregistered successfully');
+      });
+    }
+  });
+}
+if ('caches' in window) {
+  caches.keys().then((names) => {
+    for (let name of names) {
+      caches.delete(name);
+    }
   });
 }
 

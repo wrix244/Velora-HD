@@ -3,11 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useLogin, useGoogleLogin } from '../hooks/useAuth';
 import useAuthStore from '../store/authStore';
-import useThemeStore from '../store/themeStore';
 
 export default function Login() {
   const navigate = useNavigate();
-  const theme = useThemeStore((s) => s.theme);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const loginMutation = useLogin();
   const googleLoginMutation = useGoogleLogin();
@@ -28,6 +26,17 @@ export default function Login() {
   };
 
   useEffect(() => {
+    // Dynamically inject the Google Sign-in client library when page mounts
+    let script = document.getElementById('google-gsi-client');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'google-gsi-client';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
     const initGoogleSignIn = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
@@ -48,14 +57,15 @@ export default function Login() {
             shape: 'rectangular',
           }
         );
+        return true;
       }
+      return false;
     };
 
-    initGoogleSignIn();
+    if (initGoogleSignIn()) return;
 
     const interval = setInterval(() => {
-      if (window.google) {
-        initGoogleSignIn();
+      if (initGoogleSignIn()) {
         clearInterval(interval);
       }
     }, 500);
@@ -66,7 +76,7 @@ export default function Login() {
       clearInterval(interval);
       window.removeEventListener('resize', initGoogleSignIn);
     };
-  }, [theme]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,27 +85,19 @@ export default function Login() {
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Theme-aware auth background */}
-      <div className="absolute inset-0 z-0">
-        <img src={theme === 'space' ? '/space-bg.png' : '/graffiti-bg.png'} alt="" className="w-full h-full object-cover" />
-        <div className={`absolute inset-0 ${theme === 'space' ? 'bg-[#0B0F19]/70' : 'bg-[#121212]/75'}`} />
-        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'space' ? 'from-[#0B0F19] via-transparent to-[#0B0F19]/80' : 'from-[#121212] via-transparent to-[#121212]/80'}`} />
-      </div>
-
-      {/* Neon glow accent */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/8 blur-[100px] pointer-events-none z-0" />
-
-      <div className="w-full max-w-md p-8 rounded-3xl glass-panel space-y-6 relative z-10 shadow-2xl">
+    <div className="pt-24 pb-16 min-h-[90vh] flex items-center justify-center px-4 relative">
+      <div className="w-full max-w-md p-8 rounded-3xl card space-y-6 relative z-10 shadow-lg">
         
         {/* Branding header */}
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center gap-1.5 justify-center">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-primary to-accent flex items-center justify-center">
-              <span className="font-display font-black text-white text-xs">VH</span>
-            </div>
+            <img 
+              src="/favicon.png" 
+              alt="VeloraHD Logo" 
+              className="w-7 h-7 rounded object-contain bg-black border border-border" 
+            />
             <span className="font-display font-black text-lg text-white">
-              Velora<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">HD</span>
+              Velora<span className="text-primary">HD</span>
             </span>
           </Link>
           <h2 className="font-display font-black text-2xl text-white">Welcome Back</h2>
@@ -107,15 +109,16 @@ export default function Login() {
           
           {/* Email input */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Email Address</label>
+            <label htmlFor="email" className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
                 type="email"
+                id="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                 required
               />
             </div>
@@ -124,16 +127,17 @@ export default function Login() {
           {/* Password input */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Password</label>
+              <label htmlFor="password" className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Password</label>
             </div>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
                 type="password"
+                id="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                 required
               />
             </div>
@@ -143,17 +147,17 @@ export default function Login() {
           <button
             type="submit"
             disabled={loginMutation.isPending}
-            className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg shadow-primary/10 transition flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
           >
-            {loginMutation.isPending ? 'Logging In...' : 'Log In'}
+            <span>{loginMutation.isPending ? 'Logging In...' : 'Log In'}</span>
           </button>
         </form>
 
         {/* OR separator */}
         <div className="relative flex py-2 items-center">
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-border"></div>
           <span className="flex-shrink mx-4 text-gray-500 text-[10px] font-bold uppercase tracking-wider">or</span>
-          <div className="flex-grow border-t border-white/10"></div>
+          <div className="flex-grow border-t border-border"></div>
         </div>
 
         {/* Google Sign-In button container */}
@@ -162,7 +166,7 @@ export default function Login() {
         </div>
 
         {/* Redirect toggle */}
-        <div className="pt-2 text-center text-xs text-gray-400 border-t border-white/5">
+        <div className="pt-2 text-center text-xs text-gray-400 border-t border-border">
           Don't have an account?{' '}
           <Link to="/register" className="font-semibold text-primary hover:underline inline-flex items-center gap-0.5">
             Register Account

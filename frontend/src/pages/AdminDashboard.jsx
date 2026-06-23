@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity, RotateCw, CheckCircle2, XCircle, Globe, Ban } from 'lucide-react';
+import { LayoutDashboard, Plus, Edit, Trash2, Users, Download, Image, DollarSign, Loader2, X, Sparkles, AlertTriangle, Activity, RotateCw } from 'lucide-react';
+import { useLenis } from 'lenis/react';
 import {
   useAdminAnalytics,
   useAdminUsers,
@@ -23,7 +25,7 @@ import {
 import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
 
-const categories = ['Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
+import { useCategories, useCreateCategory } from '../hooks/useCategories';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -49,7 +51,31 @@ export default function AdminDashboard() {
   // Form States
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const { data: dbCategories } = useCategories();
+  const categories = dbCategories || ['Nature', 'Space', 'Cyberpunk', 'Anime', 'Cars', 'Gaming', 'Minimal', 'Abstract', 'Fantasy', 'Technology', 'Architecture'];
+
   const [category, setCategory] = useState('Nature');
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [showAddCategoryInput, setShowAddCategoryInput] = useState(false);
+  const createCategoryMutation = useCreateCategory();
+
+  const handleAddCategorySubmit = () => {
+    if (!newCategoryName.trim()) {
+      addToast('Please enter a category name', 'error');
+      return;
+    }
+    createCategoryMutation.mutate(newCategoryName, {
+      onSuccess: (newCatName) => {
+        addToast(`Category "${newCatName}" created successfully!`, 'success');
+        setCategory(newCatName);
+        setNewCategoryName('');
+        setShowAddCategoryInput(false);
+      },
+      onError: (err) => {
+        addToast(err.response?.data?.message || 'Failed to create category', 'error');
+      }
+    });
+  };
   const [type, setType] = useState('static');
   const [deviceType, setDeviceType] = useState('desktop');
   const [resolution, setResolution] = useState('1920x1080');
@@ -460,6 +486,32 @@ export default function AdminDashboard() {
     }
   }, [location.state]);
 
+  const lenis = useLenis();
+
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    const isAnyModalOpen = modalOpen || confirmOpen;
+    if (lenis) {
+      if (isAnyModalOpen) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+    }
+    if (isAnyModalOpen) {
+      document.documentElement.classList.add('lenis-stopped');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    }
+    return () => {
+      if (lenis) lenis.start();
+      document.documentElement.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+    };
+  }, [modalOpen, confirmOpen, lenis]);
+
   const handleToggleBan = (id, currentBannedStatus) => {
     const action = currentBannedStatus ? 'unban' : 'ban';
     const title = currentBannedStatus ? 'Unban User Account' : 'Ban User Account';
@@ -656,7 +708,7 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               {analytics?.popularWallpapers?.map((wp) => (
                 <div key={wp._id} className="flex items-center gap-3 border-b border-white/5 pb-2">
-                  <img src={wp.previewImage} alt="" className="w-10 h-12 rounded object-cover" />
+                  <img src={wp.previewImage} alt="" className="w-10 h-12 rounded object-cover pointer-events-none select-none" />
                   <div className="flex-grow min-w-0">
                     <p className="text-xs font-semibold text-white truncate">{wp.title}</p>
                     <p className="text-[10px] text-gray-500 capitalize">{wp.category} • {wp.type}</p>
@@ -707,7 +759,7 @@ export default function AdminDashboard() {
               className="px-4 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl shadow-lg flex items-center gap-1"
             >
               <Plus className="w-4 h-4" />
-              Add Wallpaper
+              <span>Add Wallpaper</span>
             </button>
           </div>
 
@@ -730,7 +782,7 @@ export default function AdminDashboard() {
                   {wallpapersList?.map((wp) => (
                     <tr key={wp._id} className="hover:bg-white/2 transition">
                       <td className="p-4 flex items-center gap-3">
-                        <img src={wp.previewImage} alt="" className="w-8 h-10 rounded object-cover" />
+                        <img src={wp.previewImage} alt="" className="w-8 h-10 rounded object-cover pointer-events-none select-none" />
                         <span className="font-semibold text-white">{wp.title}</span>
                       </td>
                       <td className="p-4">{wp.category}</td>
@@ -1235,7 +1287,10 @@ export default function AdminDashboard() {
       {/* ADD / EDIT MODAL */}
       {modalOpen && (
         <div className="fixed inset-0 bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative">
+          <div 
+            data-lenis-prevent
+            className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto relative"
+          >
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -1248,9 +1303,9 @@ export default function AdminDashboard() {
             </h3>
 
             <form onSubmit={handleFormSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Title */}
-                <div className="space-y-1.5 col-span-2">
+                <div className="space-y-1.5 col-span-1 sm:col-span-2">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Title</label>
                   <input
                     type="text"
@@ -1262,7 +1317,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Description */}
-                <div className="space-y-1.5 col-span-2">
+                <div className="space-y-1.5 col-span-1 sm:col-span-2">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Description</label>
                   <textarea
                     value={description}
@@ -1272,17 +1327,50 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Category */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Category</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
-                  >
-                    {categories.map((c) => (
-                      <option key={c} value={c} className="bg-[#121212] text-white">{c}</option>
-                    ))}
-                  </select>
+                <div className={`space-y-1.5 transition-all duration-300 ${showAddCategoryInput ? 'col-span-1 sm:col-span-2' : 'col-span-1'}`}>
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Category</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowAddCategoryInput(!showAddCategoryInput);
+                        setNewCategoryName('');
+                      }}
+                      className="text-[9px] font-bold text-primary hover:underline uppercase tracking-wide"
+                    >
+                      {showAddCategoryInput ? 'Cancel' : '+ New Category'}
+                    </button>
+                  </div>
+
+                  {showAddCategoryInput ? (
+                    <div className="flex gap-1">
+                      <input
+                        type="text"
+                        placeholder="New category"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        className="flex-grow px-3 py-1.5 text-xs glass-input focus:bg-[#121212]"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddCategorySubmit}
+                        disabled={createCategoryMutation.isPending}
+                        className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold uppercase rounded-lg hover:bg-primary/90 transition disabled:opacity-50"
+                      >
+                        <span>{createCategoryMutation.isPending ? '...' : 'Add'}</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="w-full px-3 py-2 text-xs glass-input focus:bg-[#121212]"
+                    >
+                      {categories.map((c) => (
+                        <option key={c} value={c} className="bg-[#121212] text-white">{c}</option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 {/* Device Type */}
@@ -1329,7 +1417,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Premium toggle */}
-                <div className="space-y-1.5 flex items-center justify-between border border-white/5 rounded-xl px-4 py-2 col-span-2">
+                <div className="space-y-1.5 flex items-center justify-between border border-white/5 rounded-xl px-4 py-2 col-span-1 sm:col-span-2">
                   <div className="space-y-0.5">
                     <p className="text-xs font-semibold text-white">Premium Wallpaper</p>
                     <p className="text-[10px] text-gray-400">Require checkout simulated payment to download</p>
@@ -1344,7 +1432,7 @@ export default function AdminDashboard() {
 
                 {/* Price (Only enabled if premium) */}
                 {isPremium && (
-                  <div className="space-y-1.5 col-span-2">
+                  <div className="space-y-1.5 col-span-1 sm:col-span-2">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Price ($ USD)</label>
                     <input
                       type="number"
@@ -1359,7 +1447,7 @@ export default function AdminDashboard() {
                 )}
 
                 {/* Tags */}
-                <div className="space-y-1.5 col-span-2">
+                <div className="space-y-1.5 col-span-1 sm:col-span-2">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Tags (comma-separated)</label>
                   <input
                     type="text"
@@ -1371,9 +1459,9 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* File Upload / Link Inputs */}
-                <div className="space-y-2 col-span-2 border-t border-white/5 pt-4">
+                <div className="space-y-2 col-span-1 sm:col-span-2 border-t border-white/5 pt-4">
                   <h4 className="text-[10px] font-bold text-primary uppercase tracking-wider">Asset Source</h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Preview Image */}
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Preview Image (Optional)</label>
@@ -1407,7 +1495,7 @@ export default function AdminDashboard() {
                           <img
                             src={previewImageFile ? URL.createObjectURL(previewImageFile) : previewImageUrl}
                             alt="Preview cover"
-                            className="h-28 object-contain rounded-lg max-w-full"
+                            className="h-28 object-contain rounded-lg max-w-full pointer-events-none select-none"
                           />
                           <button
                             type="button"
@@ -1460,7 +1548,7 @@ export default function AdminDashboard() {
                               <img
                                 src={downloadFileFile ? URL.createObjectURL(downloadFileFile) : downloadFileUrl}
                                 alt="High-Res preview"
-                                className="h-28 object-contain rounded-lg max-w-full"
+                                className="h-28 object-contain rounded-lg max-w-full pointer-events-none select-none"
                               />
                               <button
                                 type="button"
@@ -1531,14 +1619,14 @@ export default function AdminDashboard() {
                   onClick={() => setModalOpen(false)}
                   className="px-4 py-2 border border-white/5 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] text-gray-300 font-semibold text-xs rounded-xl transition"
                 >
-                  Cancel
+                  <span>Cancel</span>
                 </button>
                 <button
                   type="submit"
                   disabled={createMutation.isPending || updateMutation.isPending}
                   className="px-6 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl shadow-lg transition"
                 >
-                  {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Wallpaper'}
+                  <span>{createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Wallpaper'}</span>
                 </button>
               </div>
             </form>
@@ -1579,7 +1667,7 @@ export default function AdminDashboard() {
                     : 'bg-primary hover:bg-primary/95 shadow-primary/10'
                 }`}
               >
-                Confirm
+                <span>Confirm</span>
               </button>
             </div>
           </div>

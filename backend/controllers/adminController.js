@@ -6,6 +6,28 @@ import AuditLog from '../models/AuditLog.js';
 import { sendEmail } from '../utils/emailHelper.js';
 import { uploadToCloudinary, deleteFromCloudinary } from '../config/cloudinary.js';
 
+// Helper to safely delete from Cloudinary only if no other wallpaper references the URL
+const safeDeleteCloudinaryAsset = async (url, currentWallpaperId) => {
+  if (!url) return;
+  try {
+    const referenceCount = await Wallpaper.countDocuments({
+      $or: [
+        { previewImage: url },
+        { downloadFile: url }
+      ],
+      _id: { $ne: currentWallpaperId }
+    });
+
+    if (referenceCount === 0) {
+      await deleteFromCloudinary(url);
+    } else {
+      console.log(`Cloudinary asset preservation: URL "${url}" is referenced by ${referenceCount} other wallpaper(s). Not deleting.`);
+    }
+  } catch (error) {
+    console.error(`Failed during safe Cloudinary delete check for url "${url}":`, error.message);
+  }
+};
+
 // @desc    Create a new wallpaper
 // @route   POST /api/admin/wallpapers
 // @access  Private/Admin
@@ -151,7 +173,7 @@ export const updateWallpaper = async (req, res) => {
       if (req.files.previewImage) {
         // Delete old preview image from Cloudinary
         if (wallpaper.previewImage) {
-          await deleteFromCloudinary(wallpaper.previewImage);
+          await safeDeleteCloudinaryAsset(wallpaper.previewImage, wallpaper._id);
         }
         const previewResult = await uploadToCloudinary(req.files.previewImage[0].buffer, {
           folder: 'velorahd/previews',
@@ -162,7 +184,7 @@ export const updateWallpaper = async (req, res) => {
       if (req.files.downloadFile) {
         // Delete old high-res file from Cloudinary
         if (wallpaper.downloadFile) {
-          await deleteFromCloudinary(wallpaper.downloadFile);
+          await safeDeleteCloudinaryAsset(wallpaper.downloadFile, wallpaper._id);
         }
         const isVideo = req.files.downloadFile[0].mimetype.startsWith('video') || (type !== undefined ? type === 'live' : wallpaper.type === 'live');
         const downloadResult = await uploadToCloudinary(req.files.downloadFile[0].buffer, {
@@ -175,7 +197,7 @@ export const updateWallpaper = async (req, res) => {
         if (!req.files.previewImage && !previewImage) {
           // Delete old preview image from Cloudinary
           if (wallpaper.previewImage) {
-            await deleteFromCloudinary(wallpaper.previewImage);
+            await safeDeleteCloudinaryAsset(wallpaper.previewImage, wallpaper._id);
           }
           if (isVideo) {
             wallpaper.previewImage = downloadResult.secure_url
@@ -191,14 +213,14 @@ export const updateWallpaper = async (req, res) => {
       if (previewImage !== undefined) {
         // If the URL changed, clean up the old one
         if (previewImage !== wallpaper.previewImage && wallpaper.previewImage) {
-          await deleteFromCloudinary(wallpaper.previewImage);
+          await safeDeleteCloudinaryAsset(wallpaper.previewImage, wallpaper._id);
         }
         wallpaper.previewImage = previewImage;
       }
       if (downloadFile !== undefined) {
         // If the URL changed, clean up the old one
         if (downloadFile !== wallpaper.downloadFile && wallpaper.downloadFile) {
-          await deleteFromCloudinary(wallpaper.downloadFile);
+          await safeDeleteCloudinaryAsset(wallpaper.downloadFile, wallpaper._id);
         }
         wallpaper.downloadFile = downloadFile;
 
@@ -206,7 +228,7 @@ export const updateWallpaper = async (req, res) => {
         if (previewImage === undefined) {
           // Delete old preview image from Cloudinary
           if (wallpaper.previewImage) {
-            await deleteFromCloudinary(wallpaper.previewImage);
+            await safeDeleteCloudinaryAsset(wallpaper.previewImage, wallpaper._id);
           }
           const isVideo = (type !== undefined ? type === 'live' : wallpaper.type === 'live') || downloadFile.includes('/video/upload/') || downloadFile.endsWith('.mp4');
           if (isVideo) {
@@ -245,10 +267,10 @@ export const deleteWallpaper = async (req, res) => {
 
     // Delete files from Cloudinary if they exist
     if (wallpaper.previewImage) {
-      await deleteFromCloudinary(wallpaper.previewImage);
+      await safeDeleteCloudinaryAsset(wallpaper.previewImage, wallpaper._id);
     }
     if (wallpaper.downloadFile) {
-      await deleteFromCloudinary(wallpaper.downloadFile);
+      await safeDeleteCloudinaryAsset(wallpaper.downloadFile, wallpaper._id);
     }
 
     await Wallpaper.findByIdAndDelete(req.params.id);

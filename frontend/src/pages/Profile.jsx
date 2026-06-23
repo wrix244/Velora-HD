@@ -130,7 +130,7 @@ export default function Profile() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Side: Tab controls */}
-        <div className="lg:col-span-3 p-4 rounded-2xl glass-panel flex flex-col gap-1.5">
+        <div className="lg:col-span-3 p-4 rounded-2xl card flex flex-col gap-1.5">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -156,11 +156,11 @@ export default function Profile() {
               <h2 className="font-display font-bold text-lg text-white">My Favorite Wallpapers</h2>
               
               {favsLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !favorites || favorites.length === 0 ? (
-                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                <div className="p-16 rounded-2xl card text-center flex flex-col items-center justify-center space-y-4">
                   <Bookmark className="w-10 h-10 text-gray-600 animate-pulse" />
                   <h3 className="font-display font-bold text-base text-white">Your favorites folder is empty</h3>
                   <p className="text-xs text-gray-400 max-w-sm">
@@ -170,11 +170,11 @@ export default function Profile() {
                     onClick={() => navigate('/explore')}
                     className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
                   >
-                    Browse Collections
+                    <span>Browse Collections</span>
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {favorites.map((wp) => (
                     <WallpaperCard
                       key={`fav-${wp._id}`}
@@ -193,11 +193,11 @@ export default function Profile() {
               <h2 className="font-display font-bold text-lg text-white">Purchased Premium Licenses</h2>
               
               {purchasesLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)}
                 </div>
               ) : !purchases || purchases.length === 0 ? (
-                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                <div className="p-16 rounded-2xl card text-center flex flex-col items-center justify-center space-y-4">
                   <ShoppingBag className="w-10 h-10 text-gray-600 animate-pulse" />
                   <h3 className="font-display font-bold text-base text-white">No purchased wallpapers</h3>
                   <p className="text-xs text-gray-400 max-w-sm">
@@ -207,11 +207,11 @@ export default function Profile() {
                     onClick={() => navigate('/explore?isPremium=true')}
                     className="px-5 py-2.5 bg-primary text-white text-xs font-semibold rounded-xl"
                   >
-                    Explore Premium Layouts
+                    <span>Explore Premium Layouts</span>
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                   {purchases.map((p) =>
                     p.wallpaperId ? (
                       <WallpaperCard key={`purchased-${p._id}`} wallpaper={p.wallpaperId} purchased={true} />
@@ -230,11 +230,11 @@ export default function Profile() {
               {downloadsLoading ? (
                 <div className="space-y-3">
                   {Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="h-14 bg-[#1A1A1A]/40 rounded-xl animate-pulse" />
+                    <div key={i} className="h-14 bg-surface-2 rounded-xl animate-pulse" />
                   ))}
                 </div>
               ) : !downloads || downloads.length === 0 ? (
-                <div className="p-16 rounded-2xl glass-panel text-center flex flex-col items-center justify-center space-y-4">
+                <div className="p-16 rounded-2xl card text-center flex flex-col items-center justify-center space-y-4">
                   <Download className="w-10 h-10 text-gray-600 animate-pulse" />
                   <h3 className="font-display font-bold text-base text-white">No downloads recorded</h3>
                   <p className="text-xs text-gray-400 max-w-xs">
@@ -283,7 +283,7 @@ export default function Profile() {
 
           {/* TAB 4: Account Settings */}
           {activeTab === 'settings' && (
-            <div className="p-6 rounded-2xl glass-panel space-y-6 max-w-xl">
+            <div className="p-6 rounded-2xl card space-y-6 max-w-xl">
               <h2 className="font-display font-bold text-lg text-white border-b border-white/5 pb-3 flex items-center gap-1.5">
                 <Settings className="w-5 h-5 text-primary" />
                 Update Profile Settings
@@ -300,7 +300,7 @@ export default function Profile() {
                       placeholder="Your Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                       required
                     />
                   </div>
@@ -315,7 +315,7 @@ export default function Profile() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                       required
                     />
                   </div>
@@ -331,7 +331,7 @@ export default function Profile() {
                       placeholder="Leave blank to keep current"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                      className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                     />
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export default function Profile() {
                         placeholder="Confirm password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 text-sm glass-input focus:bg-[#1A1A1A]"
+                        className="w-full pl-10 pr-4 py-2.5 text-sm clean-input focus:bg-surface-2"
                         required={!!password}
                       />
                     </div>
@@ -359,7 +359,7 @@ export default function Profile() {
                   disabled={updateProfileMutation.isPending}
                   className="px-6 py-2.5 bg-primary hover:bg-primary/95 text-white font-bold text-xs tracking-wider uppercase rounded-xl shadow-lg transition"
                 >
-                  {updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}
+                  <span>{updateProfileMutation.isPending ? 'Updating...' : 'Save Settings'}</span>
                 </button>
               </form>
 
