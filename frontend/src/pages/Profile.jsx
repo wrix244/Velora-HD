@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { User, Heart, Bookmark, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert } from 'lucide-react';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { User, Heart, Bookmark, ShoppingBag, Download, Settings, Lock, Mail, ArrowRight, ShieldAlert, Check, X, Camera } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useProfile, useUpdateProfile, useDeleteProfile } from '../hooks/useAuth';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePurchaseHistory } from '../hooks/usePurchases';
@@ -9,6 +10,45 @@ import useAuthStore from '../store/authStore';
 import useUIStore from '../store/uiStore';
 import WallpaperCard from '../components/common/WallpaperCard';
 import SkeletonCard from '../components/common/SkeletonCard';
+
+const avatarPresets = [
+  {
+    category: 'Anime / Manga',
+    icons: [
+      { name: 'Goku Style', url: '/avatars/anime.png' },
+      { name: 'Cyberpunk Girl', url: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=150&h=150&fit=crop&q=80' },
+      { name: 'Synthwave Boy', url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&h=150&fit=crop&q=80' },
+      { name: 'Neon Samurai', url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&h=150&fit=crop&q=80' }
+    ]
+  },
+  {
+    category: 'DC Characters / Comics',
+    icons: [
+      { name: 'Dark Knight', url: '/avatars/dc.png' },
+      { name: 'Joker Style', url: 'https://images.unsplash.com/photo-1601513525393-8b5e9f1a268a?w=150&h=150&fit=crop&q=80' },
+      { name: 'Red Spidermask', url: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=150&h=150&fit=crop&q=80' },
+      { name: 'Cyber Hero', url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=150&h=150&fit=crop&q=80' }
+    ]
+  },
+  {
+    category: '3D Render / Sci-Fi',
+    icons: [
+      { name: 'Astronaut', url: '/avatars/3d.png' },
+      { name: 'Cyber Mech', url: '/avatars/ninja.png' },
+      { name: 'Synth Cyborg', url: 'https://images.unsplash.com/photo-1618005198143-e528346d9a59?w=150&h=150&fit=crop&q=80' },
+      { name: 'Minimal Render', url: 'https://images.unsplash.com/photo-1620336655055-088d06e36bf0?w=150&h=150&fit=crop&q=80' }
+    ]
+  },
+  {
+    category: 'Classic / Pop Art',
+    icons: [
+      { name: 'Pixel Gamer', url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=150&h=150&fit=crop&q=80' },
+      { name: 'Minimal Portrait', url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&q=80' },
+      { name: 'Retro Gamer', url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&q=80' },
+      { name: 'Statue Art', url: 'https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=150&h=150&fit=crop&q=80' }
+    ]
+  }
+];
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -43,6 +83,18 @@ export default function Profile() {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+
+  const handleAvatarSelect = (avatarUrl) => {
+    updateProfileMutation.mutate(
+      { name, email, profilePicture: avatarUrl },
+      {
+        onSuccess: () => {
+          setShowAvatarModal(false);
+        }
+      }
+    );
+  };
 
   const handleDeleteAccount = () => {
     setShowDeleteModal(true);
@@ -100,18 +152,38 @@ export default function Profile() {
     <div className="pt-20 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 min-h-screen">
       
       {/* Profile Banner */}
-      <div className="p-8 rounded-3xl bg-gradient-to-r from-primary/10 via-secondary/5 to-transparent border border-white/5 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="p-8 rounded-3xl bg-surface border border-border relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
 
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center font-display font-black text-white text-2xl uppercase">
-            {profile?.name?.slice(0, 2) || 'DL'}
+          {/* Interactive Profile Pic */}
+          <div 
+            onClick={() => setShowAvatarModal(true)}
+            className="relative w-16 h-16 rounded-2xl overflow-hidden border border-border bg-surface-2 flex-shrink-0 cursor-pointer group/banner-avatar shadow-lg animate-fade-in"
+            title="Click to change profile icon"
+          >
+            {profile?.profilePicture ? (
+              <img 
+                src={profile.profilePicture} 
+                alt={profile.name} 
+                className="w-full h-full object-cover transition-transform group-hover/banner-avatar:scale-105 duration-300" 
+              />
+            ) : (
+              <div className="w-full h-full bg-primary flex items-center justify-center font-display font-black text-black text-2xl uppercase">
+                {profile?.name?.slice(0, 2) || 'DL'}
+              </div>
+            )}
+            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/banner-avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-bold">
+              <Camera className="w-4 h-4 mb-0.5" />
+              <span>Change</span>
+            </div>
           </div>
+
           <div className="space-y-1">
             <h1 className="font-display font-black text-2xl text-white">
               {profile?.name || 'User Profile'}
             </h1>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-text-muted">
               {profile?.email} • Member since {new Date(profile?.createdAt || Date.now()).toLocaleDateString()}
             </p>
           </div>
@@ -284,12 +356,37 @@ export default function Profile() {
           {/* TAB 4: Account Settings */}
           {activeTab === 'settings' && (
             <div className="p-6 rounded-2xl card space-y-6 max-w-xl">
-              <h2 className="font-display font-bold text-lg text-white border-b border-white/5 pb-3 flex items-center gap-1.5">
+              <h2 className="font-display font-bold text-lg text-white border-b border-border pb-3 flex items-center gap-1.5">
                 <Settings className="w-5 h-5 text-primary" />
                 Update Profile Settings
               </h2>
 
               <form onSubmit={handleUpdateProfile} className="space-y-4">
+                {/* Avatar Picker Preview */}
+                <div className="flex items-center gap-4 border-b border-border pb-4 mb-4">
+                  {profile?.profilePicture ? (
+                    <img 
+                      src={profile.profilePicture} 
+                      alt="" 
+                      className="w-14 h-14 rounded-xl object-cover border border-border animate-fade-in" 
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center font-display font-black text-black text-lg uppercase">
+                      {profile?.name?.slice(0, 2) || 'DL'}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-xs font-bold text-white">Profile Icon</p>
+                    <button
+                      type="button"
+                      onClick={() => setShowAvatarModal(true)}
+                      className="text-[10px] font-bold text-primary hover:text-primary/80 uppercase tracking-wide mt-1 cursor-pointer"
+                    >
+                      Choose cool character icon →
+                    </button>
+                  </div>
+                </div>
+
                 {/* Name */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Full Name</label>
@@ -451,6 +548,83 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      {/* Avatar Selection Modal */}
+      <AnimatePresence>
+        {showAvatarModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              transition={{ type: 'spring', duration: 0.4 }}
+              className="bg-surface border border-border p-6 rounded-3xl max-w-md w-full space-y-6 shadow-2xl relative max-h-[80vh] overflow-y-auto"
+              data-lenis-prevent
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowAvatarModal(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full text-text-muted hover:text-white hover:bg-surface-2 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="space-y-1.5 border-b border-border pb-3">
+                <h3 className="text-base font-display font-black text-white">Choose Profile Avatar</h3>
+                <p className="text-text-muted text-xs">
+                  Pick from our collection of anime, comic book, 3D, and pop culture characters.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {avatarPresets.map((group) => (
+                  <div key={group.category} className="space-y-3">
+                    <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">{group.category}</h4>
+                    <div className="grid grid-cols-4 gap-3">
+                      {group.icons.map((avatar) => {
+                        const isSelected = profile?.profilePicture === avatar.url;
+                        return (
+                          <button
+                            key={avatar.name}
+                            type="button"
+                            onClick={() => handleAvatarSelect(avatar.url)}
+                            className={`relative aspect-square rounded-2xl overflow-hidden border transition-all cursor-pointer group/avatar ${
+                              isSelected
+                                ? 'border-primary scale-98 shadow-md shadow-primary/10'
+                                : 'border-border hover:border-gray-500 hover:scale-102'
+                            }`}
+                          >
+                            <img
+                              src={avatar.url}
+                              alt={avatar.name}
+                              className="w-full h-full object-cover"
+                            />
+                            {/* Hover info badge */}
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center p-1 text-[8px] font-bold text-white text-center leading-tight">
+                              {avatar.name}
+                            </div>
+                            {/* Selected Indicator */}
+                            {isSelected && (
+                              <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                                <Check className="w-2.5 h-2.5 text-black" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

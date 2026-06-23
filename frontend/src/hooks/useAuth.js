@@ -107,8 +107,8 @@ export const useUpdateProfile = () => {
   const addToast = useUIStore((state) => state.addToast);
 
   return useMutation({
-    mutationFn: async ({ name, email, password }) => {
-      const response = await axios.put('/api/auth/profile', { name, email, password });
+    mutationFn: async ({ name, email, password, profilePicture }) => {
+      const response = await axios.put('/api/auth/profile', { name, email, password, profilePicture });
       return response.data;
     },
     onSuccess: (data) => {

@@ -69,6 +69,7 @@ export const registerUser = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          profilePicture: user.profilePicture || '',
           token: generateToken(user._id),
         },
       });
@@ -106,6 +107,7 @@ export const loginUser = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          profilePicture: user.profilePicture || '',
           token: generateToken(user._id),
         },
       });
@@ -132,6 +134,7 @@ export const getUserProfile = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          profilePicture: user.profilePicture || '',
         },
       });
     } else {
@@ -152,6 +155,10 @@ export const updateUserProfile = async (req, res) => {
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
+      
+      if (req.body.profilePicture !== undefined) {
+        user.profilePicture = req.body.profilePicture;
+      }
 
       if (req.body.password) {
         user.password = req.body.password;
@@ -166,6 +173,7 @@ export const updateUserProfile = async (req, res) => {
           name: updatedUser.name,
           email: updatedUser.email,
           role: updatedUser.role,
+          profilePicture: updatedUser.profilePicture || '',
           token: generateToken(updatedUser._id),
         },
       });
@@ -255,6 +263,7 @@ export const googleLogin = async (req, res) => {
           name: name || email.split('@')[0],
           email,
           googleId,
+          profilePicture: payload.picture || '',
         });
       }
     }
@@ -270,6 +279,7 @@ export const googleLogin = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profilePicture: user.profilePicture || '',
         token: generateToken(user._id),
       },
     });

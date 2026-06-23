@@ -139,9 +139,17 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-2.5 p-1 pr-3 rounded-full bg-surface-2 border border-border hover:border-gray-500 transition-all text-left cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white uppercase text-xs">
-                  {user?.name?.slice(0, 2)}
-                </div>
+                {user?.profilePicture ? (
+                  <img
+                    src={user.profilePicture}
+                    alt={user.name}
+                    className="w-7 h-7 rounded-full object-cover border border-border"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white uppercase text-xs">
+                    {user?.name?.slice(0, 2)}
+                  </div>
+                )}
                 <div>
                   <p className="text-[11px] font-bold text-white leading-none max-w-[80px] truncate">
                     {user?.name}
@@ -337,9 +345,17 @@ export default function Navbar() {
               {isAuthenticated ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2.5 px-1 py-1.5">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white text-xs">
-                      {user?.name?.slice(0, 2)}
-                    </div>
+                    {user?.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full object-cover border border-border"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-display font-bold text-white text-xs">
+                        {user?.name?.slice(0, 2)}
+                      </div>
+                    )}
                     <div>
                       <p className="text-xs font-bold text-white max-w-[120px] truncate">{user?.name}</p>
                       <p className="text-[10px] text-text-muted capitalize">{user?.role}</p>
