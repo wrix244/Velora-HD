@@ -319,33 +319,33 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right: Creator Program Teaser */}
+          {/* Right: Creator Program Onboarding */}
           <div className="card p-6 sm:p-8 rounded-3xl border border-border bg-surface space-y-5">
-            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Coming Soon</span>
-            <h3 className="font-display font-bold text-xl text-white">VeloraHD Creator Program</h3>
+            <span className="text-[10px] font-bold text-primary tracking-widest uppercase">Creator Program</span>
+            <h3 className="font-display font-bold text-xl text-white">Join the Creator Circle</h3>
             <p className="text-xs text-text-muted leading-relaxed">
-              We are building a creator-friendly publishing platform for digital designers, AI illustrators, and motion artists. In the future, creators will be able to:
+              Showcase your digital art, AI illustrations, and motion wallpapers. Apply to join our creator program and start sharing your work with a global community:
             </p>
             <ul className="text-[11px] text-text-muted space-y-2.5 pl-1">
               <li className="flex gap-2 items-start">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                <span>Upload and showcase high-resolution static or live wallpapers directly.</span>
+                <span>Upload and publish high-resolution static or live wallpapers directly.</span>
               </li>
               <li className="flex gap-2 items-start">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                <span>Choose your own licensing preferences and usage guidelines for every asset.</span>
+                <span>Retain proper credit, display attribution, and manage licensing preferences.</span>
               </li>
               <li className="flex gap-2 items-start">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                <span>Set premium price tiers or offer files free with options for community support.</span>
+                <span>Build your custom creator portfolio page to grow your following.</span>
               </li>
             </ul>
             <div className="pt-2">
               <Link
-                to="/contact?subject=Creator Program Inquiry"
-                className="inline-flex px-4 py-2 bg-white text-black hover:bg-gray-100 font-semibold text-[10px] tracking-wider uppercase rounded-lg transition"
+                to="/become-creator"
+                className="inline-flex px-4 py-2 bg-primary hover:bg-primary/90 text-white font-semibold text-[10px] tracking-wider uppercase rounded-lg transition"
               >
-                Get Early Alerts
+                <span>Hop on Creator Program</span>
               </Link>
             </div>
           </div>
