@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Lock, ArrowLeft, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useResetPassword } from '../hooks/useAuth';
@@ -12,6 +12,7 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const passwordInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,6 +91,7 @@ export default function ResetPassword() {
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                 <input
+                  ref={passwordInputRef}
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   placeholder="••••••••"
@@ -101,7 +103,11 @@ export default function ResetPassword() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                    setTimeout(() => passwordInputRef.current?.focus(), 0);
+                  }}
+                  onMouseDown={(e) => e.preventDefault()}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

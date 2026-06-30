@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useRegister, useGoogleLogin } from '../hooks/useAuth';
@@ -14,6 +14,7 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const passwordInputRef = useRef(null);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -46,15 +47,19 @@ export default function Register() {
           callback: handleGoogleCredentialResponse,
         });
 
-        const container = document.getElementById('google-signin-button');
-        const width = container ? Math.min(container.offsetWidth || 382, 382) : 382;
+        const getGoogleButtonWidth = () => {
+          const isMobile = window.innerWidth < 640;
+          const padding = isMobile ? 80 : 96;
+          const availableWidth = window.innerWidth - padding;
+          return Math.max(250, Math.min(availableWidth, 382));
+        };
 
         window.google.accounts.id.renderButton(
           document.getElementById('google-signin-button'),
           {
             theme: 'filled_black',
             size: 'large',
-            width: width,
+            width: getGoogleButtonWidth(),
             text: 'signup_with', // Changed to signup_with for register page
             shape: 'rectangular',
           }
@@ -154,6 +159,7 @@ export default function Register() {
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input
+                ref={passwordInputRef}
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="••••••••"
@@ -164,7 +170,11 @@ export default function Register() {
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => {
+                  setShowPassword(!showPassword);
+                  setTimeout(() => passwordInputRef.current?.focus(), 0);
+                }}
+                onMouseDown={(e) => e.preventDefault()}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition cursor-pointer"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
