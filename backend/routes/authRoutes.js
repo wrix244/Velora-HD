@@ -8,6 +8,8 @@ import {
   deleteUserProfile,
   googleLogin,
   uploadAvatar,
+  forgotPassword,
+  resetPassword,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -30,6 +32,9 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/google', googleLogin);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
+
 router.route('/me').get(protect, getUserProfile);
 router.route('/profile')
   .put(protect, updateUserProfile)

@@ -160,3 +160,41 @@ export const useDeleteProfile = () => {
     },
   });
 };
+
+// Forgot Password Hook
+export const useForgotPassword = () => {
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async ({ email }) => {
+      const response = await axios.post('/api/auth/forgot-password', { email });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast(data.message || 'Reset link sent to your email.', 'success');
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to send reset link.';
+      addToast(message, 'error');
+    },
+  });
+};
+
+// Reset Password Hook
+export const useResetPassword = () => {
+  const addToast = useUIStore((state) => state.addToast);
+
+  return useMutation({
+    mutationFn: async ({ token, password }) => {
+      const response = await axios.post(`/api/auth/reset-password/${token}`, { password });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      addToast(data.message || 'Password reset successful! You can now log in.', 'success');
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to reset password.';
+      addToast(message, 'error');
+    },
+  });
+};
