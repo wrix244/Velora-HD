@@ -8,19 +8,25 @@ import { Resend } from 'resend';
  * @param {string} options.subject - Email subject
  * @param {string} options.html - HTML content of the email
  */
-export const sendEmail = async ({ to, subject, html }) => {
+export const sendEmail = async ({ to, subject, html, replyTo, from }) => {
   const resendApiKey = process.env.RESEND_API_KEY;
+  const defaultSender = process.env.SENDER_EMAIL || 'VeloraHD <onboarding@resend.dev>';
+  const senderEmail = from || defaultSender;
 
   // 1. Try sending via Resend API (highly reliable on cloud hosting like Render/Railway)
   if (resendApiKey) {
     try {
       const resend = new Resend(resendApiKey);
-      const result = await resend.emails.send({
-        from: 'VeloraHD <onboarding@resend.dev>',
+      const emailOptions = {
+        from: senderEmail,
         to,
         subject,
         html,
-      });
+      };
+      if (replyTo) {
+        emailOptions.replyTo = replyTo;
+      }
+      const result = await resend.emails.send(emailOptions);
       
       if (result.error) {
         console.warn('Resend API returned error, attempting fallback to SMTP:', result.error);
@@ -45,6 +51,7 @@ export const sendEmail = async ({ to, subject, html }) => {
   if (!isConfigured) {
     console.log('\n=================== SMTP EMAIL SIMULATION ===================');
     console.log(`To      : ${to}`);
+    if (replyTo) console.log(`Reply-To: ${replyTo}`);
     console.log(`Subject : ${subject}`);
     console.log('-------------------- HTML Content ---------------------------');
     // Strip HTML tags for clean console display
@@ -65,11 +72,15 @@ export const sendEmail = async ({ to, subject, html }) => {
     });
 
     const mailOptions = {
-      from: `"VeloraHD Wallpaper Platform" <${emailUser}>`,
+      from: `"${senderEmail.split(' <')[0]}" <${emailUser}>`,
       to,
       subject,
       html,
     };
+
+    if (replyTo) {
+      mailOptions.replyTo = replyTo;
+    }
 
     const info = await transporter.sendMail(mailOptions);
     console.log(`Email successfully sent via Gmail SMTP: ${info.messageId}`);

@@ -1,4 +1,4 @@
-import { Resend } from 'resend';
+import { sendEmail } from '../utils/emailHelper.js';
 
 // @desc    Send contact email via Resend
 // @route   POST /api/contact
@@ -12,25 +12,16 @@ export const sendContactEmail = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please fill in all required fields.' });
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const receiverEmail = 'velorahdwallart@gmail.com';
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || 'velorahdwallart@gmail.com';
+    const senderEmail = process.env.SENDER_EMAIL || 'VeloraHD <onboarding@resend.dev>';
+    const senderName = 'VeloraHD Contact Form';
+    const fromAddress = senderEmail.includes('<')
+      ? `${senderName} <${senderEmail.split('<')[1]}`
+      : `${senderName} <${senderEmail}>`;
 
-    // If credentials are not configured
-    if (!resendApiKey) {
-      console.warn('Resend API key is not configured in .env. Logging contact message instead:');
-      console.log(`--- CONTACT INQUIRY ---\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}\n----------------------`);
-      
-      return res.status(500).json({
-        success: false,
-        message: 'Email service is not configured on the server. Please check the RESEND_API_KEY variable.'
-      });
-    }
-
-    const resend = new Resend(resendApiKey);
-
-    // Send email via Resend API
-    await resend.emails.send({
-      from: 'VeloraHD Contact Form <onboarding@resend.dev>',
+    // Send email via helper (handles Resend with SMTP fallback)
+    const emailResult = await sendEmail({
+      from: fromAddress,
       to: receiverEmail,
       replyTo: email, // Allows replying directly to the person who submitted
       subject: `[VeloraHD Contact] ${subject}`,
@@ -53,6 +44,13 @@ export const sendContactEmail = async (req, res) => {
         </div>
       `,
     });
+
+    if (!emailResult.success && !emailResult.simulated) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send message: ' + (emailResult.error || 'Server email delivery failure')
+      });
+    }
 
     res.status(200).json({ success: true, message: 'Your message has been sent successfully!' });
   } catch (error) {
@@ -92,27 +90,16 @@ export const sendDmcaEmail = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please fill in all required fields and accept the declarations.' });
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const receiverEmail = 'velorahdwallart@gmail.com';
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || 'velorahdwallart@gmail.com';
+    const senderEmail = process.env.SENDER_EMAIL || 'VeloraHD <onboarding@resend.dev>';
+    const senderName = 'VeloraHD DMCA Portal';
+    const fromAddress = senderEmail.includes('<')
+      ? `${senderName} <${senderEmail.split('<')[1]}`
+      : `${senderName} <${senderEmail}>`;
 
-    // If credentials are not configured
-    if (!resendApiKey) {
-      console.warn('Resend API key is not configured in .env. Logging DMCA notice instead:');
-      console.log(
-        `--- DMCA NOTICE ---\nReporter: ${reporterName}\nEmail: ${reporterEmail}\nPhone: ${reporterPhone}\nOwner: ${copyrightOwner}\nInfringing URL: ${infringingUrl}\nWork Desc: ${workDescription}\nInfringement Details: ${infringementDetails}\n-------------------`
-      );
-      
-      return res.status(500).json({
-        success: false,
-        message: 'Email service is not configured on the server. Please check the RESEND_API_KEY variable.'
-      });
-    }
-
-    const resend = new Resend(resendApiKey);
-
-    // Send email via Resend API
-    await resend.emails.send({
-      from: 'VeloraHD DMCA Portal <onboarding@resend.dev>',
+    // Send email via helper (handles Resend with SMTP fallback)
+    const emailResult = await sendEmail({
+      from: fromAddress,
       to: receiverEmail,
       replyTo: reporterEmail,
       subject: `[VeloraHD DMCA Complaint] Infringement Claim by ${reporterName}`,
@@ -148,6 +135,13 @@ export const sendDmcaEmail = async (req, res) => {
         </div>
       `,
     });
+
+    if (!emailResult.success && !emailResult.simulated) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to submit your complaint: ' + (emailResult.error || 'Server email delivery failure')
+      });
+    }
 
     res.status(200).json({ success: true, message: 'Your DMCA complaint has been submitted successfully!' });
   } catch (error) {
